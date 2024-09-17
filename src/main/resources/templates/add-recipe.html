@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add a Recipe</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <script>
+        function addIngredientField() {
+            // Select the container for the ingredients
+            const ingredientsContainer = document.getElementById('ingredients-container');
+
+            // Create a new div for the ingredient fields
+            const newIngredientDiv = document.createElement('div');
+            newIngredientDiv.innerHTML = `
+                <label for="ingredientName">Ingredient Name:</label>
+                <input type="text" name="ingredients[${ingredientsContainer.children.length}].ingredient.name" required>
+
+                <label for="quantity">Quantity:</label>
+                <input type="number" name="ingredients[${ingredientsContainer.children.length}].quantity" required>
+
+                <label for="unit">Unit:</label>
+                <input type="text" name="ingredients[${ingredientsContainer.children.length}].unit" required>
+            `;
+
+            // Append the new div to the container
+            ingredientsContainer.appendChild(newIngredientDiv);
+        }
+    </script>
+</head>
+
+<body>
+<h1>Add a New Recipe</h1>
+
+<form th:action="@{/recipes/add}" th:object="${recipe}" method="post">
+    <label for="name">Recipe Name:</label>
+    <input type="text" id="name" th:field="*{name}" required>
+
+    <div id="ingredients-container">
+        <!-- This will be the initial set of ingredient fields -->
+<!--        <div>-->
+<!--            <label for="ingredientName">Ingredient Name:</label>-->
+<!--            <input type="text" th:field="*{ingredients[0].ingredient.name}" required>-->
+
+<!--            <label for="quantity">Quantity:</label>-->
+<!--            <input type="number" th:field="*{ingredients[0].quantity}" required>-->
+
+<!--            <label for="unit">Unit:</label>-->
+<!--            <input type="text" th:field="*{ingredients[0].unit}" required>-->
+<!--        </div>-->
+        <div th:each="ingredient, iterStat : *{ingredients}">
+            <label for="ingredientName${iterStat.index}">Ingredient Name:</label>
+            <input type="text" id="ingredientName${iterStat.index}" th:field="*{ingredients[__${iterStat.index}__].ingredient.name}" required>
+
+            <label for="quantity${iterStat.index}">Quantity:</label>
+            <input type="number" id="quantity${iterStat.index}" th:field="*{ingredients[__${iterStat.index}__].quantity}" required>
+
+            <label for="unit${iterStat.index}">Unit:</label>
+            <input type="text" id="unit${iterStat.index}" th:field="*{ingredients[__${iterStat.index}__].unit}" required>
+        </div>
+
+    </div>
+
+    <button type="button" onclick="addIngredientField()">Add Ingredient</button>
+
+    <button type="submit">Save Recipe</button>
+</form>
+
+<button onclick="window.location.href='/'">Back to Home</button>
+</body>
+</html>

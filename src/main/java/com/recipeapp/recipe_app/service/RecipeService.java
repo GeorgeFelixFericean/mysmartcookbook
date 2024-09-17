@@ -34,6 +34,9 @@ public class RecipeService {
     }
 
     // Poți adăuga și metode pentru a adăuga rețete subordonate
+    public Recipe save(Recipe recipe) {
+        return recipeRepository.save(recipe);
+    }
 }
 
 
