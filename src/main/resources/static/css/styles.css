@@ -1,20 +1,52 @@
 body {
-    font-family: Arial, sans-serif;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  min-height: 100vh;
+  background-color: #f9f9f9; /* fallback */
 }
 
-.button-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
+body::before {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: url('/img/fundal.jpg') no-repeat center center;
+  background-size: cover;
+  filter: blur(10px);
+  z-index: -1; /* stă sub conținut */
+}
+
+h1, h2 {
+  color: #333;
 }
 
 button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+  padding: 10px;
+  margin: 5px;
+  background: #28a745;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 button:hover {
-    background-color: #ddd;
+  background: #218838;
+}
+
+.suggestions-box {
+  border: 1px solid #ccc;
+  background: #fff;
+  position: absolute;
+  width: 200px;
+}
+
+.suggestion-item {
+  padding: 8px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background: #eee;
 }

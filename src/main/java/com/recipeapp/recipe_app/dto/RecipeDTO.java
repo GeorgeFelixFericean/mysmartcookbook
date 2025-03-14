@@ -1,52 +1,22 @@
-package com.recipeapp.recipe_app.model;
+package com.recipeapp.recipe_app.dto;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-public class Recipe {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class RecipeDTO {
     private String name;
-    @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JsonManagedReference
-    private List<Ingredient> ingredients = new ArrayList<>();
-    @Lob
-    @Column(columnDefinition = "TEXT")
     private String instructions;
     private String imagePath;
     private String externalLink;
-    @Lob
-    @Column(columnDefinition = "TEXT")
     private String notes;
+    private List<IngredientDTO> ingredients;
 
-    //getters and setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    // Getters and setters
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public List<Ingredient> getIngredients() {
-        return ingredients;
-    }
-
-    public void setIngredients(List<Ingredient> ingredients) {
-        this.ingredients = ingredients;
     }
 
     public String getInstructions() {
@@ -79,5 +49,13 @@ public class Recipe {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public List<IngredientDTO> getIngredients() {
+        return ingredients;
+    }
+
+    public void setIngredients(List<IngredientDTO> ingredients) {
+        this.ingredients = ingredients;
     }
 }
