@@ -6,7 +6,20 @@
     <title>Recipe App</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Fișierul tău CSS (cu fundalul blurat) -->
     <link rel="stylesheet" href="/css/styles.css">
+
+    <style>
+        /* Clasa care face textul mai vizibil pe fundal */
+        .hero-text {
+            display: inline-block;               /* pentru a se adapta dimensiunii textului */
+            background: rgba(0, 0, 0, 0.3);      /* fundal semitransparent */
+            color: #fff;                        /* text alb */
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* umbră pentru lizibilitate */
+            padding: 10px;                      /* spațiu în jurul textului */
+            border-radius: 8px;                 /* colțuri rotunjite (opțional) */
+        }
+    </style>
 </head>
 <body>
 
@@ -33,8 +46,11 @@
 <div class="container my-5">
     <div class="row">
         <div class="col text-center">
-            <h1 class="mb-4">Bine ai venit la Recipe App!</h1>
-            <p class="lead">Aici poți adăuga, căuta și vizualiza rețete delicioase.</p>
+            <!-- Grupăm titlul și paragraful într-un div cu .hero-text -->
+            <div class="hero-text">
+                <h1 class="mb-4">Bine ai venit la Recipe App!</h1>
+                <p class="lead">Aici poți adăuga, căuta și vizualiza rețete delicioase.</p>
+            </div>
         </div>
     </div>
 

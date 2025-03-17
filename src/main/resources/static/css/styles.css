@@ -4,15 +4,19 @@ body {
   padding: 0;
   position: relative;
   min-height: 100vh;
-  background-color: #f9f9f9; /* fallback */
+  /* Scoatem background-color pentru a lăsa imaginea blurată să fie vizibilă */
+  /* background-color: #f9f9f9; */
 }
 
 body::before {
   content: "";
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: url('/img/fundal.jpg') no-repeat center center;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* Ajustează calea dacă fișierul este în src/main/resources/static/img/ */
+  background: url("/img/Background.jpg") no-repeat center center;
   background-size: cover;
   filter: blur(10px);
   z-index: -1; /* stă sub conținut */
@@ -49,4 +53,23 @@ button:hover {
 
 .suggestion-item:hover {
   background: #eee;
+}
+
+/* Stilurile pentru textul din secțiunea "hero-text" */
+.hero-text {
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.4);
+  color: #ccc !important;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.hero-text h1 {
+  color: #ccc !important;
+  font-weight: 700;
+}
+
+.hero-text p {
+  color: #ccc;
 }

@@ -23,14 +23,14 @@ function removeIngredientField(btn) {
 }
 
 function saveRecipe() {
-  // Colectăm datele din formular
+  // 1. Colectăm datele text din formular
   const name = document.getElementById("name").value;
   const instructions = document.getElementById("instructions").value;
   const notes = document.getElementById("notes").value;
   const externalLink = document.getElementById("externalLink").value;
   const imagePath = document.getElementById("imagePath").value;
 
-  // Colectăm ingredientele
+  // 2. Colectăm ingredientele
   let ingredients = [];
   const ingredientNames = document.getElementsByClassName("ingredient-name");
   const ingredientQuantities = document.getElementsByClassName("ingredient-quantity");
@@ -44,7 +44,7 @@ function saveRecipe() {
     });
   }
 
-  // Creăm obiectul JSON
+  // 3. Construim obiectul JSON pentru DTO
   const recipeDTO = {
     name: name,
     instructions: instructions,
@@ -54,21 +54,37 @@ function saveRecipe() {
     ingredients: ingredients
   };
 
-  // Trimitem la backend
+  // 4. Creăm un obiect FormData
+  const formData = new FormData();
+
+  // 5. Adăugăm JSON-ul (DTO) sub formă de string
+  formData.append("recipeDTO",  new Blob([JSON.stringify(recipeDTO)], { type: "application/json" }));
+
+  // 6. Luăm fișierul imagine din <input type="file" id="imageFile">
+  const imageFile = document.getElementById("imageFile").files[0];
+  if (imageFile) {
+    formData.append("imageFile", imageFile);
+  }
+
+  // 7. Trimitem la backend FĂRĂ să setăm manual Content-Type
   fetch("/api/recipes", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(recipeDTO)
+    body: formData
   })
     .then(response => response.json())
     .then(data => {
-      alert("Rețeta a fost salvată cu ID-ul: " + data.id);
-      window.location.href = "/"; // Ne întoarcem la pagina principală
+        if (!data || !data.id) {
+            throw new Error("Rețeta nu a fost salvată corect. ID-ul este lipsă.");
+        }
+        alert("Rețeta a fost salvată cu ID-ul: " + data.id);
+        window.location.href = "/";
     })
-    .catch(error => console.error("Eroare la salvare:", error));
+    .catch(error => {
+        console.error("Eroare la salvare:", error);
+        alert("Eroare: " + error.message);
+    });
 }
+
 
 /***********************
  * SEARCH BY INGREDIENTS

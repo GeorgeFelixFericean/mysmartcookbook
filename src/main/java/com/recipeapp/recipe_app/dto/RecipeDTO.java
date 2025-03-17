@@ -10,6 +10,9 @@ public class RecipeDTO {
     private String notes;
     private List<IngredientDTO> ingredients;
 
+    public RecipeDTO() {
+    }
+
     // Getters and setters
     public String getName() {
         return name;

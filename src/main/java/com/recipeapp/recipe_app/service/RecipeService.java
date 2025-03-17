@@ -1,12 +1,17 @@
 package com.recipeapp.recipe_app.service;
 
 import com.recipeapp.recipe_app.dto.RecipeDTO;
+import com.recipeapp.recipe_app.dto.IngredientDTO; // dacă ai nevoie de import separat
 import com.recipeapp.recipe_app.model.Ingredient;
 import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.repository.IngredientRepository;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,24 +38,66 @@ public class RecipeService {
         return recipeRepository.findAll();
     }
 
-    public Recipe saveRecipe(RecipeDTO recipeDTO) {
+    /**
+     * Metodă care salvează o rețetă împreună cu fișierul imagine (dacă există).
+     * @param recipeDTO datele rețetei (nume, instrucțiuni, ingrediente etc.)
+     * @param imageFile fișierul imagine, poate fi null sau gol
+     * @return rețeta salvată în baza de date
+     */
+    public Recipe saveRecipe(RecipeDTO recipeDTO, MultipartFile imageFile) {
+        // 1. Construim entitatea Recipe din DTO
         Recipe recipe = new Recipe();
         recipe.setName(recipeDTO.getName());
         recipe.setInstructions(recipeDTO.getInstructions());
-        recipe.setImagePath(recipeDTO.getImagePath());
         recipe.setExternalLink(recipeDTO.getExternalLink());
         recipe.setNotes(recipeDTO.getNotes());
 
-        List<Ingredient> ingredients = recipeDTO.getIngredients().stream().map(dto -> {
-            Ingredient ingredient = new Ingredient();
-            ingredient.setName(dto.getName());
-            ingredient.setQuantity(dto.getQuantity());
-            ingredient.setUnit(dto.getUnit());
-            ingredient.setRecipe(recipe);
-            return ingredient;
-        }).collect(Collectors.toList());
+        // Dacă DTO-ul are un câmp imagePath (ex: link extern),
+        // îl putem salva doar dacă nu încărcăm un fișier nou.
+        // (opțional) recipe.setImagePath(recipeDTO.getImagePath());
 
+        // 2. Transformăm IngredientDTO -> Ingredient și le legăm de rețetă
+        List<Ingredient> ingredients = new ArrayList<>();
+        if (recipeDTO.getIngredients() != null) {
+            ingredients = recipeDTO.getIngredients().stream().map(dto -> {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setName(dto.getName());
+                ingredient.setQuantity(dto.getQuantity());
+                ingredient.setUnit(dto.getUnit());
+                ingredient.setRecipe(recipe);
+                return ingredient;
+            }).collect(Collectors.toList());
+        }
         recipe.setIngredients(ingredients);
+
+        // 3. Dacă user-ul a încărcat un fișier imagine, îl salvăm în "uploads/"
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String originalFilename = imageFile.getOriginalFilename();
+                // generăm un nume unic pentru fișier
+                String uniqueFilename = "recipe-" + System.currentTimeMillis() + "_" + originalFilename;
+
+                // folderul "uploads/" - îl creăm dacă nu există
+                Path uploadPath = Paths.get("uploads");
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+
+                // copiem fișierul în "uploads/"
+                Path filePath = uploadPath.resolve(uniqueFilename);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // stocăm în DB doar calea accesibilă via HTTP
+                // ex: "/recipe-1679068342123_img.jpg"
+                recipe.setImagePath("/" + uniqueFilename);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Eroare la salvarea fișierului imagine", e);
+            }
+        }
+
+        // 4. Salvăm rețeta în DB (include și ingredientele)
         return recipeRepository.save(recipe);
     }
 
