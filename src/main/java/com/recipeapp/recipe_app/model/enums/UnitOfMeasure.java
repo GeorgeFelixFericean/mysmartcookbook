@@ -4,7 +4,7 @@ public enum UnitOfMeasure {
     GRAM("g"),
     KILOGRAM("kg"),
     MILLILITER("ml"),
-    LITRU("l"),
+    LITER("l"),
     CUP("cup"),
     TABLESPOON("tbsp"),
     TEASPOON("tsp"),

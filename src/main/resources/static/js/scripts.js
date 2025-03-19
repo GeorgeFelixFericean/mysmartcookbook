@@ -8,10 +8,15 @@ function addIngredientField() {
     <input type="text" placeholder="Nume ingredient" class="ingredient-name">
     <input type="number" placeholder="Cantitate" class="ingredient-quantity">
     <select class="ingredient-unit">
-      <option value="GRAM">GRAM</option>
-      <option value="KILOGRAM">KILOGRAM</option>
-      <option value="LITRU">LITRU</option>
-      <option value="BUCATA">BUCATA</option>
+      <!-- [MODIFICAT] Afișăm prescurtările, dar value rămâne numele enum -->
+      <option value="GRAM">g</option>
+      <option value="KILOGRAM">kg</option>
+      <option value="MILLILITER">ml</option>
+      <option value="LITER">l</option>
+      <option value="CUP">cup</option>
+      <option value="TABLESPOON">tbsp</option>
+      <option value="TEASPOON">tsp</option>
+      <option value="PIECE">buc</option>
     </select>
     <button onclick="removeIngredientField(this)">X</button>
   `;
@@ -28,7 +33,6 @@ function saveRecipe() {
   const instructions = document.getElementById("instructions").value;
   const notes = document.getElementById("notes").value;
   const externalLink = document.getElementById("externalLink").value;
-  const imagePath = document.getElementById("imagePath").value;
 
   // 2. Colectăm ingredientele
   let ingredients = [];
@@ -50,7 +54,6 @@ function saveRecipe() {
     instructions: instructions,
     notes: notes,
     externalLink: externalLink,
-    imagePath: imagePath,
     ingredients: ingredients
   };
 
@@ -110,28 +113,55 @@ function searchByIngredients() {
     .catch(error => console.error("Eroare:", error));
 }
 
+
 /***********************
  * GO TO RECIPE DETAILS
  ***********************/
 function goToRecipe(recipeId) {
   // Într-un proiect mai complex, ai avea o pagină dedicată /recipe/{id}
   // Pentru exemplu, doar alertăm ID-ul:
-//  alert("Ar trebui să mergi la detaliile rețetei cu ID: " + recipeId);
-   window.location.href = "/recipe/" + recipeId;
+  //  alert("Ar trebui să mergi la detaliile rețetei cu ID: " + recipeId);
+  window.location.href = "/recipe/" + recipeId;
 }
+
 
 /***********************
  * ALL RECIPES
  ***********************/
+// [MODIFICAT PENTRU CARDURI]
 function fetchAllRecipes() {
   fetch("/api/recipes")
     .then(response => response.json())
     .then(data => {
       let container = document.getElementById("allRecipesContainer");
-      container.innerHTML = "<h3>Toate rețetele</h3>";
-      data.forEach(recipe => {
-        container.innerHTML += `<p onclick="goToRecipe(${recipe.id})" style="cursor:pointer; color:blue;">${recipe.name}</p>`;
-      });
+
+      // Cream un grid de carduri (Bootstrap) cu 1 col pe ecrane mici, 3 col pe ecrane medii
+      container.innerHTML = `
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          ${data.map(recipe => `
+            <div class="col">
+              <div class="card shadow-sm">
+                <!-- Imaginea. Dacă nu există recipe.imageUrl, folosim un placeholder. -->
+                <img
+                  src="${recipe.imagePath ? recipe.imagePath : '/img/placeholder.jpg'}"
+                  class="card-img-top"
+                  alt="${recipe.name}"
+                  style="max-height: 200px; object-fit: cover;"
+                >
+                <div class="card-body">
+                  <h5 class="card-title">${recipe.name}</h5>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    onclick="goToRecipe(${recipe.id})"
+                  >
+                    Detalii
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
     })
     .catch(error => console.error("Eroare la încărcarea rețetelor:", error));
 }

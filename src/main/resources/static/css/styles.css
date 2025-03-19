@@ -73,3 +73,12 @@ button:hover {
 .hero-text p {
   color: #ccc;
 }
+
+/* Clasă NOUĂ pentru scalarea conținutului */
+.scale-wrapper {
+  transform: scale(0.8);
+  transform-origin: top center;
+  overflow-x: hidden;
+}
+
+
