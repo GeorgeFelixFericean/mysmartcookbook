@@ -5,84 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adaugă Rețetă</title>
 
-    <!-- Fișierul tău CSS (dacă ai un fundal blurat setat acolo) -->
+    <!-- Fundal blurat -->
     <link rel="stylesheet" href="/css/styles.css">
 
-    <!-- Bootstrap CSS -->
+    <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
     <style>
+        body.add-recipe-page {
+            height: 100vh;
+            overflow: hidden;
+        }
+
         .add-recipe-wrapper {
-            position: relative;
-            min-height: 100vh;
-            z-index: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
         .add-recipe-container {
-            background-color: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            top: 50px;
-            z-index: 1;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            max-width: 650px;
+            width: 100%;
+            padding: 25px 30px;
+            overflow-y: auto;
+            max-height: 95vh;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            animation: fadeInForm 0.5s ease-out forwards;
+        }
+
+        .add-recipe-container input,
+        .add-recipe-container textarea,
+        .add-recipe-container label {
+            margin-bottom: 3px;
+        }
+
+        .add-recipe-container .mb-3 {
+            margin-bottom: 6px !important;
+        }
+
+        .add-recipe-container h5 {
+            margin-top: 10px;
+            margin-bottom: 6px;
+        }
+
+        .add-recipe-container {
+            padding: 20px 24px;
+        }
+
+
+        @keyframes fadeInForm {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
 
-<body>
+<body class="add-recipe-page">
 <div class="add-recipe-wrapper">
-    <div class="add-recipe-container">
+    <div class="add-recipe-container scaled-form">
         <h2 class="text-center mb-4">Adaugă o nouă rețetă</h2>
 
-        <!-- Important: enctype="multipart/form-data" pentru fișiere -->
         <form id="addRecipeForm" enctype="multipart/form-data">
-            <!-- Nume Rețetă -->
             <div class="mb-3">
                 <label for="name" class="form-label">Nume Rețetă:</label>
                 <input type="text" class="form-control" id="name" required>
             </div>
 
-            <!-- Instrucțiuni -->
             <div class="mb-3">
                 <label for="instructions" class="form-label">Instrucțiuni:</label>
                 <textarea class="form-control" id="instructions" rows="3"></textarea>
             </div>
 
-            <!-- Observații -->
             <div class="mb-3">
                 <label for="notes" class="form-label">Observații:</label>
                 <textarea class="form-control" id="notes" rows="2"></textarea>
             </div>
 
-            <!-- Link extern -->
             <div class="mb-3">
                 <label for="externalLink" class="form-label">Link Extern (opțional):</label>
                 <input type="text" class="form-control" id="externalLink">
             </div>
 
-            <!-- [ȘTERS] Imagine (path local sau URL) -->
-            <!--
-            <div class="mb-3">
-                <label for="imagePath" class="form-label">Imagine (path local sau URL):</label>
-                <input type="text" class="form-control" id="imagePath">
-            </div>
-            -->
-
-            <!-- Buton de încărcare imagine de pe PC -->
             <div class="mb-3">
                 <label for="imageFile" class="form-label">Încarcă imagine:</label>
                 <input type="file" class="form-control" id="imageFile" accept="image/*">
             </div>
 
-            <!-- Ingrediente -->
             <h5 class="mt-4">Ingrediente</h5>
             <div id="ingredientsContainer"></div>
-            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">Adaugă ingredient
-            </button>
+            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Adaugă ingredient</button>
 
-            <!-- Buton de salvare -->
             <button type="submit" class="btn btn-primary w-100">Salvează</button>
         </form>
     </div>
@@ -92,13 +114,10 @@
 <script>
     document.getElementById("addRecipeForm").addEventListener("submit", function(event) {
         event.preventDefault();
-        // Aici, dacă vrei să trimiți fișierul la server,
-        // trebuie să folosești FormData sau un endpoint special.
         saveRecipe();
     });
 </script>
 
-<!-- Bootstrap JS (opțional) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

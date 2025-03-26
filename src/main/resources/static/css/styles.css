@@ -4,8 +4,7 @@ body {
   padding: 0;
   position: relative;
   min-height: 100vh;
-  /* Scoatem background-color pentru a lăsa imaginea blurată să fie vizibilă */
-  /* background-color: #f9f9f9; */
+  overflow-y: auto;
 }
 
 body::before {
@@ -13,56 +12,34 @@ body::before {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  /* Ajustează calea dacă fișierul este în src/main/resources/static/img/ */
-  background: url("/img/Background.jpg") no-repeat center center;
+  width: 100vw;
+  height: 100vh;
+  background: url("/img/background.jpg") no-repeat center center;
   background-size: cover;
   filter: blur(10px);
-  z-index: -1; /* stă sub conținut */
+  z-index: -1;
 }
 
-h1, h2 {
-  color: #333;
+/* Navbar */
+.navbar-brand {
+  font-weight: bold;
 }
 
-button {
-  padding: 10px;
-  margin: 5px;
-  background: #28a745;
-  color: white;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover {
-  background: #218838;
-}
-
-.suggestions-box {
-  border: 1px solid #ccc;
-  background: #fff;
-  position: absolute;
-  width: 200px;
-}
-
-.suggestion-item {
-  padding: 8px;
-  cursor: pointer;
-}
-
-.suggestion-item:hover {
-  background: #eee;
-}
-
-/* Stilurile pentru textul din secțiunea "hero-text" */
+/* Hero section */
 .hero-text {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
   background: rgba(0, 0, 0, 0.4);
   color: #ccc !important;
   text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
   padding: 20px;
   border-radius: 8px;
+  max-width: 600px;
+  width: 100%;
+  margin: 30px auto 0 auto;
 }
 
 .hero-text h1 {
@@ -74,11 +51,153 @@ button:hover {
   color: #ccc;
 }
 
-/* Clasă NOUĂ pentru scalarea conținutului */
-.scale-wrapper {
-  transform: scale(0.8);
-  transform-origin: top center;
-  overflow-x: hidden;
+/* Carduri */
+.card {
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+.card-img-top {
+  height: 240px;
+  object-fit: cover;
+}
+
+.card-body {
+  background: rgba(255, 255, 255, 0.9);   /* fundal alb cu transparență ușoară */
+  backdrop-filter: blur(3px);             /* efect de sticlă mată (glassmorphism) */
+  border-radius: 0 0 10px 10px;           /* colțuri doar jos rotunjite */
+  padding: 15px 20px;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* umbră subtilă interioră */
+}
+
+.card-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.card-text {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.4;
+}
+
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+
+/* Butoane */
+button, .btn {
+  margin-top: 10px;
+  padding: 10px 15px;
+}
+
+button:hover, .btn:hover {
+  opacity: 0.9;
+}
+
+/* Fix scroll dacă nu e pagina recipe.html */
+body:not(.fit-to-screen) {
+  overflow-y: auto !important;
+  height: auto !important;
+}
+
+/* Fundaluri colorate pentru fiecare card */
+.card-add .card-body {
+  background: rgba(0, 123, 255, 0.1);
+  backdrop-filter: blur(3px);
+  border-radius: 0 0 10px 10px;
+  padding: 15px 20px;
+}
+
+.card-add .card-title {
+  color: #0056b3;
+}
+
+.card-search .card-body {
+  background: rgba(40, 167, 69, 0.1);
+  backdrop-filter: blur(3px);
+  border-radius: 0 0 10px 10px;
+  padding: 15px 20px;
+}
+
+.card-search .card-title {
+  color: #1e7e34;
+}
+
+.card-list .card-body {
+  background: rgba(255, 193, 7, 0.15);
+  backdrop-filter: blur(3px);
+  border-radius: 0 0 10px 10px;
+  padding: 15px 20px;
+}
+
+.card-list .card-title {
+  color: #856404;
+}
+
+/* Estetică generală pentru text și butoane */
+.card-text {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.4;
+}
+
+.btn {
+  border-radius: 6px;
+  font-weight: 500;
+  padding: 8px 16px;
+}
+
+/* Fade-in pentru hero-text */
+.hero-text {
+  opacity: 0;
+  transform: translateY(-10px);
+  animation: fadeInHero 0.8s ease-out forwards;
+}
+
+@keyframes fadeInHero {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ingredient-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+  animation: fadeInIngredient 0.4s ease-out;
+}
+
+@keyframes fadeInIngredient {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.btn:hover {
+  transform: scale(1.05);
+  transition: all 0.2s ease;
+}
+
+.btn:focus, .btn:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 

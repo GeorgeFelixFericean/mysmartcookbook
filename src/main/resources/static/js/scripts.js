@@ -3,12 +3,14 @@
  ***********************/
 function addIngredientField() {
   const container = document.getElementById("ingredientsContainer");
+
   const div = document.createElement("div");
+  div.classList.add("ingredient-row");
+
   div.innerHTML = `
-    <input type="text" placeholder="Nume ingredient" class="ingredient-name">
-    <input type="number" placeholder="Cantitate" class="ingredient-quantity">
-    <select class="ingredient-unit">
-      <!-- [MODIFICAT] Afișăm prescurtările, dar value rămâne numele enum -->
+    <input type="text" placeholder="Nume ingredient" class="form-control ingredient-name" style="flex:2">
+    <input type="number" placeholder="Cantitate" class="form-control ingredient-quantity" style="flex:1">
+    <select class="form-control ingredient-unit" style="flex:1">
       <option value="GRAM">g</option>
       <option value="KILOGRAM">kg</option>
       <option value="MILLILITER">ml</option>
@@ -18,10 +20,12 @@ function addIngredientField() {
       <option value="TEASPOON">tsp</option>
       <option value="PIECE">buc</option>
     </select>
-    <button onclick="removeIngredientField(this)">X</button>
+    <button type="button" class="btn btn-danger btn-sm" onclick="removeIngredientField(this)">×</button>
   `;
+
   container.appendChild(div);
 }
+
 
 function removeIngredientField(btn) {
   btn.parentElement.remove();
@@ -165,3 +169,4 @@ function fetchAllRecipes() {
     })
     .catch(error => console.error("Eroare la încărcarea rețetelor:", error));
 }
+

@@ -1,101 +1,65 @@
 <!DOCTYPE html>
 <html lang="ro">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Recipe App</title>
-    <!-- Bootstrap CSS -->
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Recipe App - Home</title>
+    <link rel="stylesheet" href="/css/styles.css?v=4">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!-- Fișierul tău CSS (cu fundalul blurat) -->
-    <link rel="stylesheet" href="/css/styles.css">
-
-    <style>
-        /* Clasa care face textul mai vizibil pe fundal */
-        .hero-text {
-            display: inline-block;               /* pentru a se adapta dimensiunii textului */
-            background: rgba(0, 0, 0, 0.3);      /* fundal semitransparent */
-            color: #fff;                        /* text alb */
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.7); /* umbră pentru lizibilitate */
-            padding: 10px;                      /* spațiu în jurul textului */
-            border-radius: 8px;                 /* colțuri rotunjite (opțional) */
-        }
-    </style>
 </head>
 <body>
-
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Recipe App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Comutare navigare">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/add-recipe">Adaugă</a></li>
-                <li class="nav-item"><a class="nav-link" href="/search">Caută</a></li>
-                <li class="nav-item"><a class="nav-link" href="/all-recipes">Toate rețetele</a></li>
-            </ul>
-        </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <a class="navbar-brand" href="/">Recipe App</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item"><a class="nav-link" href="/add-recipe">Adaugă</a></li>
+            <li class="nav-item"><a class="nav-link" href="/search">Caută</a></li>
+            <li class="nav-item"><a class="nav-link" href="/all-recipes">Toate rețetele</a></li>
+        </ul>
     </div>
 </nav>
 
-<!-- Secțiune principală -->
-<div class="scale-wrapper">
-    <div class="container my-5">
-        <div class="row">
-            <div class="col text-center">
-                <!-- Grupăm titlul și paragraful într-un div cu .hero-text -->
-                <div class="hero-text">
-                    <h1 class="mb-4">Bine ai venit la Recipe App!</h1>
-                    <p class="lead">Aici poți adăuga, căuta și vizualiza rețete delicioase.</p>
+<!-- Hero Text -->
+<div class="hero-text mt-4">
+    <h1>Bine ai venit la Recipe App!</h1>
+    <p>Aici poți adăuga, căuta și vizualiza rețete delicioase.</p>
+</div>
+
+<!-- Carduri -->
+<div class="container mt-4 pb-5">
+    <div class="row justify-content-center g-4">
+        <div class="col-md-4">
+            <div class="card card-add">
+                <img src="/img/add_recipe.jpg" class="card-img-top" alt="Adaugă rețetă">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Adaugă o rețetă</h5>
+                    <p class="card-text">Scrie ingredientele și instrucțiunile, adaugă o poză și salvează rețeta!</p>
+                    <a href="/add-recipe" class="btn btn-primary">Mergi la formular</a>
                 </div>
             </div>
         </div>
-
-        <div class="row mt-5">
-            <div class="col-md-4">
-                <div class="card shadow-sm">
-                    <img src="/img/Add.jpg"
-                         class="card-img-top" alt="Adaugă o rețetă">
-                    <div class="card-body">
-                        <h5 class="card-title">Adaugă o rețetă</h5>
-                        <p class="card-text">Scrie ingredientele și instrucțiunile, adaugă o poză și salvează rețeta!</p>
-                        <a href="/add-recipe" class="btn btn-primary w-100">Mergi la formular</a>
-                    </div>
+        <div class="col-md-4">
+            <div class="card card-search">
+                <img src="/img/search_recipe.jpg" class="card-img-top" alt="Caută rețete">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Caută rețete</h5>
+                    <p class="card-text">Folosește un filtru pe baza numelui sau a ingredientelor pentru a găsi rețetele dorite.</p>
+                    <a href="/search" class="btn btn-success">Caută acum</a>
                 </div>
             </div>
-
-            <div class="col-md-4 mt-4 mt-md-0">
-                <div class="card shadow-sm">
-                    <img src="/img/Search.jpg"
-                         class="card-img-top" alt="Caută rețete">
-                    <div class="card-body">
-                        <h5 class="card-title">Caută rețete</h5>
-                        <p class="card-text">Folosește un filtru pe baza numelui sau a ingredientelor pentru a găsi rețetele dorite.</p>
-                        <a href="/search" class="btn btn-success w-100">Caută acum</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-4 mt-4 mt-md-0">
-                <div class="card shadow-sm">
-                    <img src="/img/All.jpg"
-                         class="card-img-top" alt="Toate rețetele">
-                    <div class="card-body">
-                        <h5 class="card-title">Toate rețetele</h5>
-                        <p class="card-text">Vizualizează lista completă cu toate rețetele salvate și descoperă noi idei.</p>
-                        <a href="/all-recipes" class="btn btn-warning w-100">Vezi lista</a>
-                    </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-list">
+                <img src="/img/view_all_recipes.jpg" class="card-img-top" alt="Toate rețetele">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Toate rețetele</h5>
+                    <p class="card-text">Vizualizează lista completă cu toate rețetele salvate și descoperă noi idei.</p>
+                    <a href="/all-recipes" class="btn btn-warning">Vezi lista</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<!-- Bootstrap JS (opțional) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
