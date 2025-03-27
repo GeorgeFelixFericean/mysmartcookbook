@@ -69,4 +69,12 @@ public class RecipeController {
         return recipeOpt.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/filter")
+    public List<Recipe> filterRecipes(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<String> ingredients
+    ) {
+        return recipeService.filterRecipes(name, ingredients);
+    }
 }

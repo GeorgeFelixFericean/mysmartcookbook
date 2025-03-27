@@ -170,3 +170,67 @@ function fetchAllRecipes() {
     .catch(error => console.error("Eroare la încărcarea rețetelor:", error));
 }
 
+function filterRecipes() {
+  const name = document.getElementById('filter-name').value;
+  const ingredientInputs = document.querySelectorAll('.ingredient-input');
+  const ingredients = Array.from(ingredientInputs)
+    .map(input => input.value.trim())
+    .filter(val => val !== "");
+
+  const query = new URLSearchParams();
+  if (name) query.append("name", name);
+  ingredients.forEach(ing => query.append("ingredients", ing));
+
+  console.log("Trimitem request cu:", query.toString());
+
+  fetch(`/api/recipes/filter?${query.toString()}`)
+    .then(res => res.json())
+    .then(data => {
+      let container = document.getElementById("allRecipesContainer");
+
+      if (data.length === 0) {
+        container.innerHTML = "<p class='text-center'>Nu s-au găsit rețete.</p>";
+        return;
+      }
+
+      container.innerHTML = `
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+          ${data.map(recipe => `
+            <div class="col">
+              <div class="card shadow-sm">
+                <img
+                  src="${recipe.imagePath ? recipe.imagePath : '/img/placeholder.jpg'}"
+                  class="card-img-top"
+                  alt="${recipe.name}"
+                  style="max-height: 200px; object-fit: cover;"
+                >
+                <div class="card-body">
+                  <h5 class="card-title">${recipe.name}</h5>
+                  <button
+                    class="btn btn-sm btn-outline-primary"
+                    onclick="goToRecipe(${recipe.id})"
+                  >
+                    Detalii
+                  </button>
+                </div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    })
+    .catch(error => console.error("Eroare la filtrare:", error));
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  fetchAllRecipes();
+});
+
+function resetFilters() {
+  document.getElementById("filter-name").value = "";
+  const ingredientContainer = document.getElementById("ingredient-container");
+  ingredientContainer.innerHTML = `
+    <input type="text" class="form-control mb-2 ingredient-input" placeholder="Ingredient 1">
+  `;
+  fetchAllRecipes(); // reîncarcă toate rețetele
+}

@@ -108,4 +108,24 @@ public class RecipeService {
     public Optional<Recipe> getRecipeById(Long id) {
         return recipeRepository.findById(id);
     }
+
+    public List<Recipe> filterRecipes(String name, List<String> ingredients) {
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
+
+        if (!hasName && !hasIngredients) {
+            return recipeRepository.findAll();
+        }
+
+        if (hasName && !hasIngredients) {
+            return recipeRepository.findByNameContainingIgnoreCase(name);
+        }
+
+        if (!hasName) {
+            return recipeRepository.findByIngredients(ingredients, ingredients.size());
+        }
+
+        return recipeRepository.findByNameAndIngredients(name, ingredients, ingredients.size());
+    }
+
 }
