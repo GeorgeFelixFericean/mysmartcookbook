@@ -4,37 +4,63 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toate Rețetele</title>
+    <link rel="icon" type="image/png" href="/img/favicon.png">
 
     <!-- Fișierul tău CSS (fundal blurat etc.) -->
     <link rel="stylesheet" href="/css/styles.css">
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .home-button-container {
+            position: absolute;
+            top: 70px; /* Sub navbar */
+            left: 20px;
+            z-index: 10;
+        }
+
+        .content-container {
+            margin-top: 30px;
+            padding-top: 20px;
+        }
+    </style>
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="/">Recipe App</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Comutare navigare">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                <li class="nav-item"><a class="nav-link" href="/add-recipe">Adaugă</a></li>
-                <li class="nav-item"><a class="nav-link" href="/search">Caută</a></li>
-                <li class="nav-item">
-                    <!-- Pagina curentă -->
-                    <a class="nav-link active" aria-current="page" href="/all-recipes">Toate rețetele</a>
-                </li>
-            </ul>
-        </div>
+<!-- Navbar consistent cu celelalte pagini -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <a class="navbar-brand" href="/">Recipe App</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="/add-recipe" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adaugă rețetă">
+                    <i class="bi bi-plus-circle fs-4"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link active" href="/all-recipes" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Caută & Vezi rețete">
+                    <i class="bi bi-search fs-4"></i>
+                </a>
+            </li>
+        </ul>
     </div>
 </nav>
 
-<div class="container my-5">
+<!-- Buton Acasă sub navbar -->
+<div class="home-button-container">
+    <a href="/" class="btn btn-outline-primary px-4 py-2 fw-semibold shadow-sm rounded-pill">
+        ← Acasă
+    </a>
+</div>
+
+<div class="container content-container my-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="p-4 shadow" style="background-color: rgba(255, 255, 255, 0.85); border-radius: 8px;">
@@ -47,48 +73,54 @@
                     <div id="ingredient-container" class="mb-3">
                         <input type="text" class="form-control mb-2 ingredient-input" placeholder="Ingredient 1">
                     </div>
-                    <button type="button" class="btn btn-outline-secondary me-2" onclick="addIngredientInput()">Adaugă ingredient</button>
-                    <button type="button" class="btn btn-primary" onclick="filterRecipes()">Filtrează</button>
-                    <button type="button" class="btn btn-outline-secondary" onclick="resetFilters()">Resetează</button>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-outline-secondary" onclick="addIngredientInput()">Adaugă ingredient</button>
+                        <button type="button" class="btn btn-primary" onclick="filterRecipes()">Filtrează</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="resetFilters()">Resetează</button>
+                    </div>
                 </form>
                 <!-- CONTAINER PENTRU REȚETE -->
                 <div id="allRecipesContainer" class="mt-5"></div>
-                <script>
-                    function addIngredientInput() {
-                        const container = document.getElementById('ingredient-container');
-                        const input = document.createElement('input');
-                        input.type = 'text';
-                        input.className = 'form-control mb-2 ingredient-input';
-                        input.placeholder = `Ingredient ${container.children.length + 1}`;
-                        container.appendChild(input);
-                    }
-
-                    function filterRecipes() {
-                        const name = document.getElementById('filter-name').value;
-                        const ingredientInputs = document.querySelectorAll('.ingredient-input');
-                        const ingredients = Array.from(ingredientInputs)
-                            .map(input => input.value.trim())
-                            .filter(val => val !== "");
-
-                        const query = new URLSearchParams();
-                        if (name) query.append("name", name);
-                        ingredients.forEach(ing => query.append("ingredients", ing));
-
-                        fetch(`/api/recipes/filter?${query.toString()}`)
-                            .then(res => res.json())
-                            .then(recipes => {
-                                // aici suprascrii conținutul lui #allRecipesContainer cu noile rețete
-                                displayRecipes(recipes); // presupun că ai o funcție deja similară în scripts.js
-                            });
-                    }
-                </script>
             </div>
         </div>
     </div>
 </div>
 
 <script src="/js/scripts.js"></script>
-<!-- Bootstrap JS (opțional) -->
+<script>
+    function addIngredientInput() {
+        const container = document.getElementById('ingredient-container');
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'form-control mb-2 ingredient-input';
+        input.placeholder = `Ingredient ${container.children.length + 1}`;
+        container.appendChild(input);
+    }
+
+    function filterRecipes() {
+        const name = document.getElementById('filter-name').value;
+        const ingredientInputs = document.querySelectorAll('.ingredient-input');
+        const ingredients = Array.from(ingredientInputs)
+            .map(input => input.value.trim())
+            .filter(val => val !== "");
+
+        const query = new URLSearchParams();
+        if (name) query.append("name", name);
+        ingredients.forEach(ing => query.append("ingredients", ing));
+
+        fetch(`/api/recipes/filter?${query.toString()}`)
+            .then(res => res.json())
+            .then(recipes => {
+                displayRecipes(recipes); // presupun că ai o funcție deja similară în scripts.js
+            });
+    }
+
+    // Inițializare tooltips
+    document.addEventListener('DOMContentLoaded', function() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+    });
+</script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
