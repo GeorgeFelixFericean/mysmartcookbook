@@ -59,9 +59,12 @@
     </style>
 </head>
 <body>
+<a href="/" class="btn btn-outline-primary position-absolute top-0 start-0 m-3 px-4 py-2 fw-semibold shadow-sm rounded-pill">
+    ← Acasă
+</a>
 <div class="recipe-container">
     <div id="recipeDetails"></div>
-    <button id="backButton" class="btn btn-secondary mt-3 align-self-start">Înapoi la Home</button>
+<!--    <button id="backButton" class="btn btn-secondary mt-3 align-self-start">Înapoi la Home</button>-->
 </div>
 
 <script>
@@ -78,9 +81,20 @@
                 let htmlContent = `
                 <div class="card p-3 mb-3">
                     <h3>${recipe.name}</h3>
-                    <p><strong>Instrucțiuni:</strong> ${recipe.instructions || "N/A"}</p>
+                    <p><strong>Instrucțiuni:</strong><br>
+                        ${
+                            recipe.instructions
+                            ? (recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://"))
+                                ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">
+                                        ${recipe.instructions} 🔗
+                                   </a>`
+                                : recipe.instructions
+                            : "N/A"
+                        }
+                    </p>
+
                     <p><strong>Observații:</strong> ${recipe.notes || "N/A"}</p>
-                    <p><strong>Link Extern:</strong> ${recipe.externalLink || "-"}</p>
+<!--                    <p><strong>Link Extern:</strong> ${recipe.externalLink || "-"}</p>-->
                 `;
 
                 if (recipe.imagePath) {
@@ -105,9 +119,9 @@
                 document.getElementById("recipeDetails").innerHTML = `<p style="color:red">${error.message}</p>`;
             });
 
-        document.getElementById("backButton").addEventListener("click", function() {
-            window.location.href = "/";
-        });
+<!--        document.getElementById("backButton").addEventListener("click", function() {-->
+<!--            window.location.href = "/";-->
+<!--        });-->
     });
 </script>
 </body>

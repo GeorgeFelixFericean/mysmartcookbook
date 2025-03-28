@@ -19,7 +19,6 @@ public class Recipe {
     @Column(columnDefinition = "TEXT")
     private String instructions;
     private String imagePath;
-    private String externalLink;
     @Lob
     @Column(columnDefinition = "TEXT")
     private String notes;
@@ -63,14 +62,6 @@ public class Recipe {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public String getExternalLink() {
-        return externalLink;
-    }
-
-    public void setExternalLink(String externalLink) {
-        this.externalLink = externalLink;
     }
 
     public String getNotes() {

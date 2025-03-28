@@ -1,7 +1,6 @@
 package com.recipeapp.recipe_app.service;
 
 import com.recipeapp.recipe_app.dto.RecipeDTO;
-import com.recipeapp.recipe_app.dto.IngredientDTO; // dacă ai nevoie de import separat
 import com.recipeapp.recipe_app.model.Ingredient;
 import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.repository.IngredientRepository;
@@ -10,7 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +42,7 @@ public class RecipeService {
 
     /**
      * Metodă care salvează o rețetă împreună cu fișierul imagine (dacă există).
+     *
      * @param recipeDTO datele rețetei (nume, instrucțiuni, ingrediente etc.)
      * @param imageFile fișierul imagine, poate fi null sau gol
      * @return rețeta salvată în baza de date
@@ -49,7 +52,6 @@ public class RecipeService {
         Recipe recipe = new Recipe();
         recipe.setName(recipeDTO.getName());
         recipe.setInstructions(recipeDTO.getInstructions());
-        recipe.setExternalLink(recipeDTO.getExternalLink());
         recipe.setNotes(recipeDTO.getNotes());
 
         // Dacă DTO-ul are un câmp imagePath (ex: link extern),

@@ -36,7 +36,7 @@ function saveRecipe() {
   const name = document.getElementById("name").value;
   const instructions = document.getElementById("instructions").value;
   const notes = document.getElementById("notes").value;
-  const externalLink = document.getElementById("externalLink").value;
+//  const externalLink = document.getElementById("externalLink").value;
 
   // 2. Colectăm ingredientele
   let ingredients = [];
@@ -57,7 +57,7 @@ function saveRecipe() {
     name: name,
     instructions: instructions,
     notes: notes,
-    externalLink: externalLink,
+//    externalLink: externalLink,
     ingredients: ingredients
   };
 

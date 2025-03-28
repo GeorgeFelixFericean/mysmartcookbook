@@ -6,7 +6,6 @@ public class RecipeDTO {
     private String name;
     private String instructions;
     private String imagePath;
-    private String externalLink;
     private String notes;
     private List<IngredientDTO> ingredients;
 
@@ -36,14 +35,6 @@ public class RecipeDTO {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
-    }
-
-    public String getExternalLink() {
-        return externalLink;
-    }
-
-    public void setExternalLink(String externalLink) {
-        this.externalLink = externalLink;
     }
 
     public String getNotes() {
