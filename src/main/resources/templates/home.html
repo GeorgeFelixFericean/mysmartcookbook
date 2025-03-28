@@ -6,6 +6,13 @@
     <title>Recipe App - Home</title>
     <link rel="stylesheet" href="/css/styles.css?v=4">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <style>
+        .card {
+            min-height: 100%;
+        }
+    </style>
 </head>
 <body>
 <!-- Navbar -->
@@ -13,53 +20,60 @@
     <a class="navbar-brand" href="/">Recipe App</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="/add-recipe">Adaugă</a></li>
-            <li class="nav-item"><a class="nav-link" href="/search">Caută</a></li>
-            <li class="nav-item"><a class="nav-link" href="/all-recipes">Toate rețetele</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="/add-recipe" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adaugă rețetă">
+                    <i class="bi bi-plus-circle fs-4"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/all-recipes" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Caută & Vezi rețete">
+                    <i class="bi bi-search fs-4"></i>
+                </a>
+            </li>
         </ul>
     </div>
 </nav>
 
 <!-- Hero Text -->
-<div class="hero-text mt-4">
+<div class="hero-text mt-4 text-center text-white">
     <h1>Bine ai venit la Recipe App!</h1>
     <p>Aici poți adăuga, căuta și vizualiza rețete delicioase.</p>
 </div>
 
 <!-- Carduri -->
 <div class="container mt-4 pb-5">
-    <div class="row justify-content-center g-4">
-        <div class="col-md-4">
-            <div class="card card-add">
+    <div class="row justify-content-center g-4 align-items-stretch">
+        <div class="col-md-5 d-flex">
+            <div class="card card-add w-100 d-flex flex-column">
                 <img src="/img/add_recipe.jpg" class="card-img-top" alt="Adaugă rețetă">
-                <div class="card-body text-center">
+                <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title">Adaugă o rețetă</h5>
-                    <p class="card-text">Scrie ingredientele și instrucțiunile, adaugă o poză și salvează rețeta!</p>
-                    <a href="/add-recipe" class="btn btn-primary">Mergi la formular</a>
+                    <p class="card-text mb-4">Scrie ingredientele și instrucțiunile, adaugă o poză și salvează rețeta!</p>
+                    <div class="mt-auto">
+                        <a href="/add-recipe" class="btn btn-primary">Mergi la formular</a>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card card-search">
-                <img src="/img/search_recipe.jpg" class="card-img-top" alt="Caută rețete">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Caută rețete</h5>
-                    <p class="card-text">Folosește un filtru pe baza numelui sau a ingredientelor pentru a găsi rețetele dorite.</p>
-                    <a href="/search" class="btn btn-success">Caută acum</a>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-list">
+        <div class="col-md-5 d-flex">
+            <div class="card card-list w-100 d-flex flex-column">
                 <img src="/img/view_all_recipes.jpg" class="card-img-top" alt="Toate rețetele">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Toate rețetele</h5>
-                    <p class="card-text">Vizualizează lista completă cu toate rețetele salvate și descoperă noi idei.</p>
-                    <a href="/all-recipes" class="btn btn-warning">Vezi lista</a>
+                <div class="card-body text-center d-flex flex-column">
+                    <h5 class="card-title">Găsește rețete</h5>
+                    <p class="card-text mb-4">Caută rețete după nume sau ingrediente, sau explorează toate rețetele disponibile.</p>
+                    <div class="mt-auto">
+                        <a href="/all-recipes" class="btn btn-warning">Caută & Vezi tot</a>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Tooltip init -->
+<script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+</script>
 </body>
 </html>
