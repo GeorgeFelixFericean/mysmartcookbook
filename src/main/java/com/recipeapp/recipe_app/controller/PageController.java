@@ -33,4 +33,9 @@ public class PageController {
         // doar returnăm pagina "recipe.html"
         return "recipe";
     }
+
+    @GetMapping("/edit-recipe/{id}")
+    public String editRecipePage(@PathVariable Long id) {
+        return "edit-recipe"; // Va încărca edit-recipe.html din templates
+    }
 }

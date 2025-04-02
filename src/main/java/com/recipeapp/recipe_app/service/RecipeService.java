@@ -6,6 +6,7 @@ import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.repository.IngredientRepository;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -129,5 +130,64 @@ public class RecipeService {
 
         return recipeRepository.findByNameAndIngredients(name, ingredients, ingredients.size());
     }
+
+    @Transactional
+    public Optional<Recipe> updateRecipe(Long id, RecipeDTO recipeDTO, MultipartFile imageFile) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
+        if (optionalRecipe.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Recipe recipe = optionalRecipe.get();
+
+        // Actualizăm doar câmpurile transmise
+        if (recipeDTO.getName() != null) {
+            recipe.setName(recipeDTO.getName());
+        }
+
+        if (recipeDTO.getInstructions() != null) {
+            recipe.setInstructions(recipeDTO.getInstructions());
+        }
+
+        if (recipeDTO.getNotes() != null) {
+            recipe.setNotes(recipeDTO.getNotes());
+        }
+
+        // Dacă a fost trimis un fișier imagine nou
+        if (imageFile != null && !imageFile.isEmpty()) {
+            try {
+                String originalFilename = imageFile.getOriginalFilename();
+                String uniqueFilename = "recipe-" + System.currentTimeMillis() + "_" + originalFilename;
+                Path uploadPath = Paths.get("uploads");
+                if (!Files.exists(uploadPath)) {
+                    Files.createDirectories(uploadPath);
+                }
+                Path filePath = uploadPath.resolve(uniqueFilename);
+                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+                recipe.setImagePath("/" + uniqueFilename);
+            } catch (IOException e) {
+                e.printStackTrace();
+                throw new RuntimeException("Eroare la actualizarea imaginii", e);
+            }
+        }
+
+        // curățăm lista de ingrediente și adăugăm noile ingrediente
+        recipe.getIngredients().clear();
+
+        if (recipeDTO.getIngredients() != null) {
+            for (var dto : recipeDTO.getIngredients()) {
+                Ingredient ingredient = new Ingredient();
+                ingredient.setName(dto.getName());
+                ingredient.setQuantity(dto.getQuantity());
+                ingredient.setUnit(dto.getUnit());
+                ingredient.setRecipe(recipe);
+                recipe.getIngredients().add(ingredient);
+            }
+        }
+
+        Recipe updated = recipeRepository.save(recipe);
+        return Optional.of(updated);
+    }
+
 
 }

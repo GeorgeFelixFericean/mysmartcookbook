@@ -77,4 +77,25 @@ public class RecipeController {
     ) {
         return recipeService.filterRecipes(name, ingredients);
     }
+
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Recipe> updateRecipe(
+            @PathVariable Long id,
+            @RequestPart("recipeDTO") String recipeDTOString,
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+    ) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        RecipeDTO recipeDTO;
+        try {
+            recipeDTO = objectMapper.readValue(recipeDTOString, RecipeDTO.class);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        Optional<Recipe> updatedRecipe = recipeService.updateRecipe(id, recipeDTO, imageFile);
+        return updatedRecipe.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
 }

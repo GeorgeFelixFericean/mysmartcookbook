@@ -61,12 +61,14 @@
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link" href="/add-recipe" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Adaugă rețetă">
+                <a class="nav-link" href="/add-recipe" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                   title="Adaugă rețetă">
                     <i class="bi bi-plus-circle fs-4"></i>
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/all-recipes" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Caută & Vezi rețete">
+                <a class="nav-link" href="/all-recipes" data-bs-toggle="tooltip" data-bs-placement="bottom"
+                   title="Caută & Vezi rețete">
                     <i class="bi bi-search fs-4"></i>
                 </a>
             </li>
@@ -127,7 +129,17 @@
                 } else {
                     htmlContent += `<li>Nicio ingredientă.</li>`;
                 }
-                htmlContent += `</ul></div>`;
+                htmlContent += `</ul>`;
+
+                htmlContent += `
+                    <div class="d-flex justify-content-end">
+                        <a href="/edit-recipe/${recipe.id}" class="btn btn-warning mt-3">
+                            <i class="bi bi-pencil-square"></i> Editează
+                        </a>
+                    </div>
+                `;
+
+                htmlContent += `</div>`;
 
                 document.getElementById("recipeDetails").innerHTML = htmlContent;
             })
