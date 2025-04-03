@@ -97,24 +97,6 @@
         container.appendChild(input);
     }
 
-    function filterRecipes() {
-        const name = document.getElementById('filter-name').value;
-        const ingredientInputs = document.querySelectorAll('.ingredient-input');
-        const ingredients = Array.from(ingredientInputs)
-            .map(input => input.value.trim())
-            .filter(val => val !== "");
-
-        const query = new URLSearchParams();
-        if (name) query.append("name", name);
-        ingredients.forEach(ing => query.append("ingredients", ing));
-
-        fetch(`/api/recipes/filter?${query.toString()}`)
-            .then(res => res.json())
-            .then(recipes => {
-                displayRecipes(recipes); // presupun că ai o funcție deja similară în scripts.js
-            });
-    }
-
     // Inițializare tooltips
     document.addEventListener('DOMContentLoaded', function() {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
