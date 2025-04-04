@@ -130,3 +130,13 @@ Dacă intenționezi să-l folosești sau să-l redistribui, te rog să iei legă
 ---
 
 > Creat cu pasiune pentru gătit și organizare 🙌
+
+---
+
+### ✅ Badge personalizat (optional):
+
+```md
+---
+
+Made with 💖 by [George Felix Fericean](https://github.com/GeorgeFelixFericean)
+
