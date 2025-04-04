@@ -133,9 +133,8 @@ Dacă intenționezi să-l folosești sau să-l redistribui, te rog să iei legă
 
 ---
 
-### ✅ Badge personalizat (optional):
+![ChatGPT Image Apr 4, 2025, 11_34_36 AM](https://github.com/user-attachments/assets/d1cbdf59-3bba-4886-9979-f65d76e53a93)
 
-```md
 ---
 
 Made with 💖 by [George Felix Fericean](https://github.com/GeorgeFelixFericean)
