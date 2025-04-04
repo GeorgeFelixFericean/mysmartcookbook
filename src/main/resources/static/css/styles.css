@@ -25,6 +25,11 @@ body::before {
   font-weight: bold;
 }
 
+.navbar-nav .nav-link i {
+  font-size: 1.5rem;
+  color: white;
+}
+
 /* Hero section */
 .hero-text {
   display: flex;
@@ -64,11 +69,11 @@ body::before {
 }
 
 .card-body {
-  background: rgba(255, 255, 255, 0.9);   /* fundal alb cu transparență ușoară */
-  backdrop-filter: blur(3px);             /* efect de sticlă mată (glassmorphism) */
-  border-radius: 0 0 10px 10px;           /* colțuri doar jos rotunjite */
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(3px);
+  border-radius: 0 0 10px 10px;
   padding: 15px 20px;
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05); /* umbră subtilă interioră */
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .card-title {
@@ -96,8 +101,6 @@ body::before {
   transition: all 0.3s ease;
 }
 
-
-/* Butoane */
 button, .btn {
   margin-top: 10px;
   padding: 10px 15px;
@@ -107,18 +110,14 @@ button:hover, .btn:hover {
   opacity: 0.9;
 }
 
-/* Fix scroll dacă nu e pagina recipe.html */
 body:not(.fit-to-screen) {
   overflow-y: auto !important;
   height: auto !important;
 }
 
-/* Fundaluri colorate pentru fiecare card */
+/* Carduri colorate */
 .card-add .card-body {
   background: rgba(0, 123, 255, 0.1);
-  backdrop-filter: blur(3px);
-  border-radius: 0 0 10px 10px;
-  padding: 15px 20px;
 }
 
 .card-add .card-title {
@@ -127,9 +126,6 @@ body:not(.fit-to-screen) {
 
 .card-search .card-body {
   background: rgba(40, 167, 69, 0.1);
-  backdrop-filter: blur(3px);
-  border-radius: 0 0 10px 10px;
-  padding: 15px 20px;
 }
 
 .card-search .card-title {
@@ -138,29 +134,13 @@ body:not(.fit-to-screen) {
 
 .card-list .card-body {
   background: rgba(255, 193, 7, 0.15);
-  backdrop-filter: blur(3px);
-  border-radius: 0 0 10px 10px;
-  padding: 15px 20px;
 }
 
 .card-list .card-title {
   color: #856404;
 }
 
-/* Estetică generală pentru text și butoane */
-.card-text {
-  font-size: 0.95rem;
-  color: #444;
-  line-height: 1.4;
-}
-
-.btn {
-  border-radius: 6px;
-  font-weight: 500;
-  padding: 8px 16px;
-}
-
-/* Fade-in pentru hero-text */
+/* Fade-in hero text */
 .hero-text {
   opacity: 0;
   transform: translateY(-10px);
@@ -201,3 +181,34 @@ body:not(.fit-to-screen) {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
+/* ============================
+   RESPONSIVE DESIGN (MOBILE)
+   ============================ */
+@media (max-width: 768px) {
+  .navbar-nav .nav-link i {
+    display: inline-block;
+    font-size: 1.6rem;
+    color: white !important;
+  }
+
+  .home-button-container {
+    position: static !important;
+    margin: 15px auto !important;
+    text-align: center;
+  }
+
+  .ingredient-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ingredient-row input,
+  .ingredient-row select,
+  .ingredient-row button {
+    width: 100%;
+  }
+
+  .ingredient-row > * {
+    margin-bottom: 6px;
+  }
+}
