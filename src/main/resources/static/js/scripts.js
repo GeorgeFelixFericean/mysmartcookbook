@@ -8,9 +8,10 @@ function addIngredientField() {
   div.classList.add("ingredient-row");
 
   div.innerHTML = `
-    <input type="text" placeholder="Nume ingredient" class="form-control ingredient-name" style="flex:2">
-    <input type="number" placeholder="Cantitate" class="form-control ingredient-quantity" style="flex:1">
+    <input type="text" placeholder="What's going in?" class="form-control ingredient-name" style="flex:2">
+    <input type="number" placeholder="How much?" class="form-control ingredient-quantity" style="flex:1">
     <select class="form-control ingredient-unit" style="flex:1">
+      <option value="" disabled selected hidden>Pick a unit ⚖️</option>
       <option value="GRAM">g</option>
       <option value="KILOGRAM">kg</option>
       <option value="MILLILITER">ml</option>

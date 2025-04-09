@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -16,29 +16,29 @@
     </style>
 </head>
 <body>
-<!-- Navbar responsive cu iconițe și text pe mobil -->
+<!-- Responsive Navbar with icons & mobile text -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/">Recipe App</a>
+    <a class="navbar-brand" href="/">WhatCanICook?! 🧄🥦🍕</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-            <!-- Adaugă Rețetă -->
+            <!-- Add Recipe -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Adaugă rețetă">
+                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
                     <i class="bi bi-plus-circle fs-5"></i>
-                    <span class="d-inline d-lg-none">Adaugă</span>
+                    <span class="d-inline d-lg-none">Add a recipe</span>
                 </a>
             </li>
 
-            <!-- Caută Rețete -->
+            <!-- Search Recipes -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Caută & Vezi rețete">
+                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
                     <i class="bi bi-search fs-5"></i>
-                    <span class="d-inline d-lg-none">Caută</span>
+                    <span class="d-inline d-lg-none">Search recipes</span>
                 </a>
             </li>
         </ul>
@@ -47,33 +47,37 @@
 
 <!-- Hero Text -->
 <div class="hero-text mt-4 text-center text-white">
-    <h1>Bine ai venit la Recipe App!</h1>
-    <p>Aici poți adăuga, căuta și vizualiza rețete delicioase.</p>
+    <h1>Hey there, hungry friend! 🍽️</h1>
+    <p>Turn fridge leftovers into delicious meals.
+        Because sometimes, all you’ve got is a carrot, some eggs, and a big question mark.</p>
 </div>
 
-<!-- Carduri -->
+<!-- Recipe Cards -->
 <div class="container mt-4 pb-5">
     <div class="row justify-content-center g-4 align-items-stretch">
+        <!-- Add Recipe Card -->
         <div class="col-md-5 d-flex">
             <div class="card card-add w-100 d-flex flex-column">
-                <img src="/img/add_recipe.jpg" class="card-img-top" alt="Adaugă rețetă">
+                <img src="/img/add_recipe.png" class="card-img-top" alt="Add recipe">
                 <div class="card-body text-center d-flex flex-column">
-                    <h5 class="card-title">Adaugă o rețetă</h5>
-                    <p class="card-text mb-4">Scrie ingredientele și instrucțiunile, adaugă o poză și salvează rețeta!</p>
+                    <h5 class="card-title">✍️ New recipe just dropped? Tell me everything.</h5>
+                    <p class="card-text mb-4">Add ingredients, scribble your instructions, maybe throw in a glam pic. Your future self will thank you.</p>
                     <div class="mt-auto">
-                        <a href="/add-recipe" class="btn btn-primary">Mergi la formular</a>
+                        <a href="/add-recipe" class="btn btn-primary">✨ Add Some Deliciousness</a>
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- View Recipes Card -->
         <div class="col-md-5 d-flex">
             <div class="card card-list w-100 d-flex flex-column">
-                <img src="/img/view_all_recipes.jpg" class="card-img-top" alt="Toate rețetele">
+                <img src="/img/all_recipes.png" class="card-img-top" alt="View all recipes">
                 <div class="card-body text-center d-flex flex-column">
-                    <h5 class="card-title">Găsește rețete</h5>
-                    <p class="card-text mb-4">Caută rețete după nume sau ingrediente, sau explorează toate rețetele disponibile.</p>
+                    <h5 class="card-title">🧠 "I only have eggs and cheese..." – You, every week</h5>
+                    <p class="card-text mb-4">No problem. Type what you’ve got, I’ll show you what’s possible. Culinary wizardry, unlocked. 🧙‍♂️🥘</p>
                     <div class="mt-auto">
-                        <a href="/all-recipes" class="btn btn-warning">Caută & Vezi tot</a>
+                        <a href="/all-recipes" class="btn btn-warning">🔍 Show Me the Magic</a>
                     </div>
                 </div>
             </div>
@@ -81,7 +85,7 @@
     </div>
 </div>
 
-<!-- Tooltip init -->
+<!-- Tooltip initialization -->
 <script>
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));

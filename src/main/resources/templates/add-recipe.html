@@ -1,158 +1,88 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Adaugă Rețetă</title>
+    <title>Add Recipe</title>
     <link rel="icon" type="image/png" href="/img/favicon.png">
 
-    <!-- Fundal blurat -->
+    <!-- Background blur effect -->
     <link rel="stylesheet" href="/css/styles.css">
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <style>
-        body.add-recipe-page {
-            height: 100vh;
-            overflow: hidden; /* Ascunde scroll-barul principal */
-        }
-
-        .add-recipe-wrapper {
-            height: calc(100vh - 56px - 50px); /* Scădem înălțimea navbar-ului și butonului Acasă */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-
-        .add-recipe-container {
-            background-color: rgba(255, 255, 255, 0.95);
-            border-radius: 12px;
-            max-width: 650px;
-            width: 100%;
-            padding: 25px 30px;
-            overflow-y: auto;
-            max-height: calc(90vh - 50px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-            animation: fadeInForm 0.5s ease-out forwards;
-            /* Ascunde scroll-barul dar păstrează funcționalitatea */
-            scrollbar-width: none; /* Pentru Firefox */
-        }
-
-        /* Ascunde scroll-barul pentru Chrome/Safari */
-        .add-recipe-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .add-recipe-container input,
-        .add-recipe-container textarea,
-        .add-recipe-container label {
-            margin-bottom: 3px;
-        }
-
-        .add-recipe-container .mb-3 {
-            margin-bottom: 6px !important;
-        }
-
-        .add-recipe-container h5 {
-            margin-top: 10px;
-            margin-bottom: 6px;
-        }
-
-        .add-recipe-container {
-            padding: 20px 24px;
-        }
-
-        .home-button-container {
-            position: absolute;
-            top: 70px; /* Sub navbar */
-            left: 20px;
-            z-index: 10;
-        }
-
-        @keyframes fadeInForm {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
 </head>
 
-<body class="add-recipe-page">
-<!-- Navbar responsive cu iconițe și text pe mobil -->
+<body class="add-recipe-page fit-scroll">
+<!-- Responsive Navbar with icons & mobile text -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/">Recipe App</a>
+    <a class="navbar-brand" href="/">WhatCanICook?! 🧄🥦🍕</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">
-            <!-- Adaugă Rețetă -->
+            <!-- Add Recipe -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Adaugă rețetă">
+                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
                     <i class="bi bi-plus-circle fs-5"></i>
-                    <span class="d-inline d-lg-none">Adaugă</span>
+                    <span class="d-inline d-lg-none">Add recipe</span>
                 </a>
             </li>
 
-            <!-- Caută Rețete -->
+            <!-- Search Recipes -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Caută & Vezi rețete">
+                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
                     <i class="bi bi-search fs-5"></i>
-                    <span class="d-inline d-lg-none">Caută</span>
+                    <span class="d-inline d-lg-none">Search</span>
                 </a>
             </li>
         </ul>
     </div>
 </nav>
 
-<!-- Buton Acasă sub navbar -->
+<!-- Home button under navbar -->
 <div class="home-button-container">
     <a href="/" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
-        ← Acasă
+        ← Take Me Home, Chef!
     </a>
 </div>
 
+<!-- Main form -->
 <div class="add-recipe-wrapper">
     <div class="add-recipe-container scaled-form">
-        <h2 class="text-center mb-4">Adaugă o nouă rețetă</h2>
+        <h2 class="text-center mb-4">New recipe in the making? Let's lock it in! 🔒</h2>
 
         <form id="addRecipeForm" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="name" class="form-label">Nume Rețetă:</label>
-                <input type="text" class="form-control" id="name" required>
+                <label for="name" class="form-label">🍽️ What should we call this masterpiece?</label>
+                <input type="text" class="form-control" id="name" required placeholder="Give it a name worthy of a feast!">
             </div>
 
             <div class="mb-3">
-                <label for="instructions" class="form-label">Instrucțiuni:</label>
-                <textarea class="form-control" id="instructions" rows="3"></textarea>
+                <label for="instructions" class="form-label">✨ Tell me how the magic happens</label>
+                <textarea class="form-control" id="instructions" rows="3" placeholder="Step-by-step magic..."></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="notes" class="form-label">Observații:</label>
-                <textarea class="form-control" id="notes" rows="2"></textarea>
+                <label for="notes" class="form-label">💡 Tips, twists, or secrets?</label>
+                <textarea class="form-control" id="notes" rows="2" placeholder="Any tips or swaps? Drop them here!"></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="imageFile" class="form-label">Încarcă imagine:</label>
+                <label for="imageFile" class="form-label">📷 Got a glam shot? Drop it here!</label>
                 <input type="file" class="form-control" id="imageFile" accept="image/*">
             </div>
 
-            <h5 class="mt-4">Ingrediente</h5>
+            <h5 class="mt-4">🧂 What goes in the pot?</h5>
             <div id="ingredientsContainer"></div>
-            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()"> ➕ Adaugă ingredient</button>
+            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Toss in another one!</button>
 
-            <button type="submit" class="btn btn-primary w-100">Salvează</button>
+            <button type="submit" class="btn btn-primary w-100">💾 All set? Save it!</button>
         </form>
     </div>
 </div>
@@ -164,7 +94,7 @@
         saveRecipe();
     });
 
-    // Inițializare tooltips
+    // Tooltip initialization
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
 </script>

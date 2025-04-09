@@ -14,7 +14,7 @@ body::before {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: url("/img/background.jpg") no-repeat center center;
+  background: url("/img/background.png") no-repeat center center;
   background-size: cover;
   filter: blur(10px);
   z-index: -1;
@@ -64,8 +64,11 @@ body::before {
 }
 
 .card-img-top {
-  height: 240px;
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 3;
+  object-fit: contain;
+  background-color: #fff;
 }
 
 .card-body {
@@ -211,4 +214,45 @@ body:not(.fit-to-screen) {
   .ingredient-row > * {
     margin-bottom: 6px;
   }
+}
+
+body.add-recipe-page {
+  overflow-y: auto;
+  height: auto;
+}
+
+.add-recipe-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0px 20px 60px; /* redus spațiul de sus de la 40px la 16px */
+}
+
+
+.add-recipe-container {
+    margin-top: -45px;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    max-width: 650px;
+    width: 100%;
+    padding: 25px 30px;
+    overflow-y: auto;
+    max-height: calc(100vh - 40px); /* 120px e estimat pentru navbar + buton acasă */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    animation: fadeInForm 0.5s ease-out forwards;
+    scrollbar-width: thin; /* Firefox */
+}
+
+/* Show vertical scrollbar in Chrome */
+.add-recipe-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.add-recipe-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.add-recipe-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
 }
