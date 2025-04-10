@@ -1,3 +1,21 @@
+const unitOptions = [
+  { key: "GRAM", abbreviation: "g", plural: "g" },
+  { key: "KILOGRAM", abbreviation: "kg", plural: "kg" },
+  { key: "MILLILITER", abbreviation: "ml", plural: "ml" },
+  { key: "LITER", abbreviation: "l", plural: "l" },
+  { key: "CUP", abbreviation: "cup", plural: "cups" },
+  { key: "TABLESPOON", abbreviation: "tbsp", plural: "tbsp" },
+  { key: "TEASPOON", abbreviation: "tsp", plural: "tsp" },
+  { key: "PIECE", abbreviation: "pcs", plural: "pcs" },
+  { key: "OUNCE", abbreviation: "oz", plural: "oz" },
+  { key: "POUND", abbreviation: "lb", plural: "lbs" },
+  { key: "PINCH", abbreviation: "pinch", plural: "pinches" },
+  { key: "DASH", abbreviation: "dash", plural: "dashes" },
+  { key: "SLICE", abbreviation: "slice", plural: "slices" },
+  { key: "CLOVE", abbreviation: "clove", plural: "cloves" },
+  { key: "STALK", abbreviation: "stalk", plural: "stalks" }
+];
+
 /***********************
  * ADD RECIPE LOGIC
  ***********************/
@@ -7,26 +25,23 @@ function addIngredientField() {
   const div = document.createElement("div");
   div.classList.add("ingredient-row");
 
+  // Generăm opțiunile pentru <select> dinamic
+  let unitOptionsHtml = `<option value="" disabled selected hidden>Pick a unit ⚖️</option>`;
+  unitOptions.forEach(unit => {
+    unitOptionsHtml += `<option value="${unit.key}">${unit.abbreviation}</option>`;
+  });
+
   div.innerHTML = `
     <input type="text" placeholder="What's going in?" class="form-control ingredient-name" style="flex:2">
     <input type="number" placeholder="How much?" class="form-control ingredient-quantity" style="flex:1">
     <select class="form-control ingredient-unit" style="flex:1">
-      <option value="" disabled selected hidden>Pick a unit ⚖️</option>
-      <option value="GRAM">g</option>
-      <option value="KILOGRAM">kg</option>
-      <option value="MILLILITER">ml</option>
-      <option value="LITER">l</option>
-      <option value="CUP">cup</option>
-      <option value="TABLESPOON">tbsp</option>
-      <option value="TEASPOON">tsp</option>
-      <option value="PIECE">buc</option>
+      ${unitOptionsHtml}
     </select>
     <button type="button" class="btn btn-danger btn-sm" onclick="removeIngredientField(this)">×</button>
   `;
 
   container.appendChild(div);
 }
-
 
 function removeIngredientField(btn) {
   btn.parentElement.remove();

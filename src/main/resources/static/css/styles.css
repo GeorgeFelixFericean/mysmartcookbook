@@ -290,4 +290,8 @@ body.add-recipe-page {
     background: transparent;
     margin: 0 !important;
   }
+
+  .add-recipe-container {
+      margin-top: 70px; /* sau 80px, după gustul tău */
+    }
 }
