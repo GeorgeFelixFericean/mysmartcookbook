@@ -214,6 +214,10 @@ body:not(.fit-to-screen) {
   .ingredient-row > * {
     margin-bottom: 6px;
   }
+
+  .add-recipe-container {
+      margin-top: 40px !important;
+    }
 }
 
 body.add-recipe-page {
