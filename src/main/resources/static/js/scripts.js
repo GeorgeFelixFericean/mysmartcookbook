@@ -99,8 +99,19 @@ function saveRecipe() {
         if (!data || !data.id) {
             throw new Error("Rețeta nu a fost salvată corect. ID-ul este lipsă.");
         }
-        alert("Rețeta a fost salvată cu ID-ul: " + data.id);
-        window.location.href = "/";
+        const saveMessage = document.getElementById("saveMessage");
+        saveMessage.innerHTML = `🎉 Woohoo! Your recipe is safe in the vault!`;
+        saveMessage.style.color = "#28a745"; // verde de success
+        saveMessage.style.display = "block";
+
+        // scroll automat la mesaj (pentru UX nice)
+        saveMessage.scrollIntoView({ behavior: "smooth" });
+
+        // redirect după 2 secunde
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 2000);
+
     })
     .catch(error => {
         console.error("Eroare la salvare:", error);
