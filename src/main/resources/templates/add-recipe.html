@@ -74,8 +74,25 @@
             </div>
 
             <div class="mb-3">
-                <label for="imageFile" class="form-label">📷 Got a glam shot? Drop it here!</label>
-                <input type="file" class="form-control" id="imageFile" accept="image/*">
+                <label class="form-label">📷 Got a glam shot? Drop it here!</label>
+
+                <!-- Hidden file input -->
+                <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;" required>
+
+                <!-- Upload button -->
+                <div class="mt-2">
+                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('imageFile').click()">
+                        📸 Upload some food glam!
+                    </button>
+
+                    <!-- Text status (sub buton) -->
+                    <div id="fileStatusText" class="text-muted small fst-italic mt-1">
+                        No file yet... Let’s spice things up!
+                    </div>
+
+                    <!-- Image preview (sub text) -->
+                    <div id="imagePreview" class="mt-3"></div>
+                </div>
             </div>
 
             <h5 class="mt-4">🧂 What goes in the pot?</h5>
@@ -97,7 +114,36 @@
     // Tooltip initialization
     const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
     tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+    document.getElementById("imageFile").addEventListener("change", function () {
+    const fileName = this.files[0]?.name || "No file yet... Let’s spice things up!";
+    document.getElementById("fileName").textContent = fileName;
+    });
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.getElementById("imageFile").addEventListener("change", function () {
+        const file = this.files[0];
+        const preview = document.getElementById("imagePreview");
+        const statusText = document.getElementById("fileStatusText");
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.innerHTML = `
+                  <img src="${e.target.result}" alt="Preview"
+                       class="image-preview-animate"
+                       style="max-width: 150px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); margin-bottom: 8px;">
+                  <div class="text-muted small fst-italic">${file.name}</div>
+                `;
+            };
+            reader.readAsDataURL(file);
+            statusText.textContent = ""; // ascunde mesajul inițial
+        } else {
+            preview.innerHTML = "";
+            statusText.textContent = "No file yet... Let’s spice things up!";
+        }
+    });
+</script>
+
 </body>
 </html>
