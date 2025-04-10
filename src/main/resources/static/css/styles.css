@@ -280,3 +280,14 @@ body.add-recipe-page {
     transform: scale(1);
   }
 }
+
+@media (min-width: 769px) {
+  .home-button-container {
+    position: fixed;
+    top: 70px; /* sub navbar */
+    left: 20px;
+    z-index: 1050;
+    background: transparent;
+    margin: 0 !important;
+  }
+}
