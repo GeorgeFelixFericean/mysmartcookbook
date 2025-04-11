@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recipeapp.recipe_app.dto.RecipeDTO;
 import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.service.RecipeService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,9 +26,16 @@ public class RecipeController {
     }
 
     @GetMapping
-    public List<Recipe> getAllRecipes() {
-        return recipeService.getAllRecipes();
+    public Page<Recipe> getFilteredRecipes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<String> ingredients) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        return recipeService.getFilteredRecipes(name, ingredients, pageable);
     }
+
 
     @GetMapping("/search-by-name")
     public List<Recipe> searchRecipes(@RequestParam String name) {
@@ -71,11 +81,14 @@ public class RecipeController {
     }
 
     @GetMapping("/filter")
-    public List<Recipe> filterRecipes(
+    public Page<Recipe> filterRecipes(
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) List<String> ingredients
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
     ) {
-        return recipeService.filterRecipes(name, ingredients);
+        Pageable pageable = PageRequest.of(page, size);
+        return recipeService.filterRecipes(name, ingredients, pageable);
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

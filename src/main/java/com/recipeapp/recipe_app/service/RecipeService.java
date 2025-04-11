@@ -5,6 +5,8 @@ import com.recipeapp.recipe_app.model.Ingredient;
 import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.repository.IngredientRepository;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,8 +39,8 @@ public class RecipeService {
         return recipeRepository.findByIngredients(ingredients, ingredients.size());
     }
 
-    public List<Recipe> getAllRecipes() {
-        return recipeRepository.findAll();
+    public Page<Recipe> getAllRecipes(Pageable pageable) {
+        return recipeRepository.findAll(pageable);
     }
 
     /**
@@ -112,24 +114,25 @@ public class RecipeService {
         return recipeRepository.findById(id);
     }
 
-    public List<Recipe> filterRecipes(String name, List<String> ingredients) {
+    public Page<Recipe> filterRecipes(String name, List<String> ingredients, Pageable pageable) {
         boolean hasName = name != null && !name.isBlank();
         boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
 
         if (!hasName && !hasIngredients) {
-            return recipeRepository.findAll();
+            return recipeRepository.findAll(pageable);
         }
 
         if (hasName && !hasIngredients) {
-            return recipeRepository.findByNameContainingIgnoreCase(name);
+            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
         }
 
         if (!hasName) {
-            return recipeRepository.findByIngredients(ingredients, ingredients.size());
+            return recipeRepository.findByIngredientsNameIn(ingredients, pageable);
         }
 
-        return recipeRepository.findByNameAndIngredients(name, ingredients, ingredients.size());
+        return recipeRepository.findByNameContainingIgnoreCaseAndIngredientsNameIn(name, ingredients, pageable);
     }
+
 
     @Transactional
     public Optional<Recipe> updateRecipe(Long id, RecipeDTO recipeDTO, MultipartFile imageFile) {
@@ -189,5 +192,17 @@ public class RecipeService {
         return Optional.of(updated);
     }
 
+
+    public Page<Recipe> getFilteredRecipes(String name, List<String> ingredients, Pageable pageable) {
+        if ((name == null || name.isBlank()) && (ingredients == null || ingredients.isEmpty())) {
+            return recipeRepository.findAll(pageable);
+        } else if (name != null && !name.isBlank() && (ingredients == null || ingredients.isEmpty())) {
+            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
+        } else if ((name == null || name.isBlank()) && ingredients != null && !ingredients.isEmpty()) {
+            return recipeRepository.findByIngredientsNameIn(ingredients, pageable);
+        } else {
+            return recipeRepository.findByNameContainingIgnoreCaseAndIngredientsNameIn(name, ingredients, pageable);
+        }
+    }
 
 }

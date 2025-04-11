@@ -167,20 +167,33 @@ function goToRecipe(recipeId) {
 /***********************
  * ALL RECIPES
  ***********************/
-// [MODIFICAT PENTRU CARDURI]
-function fetchAllRecipes() {
-  fetch("/api/recipes")
+function fetchAllRecipes(page = 0, size = 6) {
+  const name = document.getElementById('filter-name')?.value || "";
+  const ingredientInputs = document.querySelectorAll('.ingredient-input');
+  const ingredients = Array.from(ingredientInputs)
+    .map(input => input.value.trim())
+    .filter(val => val !== "");
+
+  const params = new URLSearchParams({ page, size });
+  if (name) params.append("name", name);
+  ingredients.forEach(ing => params.append("ingredients", ing));
+
+  fetch(`/api/recipes?${params.toString()}`)
     .then(response => response.json())
     .then(data => {
       let container = document.getElementById("allRecipesContainer");
 
-      // Cream un grid de carduri (Bootstrap) cu 1 col pe ecrane mici, 3 col pe ecrane medii
+      if (!data.content || data.content.length === 0) {
+        container.innerHTML = "<p class='text-center'>No tasty treasures found...</p>";
+        document.getElementById("paginationContainer").innerHTML = "";
+        return;
+      }
+
       container.innerHTML = `
         <div class="row row-cols-1 row-cols-md-3 g-4">
-          ${data.map(recipe => `
+          ${data.content.map(recipe => `
             <div class="col">
               <div class="card shadow-sm">
-                <!-- Imaginea. Dacă nu există recipe.imageUrl, folosim un placeholder. -->
                 <img
                   src="${recipe.imagePath ? recipe.imagePath : '/img/placeholder.jpg'}"
                   class="card-img-top"
@@ -189,11 +202,8 @@ function fetchAllRecipes() {
                 >
                 <div class="card-body">
                   <h5 class="card-title">${recipe.name}</h5>
-                  <button
-                    class="btn btn-sm btn-outline-primary"
-                    onclick="goToRecipe(${recipe.id})"
-                  >
-                    Detalii
+                  <button class="btn btn-sm btn-outline-primary" onclick="goToRecipe(${recipe.id})">
+                    Details
                   </button>
                 </div>
               </div>
@@ -201,11 +211,30 @@ function fetchAllRecipes() {
           `).join('')}
         </div>
       `;
+
+      // pagination buttons
+      const paginationContainer = document.getElementById("paginationContainer");
+      paginationContainer.innerHTML = "";
+
+      if (data.totalPages > 1) {
+        const prevDisabled = page === 0 ? "disabled" : "";
+        const nextDisabled = page === data.totalPages - 1 ? "disabled" : "";
+
+        paginationContainer.innerHTML = `
+          <div class="d-flex justify-content-center mt-4 gap-3">
+            <button class="btn btn-outline-secondary" ${prevDisabled} onclick="fetchAllRecipes(${page - 1})">← Previous</button>
+            <button class="btn btn-outline-secondary" ${nextDisabled} onclick="fetchAllRecipes(${page + 1})">Next →</button>
+          </div>
+        `;
+      }
     })
-    .catch(error => console.error("Eroare la încărcarea rețetelor:", error));
+    .catch(error => {
+      console.error("Error loading recipes:", error);
+      document.getElementById("allRecipesContainer").innerHTML = "<p class='text-center text-danger'>Oops! Something went wrong...</p>";
+    });
 }
 
-function filterRecipes() {
+function filterRecipes(page = 0, size = 6) {
   const name = document.getElementById('filter-name').value;
   const ingredientInputs = document.querySelectorAll('.ingredient-input');
   const ingredients = Array.from(ingredientInputs)
@@ -215,22 +244,22 @@ function filterRecipes() {
   const query = new URLSearchParams();
   if (name) query.append("name", name);
   ingredients.forEach(ing => query.append("ingredients", ing));
-
-  console.log("Trimitem request cu:", query.toString());
+  query.append("page", page);
+  query.append("size", size);
 
   fetch(`/api/recipes/filter?${query.toString()}`)
     .then(res => res.json())
     .then(data => {
       let container = document.getElementById("allRecipesContainer");
-
-      if (data.length === 0) {
-        container.innerHTML = "<p class='text-center'>Nu s-au găsit rețete.</p>";
+      if (!data.content || data.content.length === 0) {
+        container.innerHTML = "<p class='text-center'>No tasty treasures found...</p>";
+        document.getElementById("paginationContainer").innerHTML = "";
         return;
       }
 
       container.innerHTML = `
         <div class="row row-cols-1 row-cols-md-3 g-4">
-          ${data.map(recipe => `
+          ${data.content.map(recipe => `
             <div class="col">
               <div class="card shadow-sm">
                 <img
@@ -245,7 +274,7 @@ function filterRecipes() {
                     class="btn btn-sm btn-outline-primary"
                     onclick="goToRecipe(${recipe.id})"
                   >
-                    Detalii
+                    Details
                   </button>
                 </div>
               </div>
@@ -253,9 +282,26 @@ function filterRecipes() {
           `).join('')}
         </div>
       `;
+
+      // pagination buttons
+      const paginationContainer = document.getElementById("paginationContainer");
+      paginationContainer.innerHTML = "";
+
+      if (data.totalPages > 1) {
+        const prevDisabled = page === 0 ? "disabled" : "";
+        const nextDisabled = page === data.totalPages - 1 ? "disabled" : "";
+
+        paginationContainer.innerHTML = `
+          <div class="d-flex justify-content-center mt-4 gap-3">
+            <button class="btn btn-outline-secondary" ${prevDisabled} onclick="filterRecipes(${page - 1})">← Previous</button>
+            <button class="btn btn-outline-secondary" ${nextDisabled} onclick="filterRecipes(${page + 1})">Next →</button>
+          </div>
+        `;
+      }
     })
-    .catch(error => console.error("Eroare la filtrare:", error));
+    .catch(error => console.error("Error filtering recipes:", error));
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchAllRecipes();
@@ -267,5 +313,5 @@ function resetFilters() {
   ingredientContainer.innerHTML = `
     <input type="text" class="form-control mb-2 ingredient-input" placeholder="Ingredient 1">
   `;
-  fetchAllRecipes(); // reîncarcă toate rețetele
+  fetchAllRecipes(0); // reîncarcă toate rețetele
 }

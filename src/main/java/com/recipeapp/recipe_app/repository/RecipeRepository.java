@@ -1,6 +1,8 @@
 package com.recipeapp.recipe_app.repository;
 
 import com.recipeapp.recipe_app.model.Recipe;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,5 +24,13 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findByNameAndIngredients(@Param("name") String name,
                                           @Param("ingredients") List<String> ingredients,
                                           @Param("size") long size);
+
+    Page<Recipe> findAll(Pageable pageable);
+
+    Page<Recipe> findByNameContainingIgnoreCase(String name, Pageable pageable);
+
+    Page<Recipe> findByIngredientsNameIn(List<String> ingredients, Pageable pageable);
+
+    Page<Recipe> findByNameContainingIgnoreCaseAndIngredientsNameIn(String name, List<String> ingredients, Pageable pageable);
 
 }
