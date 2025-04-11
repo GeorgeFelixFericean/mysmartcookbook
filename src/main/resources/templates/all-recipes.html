@@ -36,7 +36,7 @@
 
 <!-- Navbar responsive cu iconițe și text pe mobil -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/">Recipe App</a>
+    <a class="navbar-brand" href="/">WhatCanICook?! 🧄🥦🍕</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">
         <span class="navbar-toggler-icon"></span>
@@ -46,17 +46,17 @@
         <ul class="navbar-nav ms-auto">
             <!-- Add Recipe -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Adaugă rețetă">
+                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
                     <i class="bi bi-plus-circle fs-5"></i>
-                    <span class="d-inline d-lg-none">Adaugă</span>
+                    <span class="d-inline d-lg-none">Got something tasty in mind? Add a new recipe!</span>
                 </a>
             </li>
 
             <!-- Caută Rețete -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Caută & Vezi rețete">
+                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
                     <i class="bi bi-search fs-5"></i>
-                    <span class="d-inline d-lg-none">Caută</span>
+                    <span class="d-inline d-lg-none">Search the vault of flavors!</span>
                 </a>
             </li>
         </ul>
@@ -66,7 +66,7 @@
 <!-- Buton Acasă sub navbar -->
 <div class="home-button-container">
     <a href="/" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
-        ← Acasă
+        ← Take Me Home, Chef!
     </a>
 </div>
 
@@ -74,19 +74,19 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="p-4 shadow" style="background-color: rgba(255, 255, 255, 0.85); border-radius: 8px;">
-                <h2 class="text-center mb-4">Lista tuturor rețetelor</h2>
+                <h2 class="text-center mb-4">🍽️ Your recipe vault is ready. Let's explore the flavors!</h2>
                 <!-- FORMULAR FILTRARE -->
                 <form id="filter-form" class="mb-4">
                     <div class="mb-3">
-                        <input type="text" id="filter-name" class="form-control" placeholder="Caută după nume">
+                        <input type="text" id="filter-name" class="form-control" placeholder="Got a dish in mind? 🍲">
                     </div>
                     <div id="ingredient-container" class="mb-3">
-                        <input type="text" class="form-control mb-2 ingredient-input" placeholder="Ingredient 1">
+                        <input type="text" class="form-control mb-2 ingredient-input" placeholder="What’s inside? 🧂">
                     </div>
                     <div class="d-flex flex-wrap gap-2">
-                        <button type="button" class="btn btn-outline-secondary" onclick="addIngredientInput()">Adaugă ingredient</button>
-                        <button type="button" class="btn btn-primary" onclick="filterRecipes()">Filtrează</button>
-                        <button type="button" class="btn btn-outline-secondary" onclick="resetFilters()">Resetează</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="addIngredientInput()">➕ Toss in another one!</button>
+                        <button type="button" class="btn btn-primary" onclick="filterRecipes()">✨ Let’s cook up some matches!</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="resetFilters()">🔄 Start fresh!</button>
                     </div>
                 </form>
                 <!-- CONTAINER PENTRU REȚETE -->
@@ -103,7 +103,7 @@
         const input = document.createElement('input');
         input.type = 'text';
         input.className = 'form-control mb-2 ingredient-input';
-        input.placeholder = `Ingredient ${container.children.length + 1}`;
+        input.placeholder = `What else? 🧂`;
         container.appendChild(input);
     }
 
