@@ -68,6 +68,15 @@ function saveRecipe() {
     });
   }
 
+  // Resetăm mesajele de eroare
+  document.getElementById("errorMessage").style.display = "none";
+
+  // Validare nume
+  if (!name.trim()) {
+        showToast("⚠️ Don't leave your masterpiece nameless!", false);
+        return;
+    }
+
   // 3. Construim obiectul JSON pentru DTO
   const recipeDTO = {
     name: name,
@@ -99,24 +108,27 @@ function saveRecipe() {
         if (!data || !data.id) {
             throw new Error("Rețeta nu a fost salvată corect. ID-ul este lipsă.");
         }
-        const saveMessage = document.getElementById("saveMessage");
-        saveMessage.innerHTML = `🎉 Woohoo! Your recipe is safe in the vault!`;
-        saveMessage.style.color = "#28a745"; // verde de success
-        saveMessage.style.display = "block";
-
-        // scroll automat la mesaj (pentru UX nice)
-        saveMessage.scrollIntoView({ behavior: "smooth" });
+        showToast("🎉 Woohoo! Your recipe is safe in the vault!", true);
 
         // redirect după 2 secunde
         setTimeout(() => {
           window.location.href = "/";
         }, 2000);
-
     })
     .catch(error => {
         console.error("Eroare la salvare:", error);
         alert("Eroare: " + error.message);
     });
+}
+
+function showToast(message, isSuccess = true) {
+  const toast = document.getElementById("toastMessage");
+  toast.className = `toast-message ${isSuccess ? "toast-success" : "toast-error"}`;
+  toast.textContent = message;
+  toast.style.display = "block";
+  setTimeout(() => {
+    toast.style.display = "none";
+  }, 3000);
 }
 
 
@@ -149,12 +161,8 @@ function searchByIngredients() {
  * GO TO RECIPE DETAILS
  ***********************/
 function goToRecipe(recipeId) {
-  // Într-un proiect mai complex, ai avea o pagină dedicată /recipe/{id}
-  // Pentru exemplu, doar alertăm ID-ul:
-  //  alert("Ar trebui să mergi la detaliile rețetei cu ID: " + recipeId);
   window.location.href = "/recipe/" + recipeId;
 }
-
 
 /***********************
  * ALL RECIPES
