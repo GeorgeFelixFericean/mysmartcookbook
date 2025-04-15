@@ -203,7 +203,7 @@ function fetchAllRecipes(page = 0, size = 6) {
                 <div class="card-body">
                   <h5 class="card-title">${recipe.name}</h5>
                   <button class="btn btn-sm btn-outline-primary" onclick="goToRecipe(${recipe.id})">
-                    Details
+                    🍴 Show me the dish!
                   </button>
                 </div>
               </div>
@@ -222,8 +222,14 @@ function fetchAllRecipes(page = 0, size = 6) {
 
         paginationContainer.innerHTML = `
           <div class="d-flex justify-content-center mt-4 gap-3">
-            <button class="btn btn-outline-secondary" ${prevDisabled} onclick="fetchAllRecipes(${page - 1})">← Previous</button>
-            <button class="btn btn-outline-secondary" ${nextDisabled} onclick="fetchAllRecipes(${page + 1})">Next →</button>
+            <button class="btn btn-warning btn-sm" ${prevDisabled} onclick="fetchAllRecipes(${page - 1})">
+                ⬅️ Back to more bites
+            </button>
+
+            <button class="btn btn-warning btn-sm" ${nextDisabled} onclick="fetchAllRecipes(${page + 1})">
+                Next yummy batch 🍽️
+            </button>
+
           </div>
         `;
       }
