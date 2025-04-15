@@ -69,7 +69,7 @@
 <body class="edit-recipe-page">
 <!-- Navbar responsive cu iconițe și text pe mobil -->
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/">Recipe App</a>
+    <a class="navbar-brand" href="/">WhatCanICook?! 🧄🥦🍕</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
             aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">
         <span class="navbar-toggler-icon"></span>
@@ -79,7 +79,7 @@
         <ul class="navbar-nav ms-auto">
             <!-- Adaugă Rețetă -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Adaugă rețetă">
+                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
                     <i class="bi bi-plus-circle fs-5"></i>
                     <span class="d-inline d-lg-none">Adaugă</span>
                 </a>
@@ -87,7 +87,7 @@
 
             <!-- Caută Rețete -->
             <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Caută & Vezi rețete">
+                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
                     <i class="bi bi-search fs-5"></i>
                     <span class="d-inline d-lg-none">Caută</span>
                 </a>
@@ -98,45 +98,67 @@
 
 <div class="home-button-container">
     <a href="/" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
-        ← Acasă
+        ← Take Me Home, Chef!
     </a>
 </div>
 
 <div class="edit-recipe-wrapper">
     <div class="edit-recipe-container scaled-form">
-        <h2 class="text-center mb-4">Editează Rețeta</h2>
+        <h2 class="text-center mb-4">🍴 Tweak Your Tasty Creation</h2>
 
         <form id="editRecipeForm" enctype="multipart/form-data">
             <div class="mb-3">
-                <label for="name" class="form-label">Nume Rețetă:</label>
+                <label for="name" class="form-label">🏷️ Dish Name (make it epic)</label>
                 <input type="text" class="form-control" id="name" required>
             </div>
 
             <div class="mb-3">
-                <label for="instructions" class="form-label">Instrucțiuni:</label>
+                <label for="instructions" class="form-label">✨ How does the magic happen?</label>
                 <textarea class="form-control" id="instructions" rows="3"></textarea>
             </div>
 
             <div class="mb-3">
-                <label for="notes" class="form-label">Observații:</label>
+                <label for="notes" class="form-label">💡 Tips, swaps, or secrets?</label>
                 <textarea class="form-control" id="notes" rows="2"></textarea>
             </div>
 
+<!--            <div class="mb-3">-->
+<!--                <label for="imageFile" class="form-label">📷 Got a better food glam? Upload it!</label>-->
+<!--                <input type="file" class="form-control" id="imageFile" accept="image/*">-->
+<!--                <img id="imagePreview" style="display:none;" />-->
+<!--            </div>-->
+
             <div class="mb-3">
-                <label for="imageFile" class="form-label">Încarcă imagine nouă:</label>
-                <input type="file" class="form-control" id="imageFile" accept="image/*">
-                <img id="imagePreview" style="display:none;" />
+                <label for="imageFile" class="form-label d-block">📷 Got a better food glam? Upload it!</label>
+
+                <!-- Butonul de upload stilizat -->
+                <button type="button" class="btn btn-secondary btn-sm" onclick="document.getElementById('imageFile').click()">
+                    📁 Pick your glam shot!
+                </button>
+
+                <!-- Inputul real, ascuns -->
+                <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;" />
+
+                <!-- Textul care apare când nu e imagine -->
+                <div id="fileStatusText" class="text-muted small fst-italic mt-1">
+                    Still waiting for a <span class="fst-italic">masterpiece</span>...
+                </div>
+
+                <!-- Preview imagine -->
+                <div id="imagePreview" class="mt-3"></div>
             </div>
 
-            <h5>Ingrediente</h5>
+            <h5>🥄 The tasty components!</h5>
             <div id="ingredientsContainer"></div>
-            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Adaugă ingredient</button>
+            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Toss in another one!</button>
 
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-warning w-100">Salvează Modificările</button>
-                <a id="cancelButton" class="btn btn-outline-secondary w-100">Anulează</a>
+                <button type="submit" class="btn btn-warning w-100">💾 Save the delicious upgrade</button>
+                <a id="cancelButton" class="btn btn-outline-secondary w-100">❌ Never mind, go back!</a>
             </div>
         </form>
+        <!-- Error message for oversized images or other form issues -->
+        <div id="errorMessage" class="text-danger text-center fw-semibold mt-2" style="display: none;"></div>
     </div>
 </div>
 
@@ -168,14 +190,14 @@
     function addIngredientField(name = "", quantity = "", unit = "") {
         const container = document.getElementById("ingredientsContainer");
         const html = `
-            <div class="row mb-2 ingredient-row">
-                <div class="col-4">
-                    <input type="text" class="form-control" name="ingredientName" placeholder="Nume" value="${name}">
+            <div class="row mb-2 ingredient-row align-items-center">
+                <div class="col-md-4 col-12 mb-2 mb-md-0">
+                    <input type="text" class="form-control" name="ingredientName" placeholder="Ingredient" value="${name}">
                 </div>
-                <div class="col-4">
-                    <input type="number" step="any" class="form-control" name="ingredientQuantity" placeholder="Cantitate" value="${quantity}">
+                <div class="col-md-3 col-6 mb-2 mb-md-0">
+                    <input type="number" step="any" class="form-control" name="ingredientQuantity" placeholder="Qty" value="${quantity}">
                 </div>
-                <div class="col-3">
+                <div class="col-md-3 col-6 mb-2 mb-md-0">
                     <select class="form-select" name="ingredientUnit">
                         <option value="GRAM" ${unit === "GRAM" ? "selected" : ""}>g</option>
                         <option value="KILOGRAM" ${unit === "KILOGRAM" ? "selected" : ""}>kg</option>
@@ -184,13 +206,17 @@
                         <option value="CUP" ${unit === "CUP" ? "selected" : ""}>cup</option>
                         <option value="TABLESPOON" ${unit === "TABLESPOON" ? "selected" : ""}>tbsp</option>
                         <option value="TEASPOON" ${unit === "TEASPOON" ? "selected" : ""}>tsp</option>
-                        <option value="PIECE" ${unit === "PIECE" ? "selected" : ""}>buc</option>
+                        <option value="PIECE" ${unit === "PIECE" ? "selected" : ""}>pcs</option>
                     </select>
                 </div>
-                <div class="col-1">
-                    <button type="button" class="btn btn-danger btn-sm" onclick="this.closest('.ingredient-row').remove()">&times;</button>
+                <div class="col-md-2 col-12 text-md-end">
+                    <button type="button" class="btn btn-outline-danger btn-sm w-100 w-md-auto mt-2 mt-md-0" onclick="this.closest('.ingredient-row').remove()">
+                        🗑️ Toss it out!
+                    </button>
                 </div>
             </div>`;
+
+
         container.insertAdjacentHTML("beforeend", html);
     }
 
@@ -223,9 +249,19 @@
         formData.append("recipeDTO", new Blob([JSON.stringify(recipeDTO)], { type: "application/json" }));
 
         const imageFile = document.getElementById("imageFile").files[0];
+
         if (imageFile) {
+            const maxSize = 1 * 1024 * 1024; // 5MB
+            if (imageFile.size > maxSize) {
+                const errorElement = document.getElementById("errorMessage"); // adaugă div-ul dacă nu-l ai deja
+                errorElement.textContent = "📸 That file’s too fabulous to fit! Max size is 5MB.";
+                errorElement.style.display = "block";
+                return; // oprește submitul
+            }
+
             formData.append("imageFile", imageFile);
         }
+
 
         fetch(`/api/recipes/${recipeId}`, {
             method: "PUT",
