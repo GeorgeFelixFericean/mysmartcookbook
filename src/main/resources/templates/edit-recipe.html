@@ -251,7 +251,7 @@
         const imageFile = document.getElementById("imageFile").files[0];
 
         if (imageFile) {
-            const maxSize = 1 * 1024 * 1024; // 5MB
+            const maxSize = 5 * 1024 * 1024; // 5MB
             if (imageFile.size > maxSize) {
                 const errorElement = document.getElementById("errorMessage"); // adaugă div-ul dacă nu-l ai deja
                 errorElement.textContent = "📸 That file’s too fabulous to fit! Max size is 5MB.";
