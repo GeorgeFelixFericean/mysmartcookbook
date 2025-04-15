@@ -6,6 +6,7 @@ import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.repository.IngredientRepository;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -193,16 +195,46 @@ public class RecipeService {
     }
 
 
+//    public Page<Recipe> getFilteredRecipes(String name, List<String> ingredients, Pageable pageable) {
+//        if ((name == null || name.isBlank()) && (ingredients == null || ingredients.isEmpty())) {
+//            return recipeRepository.findAll(pageable);
+//        } else if (name != null && !name.isBlank() && (ingredients == null || ingredients.isEmpty())) {
+//            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
+//        } else if ((name == null || name.isBlank()) && ingredients != null && !ingredients.isEmpty()) {
+//            return recipeRepository.findByIngredientsNameIn(ingredients, pageable);
+//        } else {
+//            return recipeRepository.findByNameContainingIgnoreCaseAndIngredientsNameIn(name, ingredients, pageable);
+//        }
+//    }
+
     public Page<Recipe> getFilteredRecipes(String name, List<String> ingredients, Pageable pageable) {
-        if ((name == null || name.isBlank()) && (ingredients == null || ingredients.isEmpty())) {
+        System.out.println("Ajuns în filtrare cu ingrediente: " + ingredients);
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
+
+        if (!hasName && !hasIngredients) {
             return recipeRepository.findAll(pageable);
-        } else if (name != null && !name.isBlank() && (ingredients == null || ingredients.isEmpty())) {
-            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
-        } else if ((name == null || name.isBlank()) && ingredients != null && !ingredients.isEmpty()) {
-            return recipeRepository.findByIngredientsNameIn(ingredients, pageable);
-        } else {
-            return recipeRepository.findByNameContainingIgnoreCaseAndIngredientsNameIn(name, ingredients, pageable);
         }
+
+        if (!hasName) {
+            return recipeRepository.findByPartialIngredientNames(ingredients, pageable);
+        }
+
+        if (!hasIngredients) {
+            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
+        }
+
+        // filtrare dublă – întâi după ingrediente, apoi după nume
+        Page<Recipe> filteredByIngredients = recipeRepository.findByPartialIngredientNames(ingredients, pageable);
+
+        String lowerName = name.toLowerCase();
+        List<Recipe> filteredRecipes = filteredByIngredients
+                .stream()
+                .filter(r -> r.getName().toLowerCase().contains(lowerName))
+                .toList();
+
+        return new PageImpl<>(filteredRecipes, pageable, filteredRecipes.size());
+
     }
 
 }

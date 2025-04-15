@@ -36,7 +36,6 @@ public class RecipeController {
         return recipeService.getFilteredRecipes(name, ingredients, pageable);
     }
 
-
     @GetMapping("/search-by-name")
     public List<Recipe> searchRecipes(@RequestParam String name) {
         return recipeService.searchRecipesByName(name);
@@ -88,7 +87,8 @@ public class RecipeController {
             @RequestParam(defaultValue = "9") int size
     ) {
         Pageable pageable = PageRequest.of(page, size);
-        return recipeService.filterRecipes(name, ingredients, pageable);
+        return recipeService.getFilteredRecipes(name, ingredients, pageable); // <-- AICI
+
     }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -109,6 +109,4 @@ public class RecipeController {
         return updatedRecipe.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
 }
