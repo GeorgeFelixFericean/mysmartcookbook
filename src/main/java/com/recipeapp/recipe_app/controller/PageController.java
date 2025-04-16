@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class PageController {
 
     @GetMapping("/")
+    public String landingPage() {
+        return "landing"; // va încărca landing.html din templates
+    }
+
+    @GetMapping("/home")
     public String homePage() {
-        return "home"; // Va încărca home.html din templates
+        return "home"; // home.html rămâne exact cum e
     }
 
     @GetMapping("/add-recipe")

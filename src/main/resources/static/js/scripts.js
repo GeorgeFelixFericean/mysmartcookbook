@@ -112,7 +112,7 @@ function saveRecipe() {
 
         // redirect după 2 secunde
         setTimeout(() => {
-          window.location.href = "/";
+          window.location.href = "/home";
         }, 2000);
     })
     .catch(error => {
