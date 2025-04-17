@@ -7,21 +7,31 @@
   <link rel="stylesheet" href="/css/styles.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+  <style>
+    /* Stil pentru containerul cu textul principal pentru lizibilitate */
+    .hero-overlay {
+      background-color: rgba(0, 0, 0, 0.5); /* fundal semi-transparent negru */
+      border-radius: 1rem; /* colțuri rotunjite */
+      padding: 2rem; /* spațiere interioară */
+      max-width: 800px; /* lățime maximă pentru desktop */
+    }
+  </style>
 </head>
 <body class="d-flex flex-column justify-content-center align-items-center vh-100 text-white text-center">
-  <!-- HERO TITLE + SLOGAN -->
-  <div class="text-center text-white mb-4">
-    <h1 class="fw-bold display-3">🍳 WhatCanIEat?!</h1>
-    <p class="lead fw-semibold fst-italic">
-      Add. Search. Cook. Repeat.
-    </p>
-    <p class="mb-4 fs-5">
-      The smartest way to manage your recipes and cook with what you’ve got.
-    </p>
-  </div>
 
-  <!-- Short Description -->
-  <div class="description text-white text-center mt-3 mb-4" style="max-width: 700px;">
+<!-- HERO TITLE + SLOGAN + DESCRIPTION cu fundal opac -->
+<div class="hero-overlay mb-4">
+  <!-- HERO TITLE -->
+  <h1 class="fw-bold display-3">🍳 WhatCanIEat?!</h1>
+
+  <!-- SLOGAN -->
+  <p class="lead fw-semibold fst-italic">Add. Search. Cook. Repeat.</p>
+
+  <!-- ONE-LINER -->
+  <p class="mb-4 fs-5">The smartest way to manage your recipes and cook with what you’ve got.</p>
+
+  <!-- DESCRIERE SCURTĂ -->
+  <div class="description mt-3">
     <p class="lead fst-italic">
       Tired of food waste and decision fatigue? <strong>WhatCanIEat?!</strong> helps you find meals based on what you already have.
     </p>
@@ -29,52 +39,53 @@
       For busy bees, students, or anyone tired of Googling “what to cook with eggs and rice”.
     </p>
   </div>
+</div>
 
-  <!-- LOGIN & REGISTER CARD -->
-  <div class="p-5 bg-white bg-opacity-75 rounded shadow text-center" style="max-width: 500px;">
-    <div class="d-flex justify-content-center gap-3 mb-3">
-      <a href="/login" class="btn btn-primary px-4">
-        <i class="bi bi-lock-fill me-2"></i>Login
-      </a>
-      <a href="/register" class="btn btn-outline-primary px-4">
-        <i class="bi bi-person-plus-fill me-2"></i>Register
-      </a>
-    </div>
+<!-- LOGIN & REGISTER CARD -->
+<div class="p-5 bg-white bg-opacity-75 rounded shadow text-center" style="max-width: 500px;">
+  <div class="d-flex justify-content-center gap-3 mb-3">
+    <a href="/login" class="btn btn-primary px-4">
+      <i class="bi bi-lock-fill me-2"></i>Login
+    </a>
+    <a href="/register" class="btn btn-outline-primary px-4">
+      <i class="bi bi-person-plus-fill me-2"></i>Register
+    </a>
   </div>
+</div>
 
-  <!-- FEATURE HIGHLIGHTS -->
-  <div class="container text-white mt-5">
-    <div class="row text-center g-4">
-      <div class="col-md-3 col-sm-6">
-        <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
-          <div class="fs-2">🔎</div>
-          <h5 class="fw-bold mt-2">Search by ingredients</h5>
-          <p class="small">Find recipes with what you already have at home.</p>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
-          <div class="fs-2">✍️</div>
-          <h5 class="fw-bold mt-2">Add your own recipes</h5>
-          <p class="small">Save your favorites, edit anytime.</p>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
-          <div class="fs-2">📷</div>
-          <h5 class="fw-bold mt-2">Upload photos</h5>
-          <p class="small">Make your cookbook tasty and visual.</p>
-        </div>
-      </div>
-      <div class="col-md-3 col-sm-6">
-        <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
-          <div class="fs-2">🔄</div>
-          <h5 class="fw-bold mt-2">Update anytime</h5>
-          <p class="small">Recipes evolve — so can yours. Edit and improve anytime.</p>
-        </div>
+<!-- FEATURE HIGHLIGHTS -->
+<div class="container text-white mt-5">
+  <div class="row text-center g-4">
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
+        <div class="fs-2">🔎</div>
+        <h5 class="fw-bold mt-2">Search by ingredients</h5>
+        <p class="small">Find recipes with what you already have at home.</p>
       </div>
     </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
+        <div class="fs-2">✍️</div>
+        <h5 class="fw-bold mt-2">Add your own recipes</h5>
+        <p class="small">Save your favorites, edit anytime.</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
+        <div class="fs-2">📷</div>
+        <h5 class="fw-bold mt-2">Upload photos</h5>
+        <p class="small">Make your cookbook tasty and visual.</p>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6">
+      <div class="p-3 bg-dark bg-opacity-50 rounded h-100">
+        <div class="fs-2">🔄</div>
+        <h5 class="fw-bold mt-2">Update anytime</h5>
+        <p class="small">Recipes evolve — so can yours. Edit and improve anytime.</p>
+      </div>
+    </div>
   </div>
+</div>
 
 </body>
 </html>
