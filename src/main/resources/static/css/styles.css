@@ -363,3 +363,18 @@ body.add-recipe-page {
     display: none;
   }
 }
+
+.user-suggestions a {
+  text-decoration: underline;
+}
+.user-suggestions a:hover {
+  color: #ffc107; /* gold-ish on hover */
+}
+.user-suggestions ul {
+  margin-top: 10px;
+}
+
+.user-suggestions {
+  max-width: 700px;
+  margin: 0 auto;
+}
