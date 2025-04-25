@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login – WhatCanIEat?!</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+<!-- Fundal blurat deja definit în styles.css prin body::before -->
+
+<!-- Conținut centrat -->
+<div class="d-flex justify-content-center align-items-center vh-100">
+    <div class="text-center text-white hero-text">
+        <!-- Înlocuiește conținutul din interiorul <div class="text-center text-white hero-text"> -->
+        <h1 class="mb-4">Welcome back! 🍽️</h1>
+
+        <form action="/login" method="post" style="max-width: 400px; margin: 0 auto;" autocomplete="off">
+            <!-- Email -->
+            <div class="mb-3 text-start">
+                <label for="email" class="form-label">Email:</label>
+                <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="user_email"
+                        placeholder="you@fridge.com"
+                        autocomplete="off"
+                        required
+                />
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4 text-start">
+                <label for="password" class="form-label">Password:</label>
+                <input
+                        type="password"
+                        class="form-control"
+                        id="password"
+                        name="user_password"
+                        placeholder="••••••••"
+                        autocomplete="off"
+                        required
+                />
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary w-100 fw-bold">
+                Log me in! 🔐
+            </button>
+        </form>
+
+    </div>
+</div>
+</body>
+</html>

@@ -12,6 +12,12 @@ public class PageController {
         return "landing"; // va încărca landing.html din templates
     }
 
+    @GetMapping("/login")
+    public String showLoginPage() {
+        return "login"; // caută login.html în /resources/templates
+    }
+
+
     @GetMapping("/home")
     public String homePage() {
         return "home"; // home.html rămâne exact cum e
