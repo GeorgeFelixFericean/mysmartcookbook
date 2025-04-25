@@ -17,6 +17,11 @@ public class PageController {
         return "home"; // home.html rămâne exact cum e
     }
 
+    @GetMapping("/register")
+    public String showRegisterPage() {
+        return "register"; // returnează register.html din templates
+    }
+
     @GetMapping("/add-recipe")
     public String addRecipePage() {
         return "add-recipe";
