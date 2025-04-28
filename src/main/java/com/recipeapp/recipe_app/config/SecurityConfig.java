@@ -2,7 +2,6 @@ package com.recipeapp.recipe_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,11 +16,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    @Bean
+//    @Bean
 //    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        http
 //                .authorizeHttpRequests(auth -> auth
-////                        .requestMatchers("/api/users/register", "/h2-console/**").permitAll()
+
+    /// /                        .requestMatchers("/api/users/register", "/h2-console/**").permitAll()
 //                                .requestMatchers("/api/users/register", "/h2-console/**").permitAll()
 //                        .anyRequest().authenticated()
 //                )
@@ -31,7 +31,7 @@ public class SecurityConfig {
 //
 //        return http.build();
 //    }
-
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
@@ -39,7 +39,7 @@ public class SecurityConfig {
                         .frameOptions(frame -> frame.disable())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/api/users/register", "/api/users/login", "/h2-console/**").permitAll()
+                        .requestMatchers("/", "/home", "/add-recipe", "/login", "/register", "/api/users/register", "/api/users/login", "/h2-console/**", "/css/**", "/js/**", "/img/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

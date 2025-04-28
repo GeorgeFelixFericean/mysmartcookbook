@@ -310,7 +310,85 @@ function filterRecipes(page = 0, size = 6) {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  fetchAllRecipes();
+  // Cod pentru încărcare rețete
+    if (document.getElementById("allRecipesContainer")) {
+      fetchAllRecipes();
+    }
+
+    // Cod pentru register - protejat corect
+    const form = document.getElementById("registerForm");
+
+    if (form) {  // VERIFICARE înainte să punem event listener
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            // Validări de câmpuri goale
+            if (!username) {
+                showToast("⚠️ Oops! You forgot to pick a username. Even chefs need names! 🍽️", false);
+                return;
+            }
+
+            if (!email) {
+                showToast("⚠️ We need your email to send magical recipes! 📧✨", false);
+                return;
+            }
+
+            if (!password) {
+                showToast("⚠️ Hmm... Password missing? We must protect your kitchen secrets! 🕵️‍♂️🔒", false);
+                return;
+            }
+
+            // Definim messageDiv aici, ca să fie vizibil peste tot în handler
+            const messageDiv = document.getElementById("registerMessage");
+            try {
+                const response = await fetch("/api/users/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password
+                    })
+                });
+
+                if (response.ok) {
+                    // Dacă înregistrarea a avut succes
+//                    messageDiv.textContent = "Account created successfully! You can now log in.";
+//                    messageDiv.style.color = "green";
+//                    messageDiv.style.display = "block";
+                    showToast("🎉 Yay! Your account is ready. Let's get cooking! 🍳", true);
+
+                    // Redirect către login după 2 secunde
+                    setTimeout(() => {
+                        window.location.href = "/login";
+                    }, 2000);
+                } else {
+                    // Dacă serverul a întors o eroare
+                    const errorData = await response.json();
+//                    messageDiv.textContent = "Error: " + (errorData.error || "Registration failed.");
+//                    messageDiv.style.color = "red";
+//                    messageDiv.style.display = "block";
+                    showToast("🚨 " + (errorData.error || "Something went wrong... Our kitchen elves are on it! 🧙‍♂️"), false);
+                }
+            }
+            catch (error) {
+                console.error("Error during registration:", error);
+//                messageDiv.textContent = "An unexpected error occurred. Please try again later.";
+//                messageDiv.style.color = "red";
+//                messageDiv.style.display = "block";
+                showToast("🚨 Something went wrong... Our kitchen elves are on it! 🧙‍♂️", false);
+            }
+        });
+    } else {
+        console.log("No register form found on this page.");
+    }
+
 });
 
 function resetFilters() {
