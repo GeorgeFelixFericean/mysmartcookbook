@@ -323,6 +323,10 @@ body.add-recipe-page {
   animation: shake 0.5s ease-in-out;
 }
 
+.toast-message.login-toast {
+  top: 100px !important;
+}
+
 @keyframes fadeInOut {
   0% { opacity: 0; transform: translate(-50%, -20px); }
   10% { opacity: 1; transform: translate(-50%, 0); }

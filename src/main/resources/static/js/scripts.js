@@ -389,6 +389,54 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("No register form found on this page.");
     }
 
+    // Cod pentru login - protejat corect
+    const loginForm = document.getElementById("loginForm");
+
+    if (loginForm) {
+        loginForm.addEventListener("submit", async function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById("username").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (!username) {
+                showToast("⚠️ Please enter your username!", false);
+                return;
+            }
+
+            if (!password) {
+                showToast("⚠️ Don't forget the password. Even chefs lock the fridge! 🔐", false);
+                return;
+            }
+
+            try {
+                const response = await fetch("/api/users/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                });
+
+                if (response.ok) {
+                    showToast("✅ Welcome back, chef! 🍳 Redirecting you to your kitchen...", true);
+                    setTimeout(() => {
+                        window.location.href = "/home";
+                    }, 2000);
+                } else {
+                    const errorData = await response.json();
+                    showToast("❌ " + (errorData.error || "Login failed. Please try again!"), false);
+                }
+
+            } catch (error) {
+                console.error("Login error:", error);
+                showToast("🚨 Unexpected error. Our oven might be on fire! 🔥", false);
+            }
+        });
+    }
 });
 
 function resetFilters() {
