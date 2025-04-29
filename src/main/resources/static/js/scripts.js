@@ -422,7 +422,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 if (response.ok) {
+                    // ✅ Login successful
+
+                    // Extragem username-ul trimis la login
+                    const loggedUsername = username;
+
+                    // Salvăm username-ul în localStorage pentru a reține starea de login
+                    localStorage.setItem("loggedUser", loggedUsername);
+
+                    // Afișăm toast de succes
                     showToast("✅ Welcome back, chef! 🍳 Redirecting you to your kitchen...", true);
+
+                    // Redirecționăm către pagina principală după 2 secunde
                     setTimeout(() => {
                         window.location.href = "/home";
                     }, 2000);
