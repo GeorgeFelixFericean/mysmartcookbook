@@ -56,33 +56,35 @@
 </head>
 <body>
 <!-- Navbar responsive cu iconițe și text pe mobil -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<!-- Navbar va fi injectat aici -->
+<div id="navbar-placeholder"></div>
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
+<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
+<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">-->
+<!--        <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <!-- Add Recipe -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
-                    <i class="bi bi-plus-circle fs-5"></i>
-                    <span class="d-inline d-lg-none">Adaugă</span>
-                </a>
-            </li>
+<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--        <ul class="navbar-nav ms-auto">-->
+<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
+<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
+<!--                    <span class="d-inline d-lg-none">Adaugă</span>-->
+<!--                </a>-->
+<!--            </li>-->
 
-            <!-- Caută Rețete -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
-                    <i class="bi bi-search fs-5"></i>
-                    <span class="d-inline d-lg-none">Caută</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!--            &lt;!&ndash; Caută Rețete &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
+<!--                    <i class="bi bi-search fs-5"></i>-->
+<!--                    <span class="d-inline d-lg-none">Caută</span>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</nav>-->
 
 <!-- Buton Acasă -->
 <div class="home-button-container">
@@ -224,5 +226,32 @@
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Injectare navbar -->
+<script>
+    fetch("/html/navbar.html")
+      .then(response => response.text())
+      .then(html => {
+        const container = document.getElementById("navbar-placeholder");
+        container.innerHTML = html;
+
+        // Tooltips Bootstrap
+        const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltips.forEach(el => new bootstrap.Tooltip(el));
+
+        // Setare username
+        const username = localStorage.getItem("loggedUser");
+        const nameSpan = document.getElementById("navbarUsername");
+        if (username && nameSpan) {
+          nameSpan.textContent = username;
+        }
+
+        // Funcție logout
+        window.logoutUser = function () {
+          localStorage.removeItem("loggedUser");
+          window.location.href = "/";
+        };
+      })
+      .catch(error => console.error("Navbar load error:", error));
+</script>
 </body>
 </html>

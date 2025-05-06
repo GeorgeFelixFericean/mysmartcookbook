@@ -415,25 +415,12 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({
-                        username: username,
-                        password: password
-                    })
+                    body: JSON.stringify({ username, password })
                 });
 
                 if (response.ok) {
-                    // ✅ Login successful
-
-                    // Extragem username-ul trimis la login
-                    const loggedUsername = username;
-
-                    // Salvăm username-ul în localStorage pentru a reține starea de login
-                    localStorage.setItem("loggedUser", loggedUsername);
-
-                    // Afișăm toast de succes
+                    localStorage.setItem("loggedUser", username);
                     showToast("✅ Welcome back, chef! 🍳 Redirecting you to your kitchen...", true);
-
-                    // Redirecționăm către pagina principală după 2 secunde
                     setTimeout(() => {
                         window.location.href = "/home";
                     }, 2000);
@@ -441,7 +428,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     const errorData = await response.json();
                     showToast("❌ " + (errorData.error || "Login failed. Please try again!"), false);
                 }
-
             } catch (error) {
                 console.error("Login error:", error);
                 showToast("🚨 Unexpected error. Our oven might be on fire! 🔥", false);
@@ -457,4 +443,19 @@ function resetFilters() {
     <input type="text" class="form-control mb-2 ingredient-input" placeholder="Ingredient 1">
   `;
   fetchAllRecipes(0); // reîncarcă toate rețetele
+}
+
+// ✅ Afișează username-ul în navbar după ce pagina s-a încărcat complet
+window.addEventListener("DOMContentLoaded", () => {
+    const username = localStorage.getItem("loggedUser");
+    const nameSpan = document.getElementById("navbarUsername");
+    if (username && nameSpan) {
+        nameSpan.textContent = username;
+    }
+});
+
+// 🔹 Funcție de logout: șterge userul și redirecționează
+function logoutUser() {
+    localStorage.removeItem("loggedUser");
+    window.location.href = "/";
 }

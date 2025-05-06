@@ -17,33 +17,48 @@
 </head>
 <body>
 <!-- Responsive Navbar with icons & mobile text -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
+<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
+<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--        <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <!-- Add Recipe -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
-                    <i class="bi bi-plus-circle fs-5"></i>
-                    <span class="d-inline d-lg-none">Got something tasty in mind? Add a new recipe!</span>
-                </a>
-            </li>
+<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--        <ul class="navbar-nav ms-auto">-->
+<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
+<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
+<!--                    <span class="d-inline d-lg-none">Got something tasty in mind? Add a new recipe!</span>-->
+<!--                </a>-->
+<!--            </li>-->
 
-            <!-- Search Recipes -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
-                    <i class="bi bi-search fs-5"></i>
-                    <span class="d-inline d-lg-none">Search the vault of flavors!</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!--            &lt;!&ndash; Search Recipes &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
+<!--                    <i class="bi bi-search fs-5"></i>-->
+<!--                    <span class="d-inline d-lg-none">Search the vault of flavors!</span>-->
+<!--                </a>-->
+<!--            </li>-->
+
+<!--            &lt;!&ndash; Username Display &ndash;&gt;-->
+<!--            <li class="nav-item d-flex align-items-center text-white px-2">-->
+<!--                👋 Hello, <span id="navbarUsername" class="fw-bold mx-1">User</span>!-->
+<!--            </li>-->
+
+<!--            &lt;!&ndash; Logout Button &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <button class="btn btn-sm btn-outline-light ms-2" onclick="logoutUser()">-->
+<!--                    Logout 🔓-->
+<!--                </button>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</nav>-->
+
+<!-- Navbar va fi injectat aici -->
+<div id="navbar-placeholder"></div>
 
 <!-- Hero Text -->
 <div class="hero-text mt-4 text-center text-white">
@@ -84,12 +99,43 @@
         </div>
     </div>
 </div>
-
-<!-- Tooltip initialization -->
-<script>
-    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
-</script>
+<!-- Bootstrap Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Scripturi comune -->
+<script src="/js/scripts.js"></script>
+
+<!-- Injectare navbar -->
+<script>
+    fetch("/html/navbar.html")
+      .then(response => response.text())
+      .then(html => {
+        const container = document.getElementById("navbar-placeholder");
+        container.innerHTML = html;
+
+        // 🔹 Tooltips Bootstrap (doar în navbar)
+        const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltips.forEach(el => new bootstrap.Tooltip(el));
+
+        // 🔹 Setăm username-ul din localStorage
+        const username = localStorage.getItem("loggedUser");
+        const nameSpan = document.getElementById("navbarUsername");
+        if (username && nameSpan) {
+          nameSpan.textContent = username;
+        }
+
+        // 🔹 Funcție globală pentru butonul Logout
+        window.logoutUser = function () {
+          localStorage.removeItem("loggedUser");
+          window.location.href = "/";
+        };
+      })
+      .catch(error => {
+        console.error("Failed to load navbar:", error);
+      });
+</script>
+</body>
+
+
 </body>
 </html>

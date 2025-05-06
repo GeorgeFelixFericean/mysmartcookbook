@@ -39,7 +39,23 @@ public class SecurityConfig {
                         .frameOptions(frame -> frame.disable())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/home", "/add-recipe", "/login", "/register", "/api/users/register", "/api/users/login", "/h2-console/**", "/css/**", "/js/**", "/img/**").permitAll()
+                        .requestMatchers("/",
+                                "/home",
+                                "/add-recipe",
+                                "/all-recipes",
+                                "/edit-recipe",
+                                "/api/recipes/**",
+                                "/api/**",
+                                "/recipe/**",
+                                "/login",
+                                "/register",
+                                "/api/users/register",
+                                "/api/users/login",
+                                "/h2-console/**",
+                                "/css/**",
+                                "/js/**",
+                                "/img/**",
+                                "/html/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

@@ -18,33 +18,36 @@
 <body class="add-recipe-page fit-scroll">
 <div id="toastMessage" class="toast-message"></div>
 <!-- Responsive Navbar with icons & mobile text -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
-    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+<!-- Navbar va fi injectat aici -->
+<div id="navbar-placeholder"></div>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ms-auto">
-            <!-- Add Recipe -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">
-                    <i class="bi bi-plus-circle fs-5"></i>
-                    <span class="d-inline d-lg-none">Add recipe</span>
-                </a>
-            </li>
+<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
+<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
+<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
+<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
+<!--        <span class="navbar-toggler-icon"></span>-->
+<!--    </button>-->
 
-            <!-- Search Recipes -->
-            <li class="nav-item">
-                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">
-                    <i class="bi bi-search fs-5"></i>
-                    <span class="d-inline d-lg-none">Search</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
+<!--        <ul class="navbar-nav ms-auto">-->
+<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
+<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
+<!--                    <span class="d-inline d-lg-none">Add recipe</span>-->
+<!--                </a>-->
+<!--            </li>-->
+
+<!--            &lt;!&ndash; Search Recipes &ndash;&gt;-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
+<!--                    <i class="bi bi-search fs-5"></i>-->
+<!--                    <span class="d-inline d-lg-none">Search</span>-->
+<!--                </a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </div>-->
+<!--</nav>-->
 
 <!-- Home button under navbar -->
 <div class="home-button-container">
@@ -169,6 +172,33 @@
             statusText.textContent = "No file yet... Let’s spice things up!";
         }
     });
+</script>
+<!-- Injectare navbar -->
+<script>
+    fetch("/html/navbar.html")
+      .then(response => response.text())
+      .then(html => {
+        const container = document.getElementById("navbar-placeholder");
+        container.innerHTML = html;
+
+        // Tooltips Bootstrap
+        const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltips.forEach(el => new bootstrap.Tooltip(el));
+
+        // Setare username
+        const username = localStorage.getItem("loggedUser");
+        const nameSpan = document.getElementById("navbarUsername");
+        if (username && nameSpan) {
+          nameSpan.textContent = username;
+        }
+
+        // Funcție logout
+        window.logoutUser = function () {
+          localStorage.removeItem("loggedUser");
+          window.location.href = "/";
+        };
+      })
+      .catch(error => console.error("Navbar load error:", error));
 </script>
 </body>
 </html>
