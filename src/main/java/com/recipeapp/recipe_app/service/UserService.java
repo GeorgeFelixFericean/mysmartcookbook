@@ -45,7 +45,7 @@ public class UserService {
      * @param username Username-ul introdus de utilizator
      * @param password Parola introdusă de utilizator
      */
-    public void login(String username, String password) {
+    public User login(String username, String password) {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isEmpty()) {
@@ -58,8 +58,10 @@ public class UserService {
             throw new InvalidCredentialsException("Invalid username or password");
         }
 
-        // Dacă trece de verificări, login-ul este considerat reușit
+        // Dacă trece de verificări, returnăm user-ul
+        return user;
     }
+
 
     // Poți adăuga mai târziu metode pentru login, găsire după email etc.
 }

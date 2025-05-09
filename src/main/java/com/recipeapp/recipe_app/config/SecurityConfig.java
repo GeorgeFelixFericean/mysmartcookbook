@@ -16,21 +16,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeHttpRequests(auth -> auth
-
-    /// /                        .requestMatchers("/api/users/register", "/h2-console/**").permitAll()
-//                                .requestMatchers("/api/users/register", "/h2-console/**").permitAll()
-//                        .anyRequest().authenticated()
-//                )
-//                .csrf(csrf -> csrf.disable()) // ok pentru testare în Postman
-//                .formLogin(login -> login.disable()) // dezactivează login-ul UI
-//                .httpBasic(basic -> basic.disable()); // dezactivează basic auth
-//
-//        return http.build();
-//    }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -44,8 +29,6 @@ public class SecurityConfig {
                                 "/add-recipe",
                                 "/all-recipes",
                                 "/edit-recipe",
-                                "/api/recipes/**",
-                                "/api/**",
                                 "/recipe/**",
                                 "/login",
                                 "/register",
@@ -56,6 +39,7 @@ public class SecurityConfig {
                                 "/js/**",
                                 "/img/**",
                                 "/html/**").permitAll()
+                        .requestMatchers("/api/recipes/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -63,9 +47,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .logout(logout -> logout.permitAll());
-
         return http.build();
     }
-
-
 }

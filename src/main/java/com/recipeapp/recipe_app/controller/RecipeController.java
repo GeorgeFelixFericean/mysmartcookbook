@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,10 +31,11 @@ public class RecipeController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "9") int size,
             @RequestParam(required = false) String name,
-            @RequestParam(required = false) List<String> ingredients) {
+            @RequestParam(required = false) List<String> ingredients,
+            Principal principal) {
 
         Pageable pageable = PageRequest.of(page, size);
-        return recipeService.getFilteredRecipes(name, ingredients, pageable);
+        return recipeService.getFilteredRecipes(name, ingredients, pageable, principal.getName());
     }
 
     @GetMapping("/search-by-name")
@@ -49,8 +51,12 @@ public class RecipeController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Recipe> addRecipe(
             @RequestPart("recipeDTO") String recipeDTOString,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            Principal principal  // Adaugăm Principal aici
     ) {
+        // Log pentru verificare Principal
+        System.out.println("Logged in as: " + (principal != null ? principal.getName() : "No principal"));
+
         ObjectMapper objectMapper = new ObjectMapper();
         RecipeDTO recipeDTO;
         try {
@@ -58,11 +64,10 @@ public class RecipeController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-        Recipe savedRecipe = recipeService.saveRecipe(recipeDTO, imageFile);
+        Recipe savedRecipe = recipeService.saveRecipe(recipeDTO, imageFile, principal.getName());
         if (savedRecipe.getId() == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
-
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRecipe);
     }
 
@@ -79,17 +84,16 @@ public class RecipeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/filter")
-    public Page<Recipe> filterRecipes(
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) List<String> ingredients,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "9") int size
-    ) {
-        Pageable pageable = PageRequest.of(page, size);
-        return recipeService.getFilteredRecipes(name, ingredients, pageable); // <-- AICI
-
-    }
+//    @GetMapping("/filter")
+//    public Page<Recipe> filterRecipes(
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) List<String> ingredients,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "9") int size
+//    ) {
+//        Pageable pageable = PageRequest.of(page, size);
+//        return recipeService.getFilteredRecipes(name, ingredients, pageable); // <-- AICI
+//    }
 
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Recipe> updateRecipe(
@@ -108,5 +112,13 @@ public class RecipeController {
         Optional<Recipe> updatedRecipe = recipeService.updateRecipe(id, recipeDTO, imageFile);
         return updatedRecipe.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/session-test")
+    public ResponseEntity<String> testSession(Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+        }
+        return ResponseEntity.ok("Authenticated as: " + principal.getName());
     }
 }

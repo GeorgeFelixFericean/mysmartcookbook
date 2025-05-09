@@ -7,6 +7,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface RecipeRepositoryCustom {
-    Page<Recipe> findByPartialIngredientNames(List<String> ingredientFragments, Pageable pageable);
+    Page<Recipe> findByPartialIngredientNames(List<String> ingredientFragments, String username, Pageable pageable);
 }
 

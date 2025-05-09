@@ -21,12 +21,13 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
     private EntityManager entityManager;
 
     @Override
-    public Page<Recipe> findByPartialIngredientNames(List<String> ingredientFragments, Pageable pageable) {
+    public Page<Recipe> findByPartialIngredientNames(List<String> ingredientFragments, String username, Pageable pageable) {
         System.out.println("Caut dupa ingrediente: " + ingredientFragments);
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Recipe> query = cb.createQuery(Recipe.class);
         Root<Recipe> recipe = query.from(Recipe.class);
-
+        // Adaugă condiția pentru user
+        Predicate userMatch = cb.equal(recipe.get("user").get("username"), username);
         List<Predicate> mustHaveAll = new ArrayList<>();
 
         for (String fragment : ingredientFragments) {
@@ -43,8 +44,9 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
             mustHaveAll.add(cb.exists(subquery));
         }
 
+        // Aplicăm filtrul de user împreună cu celelalte condiții
         query.select(recipe).distinct(true)
-                .where(cb.and(mustHaveAll.toArray(new Predicate[0])));
+                .where(cb.and(userMatch, cb.and(mustHaveAll.toArray(new Predicate[0]))));
 
         // Count query (simplificată — poate fi rafinată)
         List<Recipe> resultList = entityManager.createQuery(query)
@@ -53,9 +55,6 @@ public class RecipeRepositoryImpl implements RecipeRepositoryCustom {
                 .getResultList();
 
         long total = resultList.size(); // sau poți construi un countQuery similar
-
         return new PageImpl<>(resultList, pageable, total);
     }
-
 }
-

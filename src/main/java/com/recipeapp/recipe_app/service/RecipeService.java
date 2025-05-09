@@ -3,8 +3,10 @@ package com.recipeapp.recipe_app.service;
 import com.recipeapp.recipe_app.dto.RecipeDTO;
 import com.recipeapp.recipe_app.model.Ingredient;
 import com.recipeapp.recipe_app.model.Recipe;
+import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.repository.IngredientRepository;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
+import com.recipeapp.recipe_app.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -19,18 +21,17 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 public class RecipeService {
     private final RecipeRepository recipeRepository;
-    private final IngredientRepository ingredientRepository;
+    private final UserRepository userRepository;
 
-    public RecipeService(RecipeRepository recipeRepository, IngredientRepository ingredientRepository) {
+    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository) {
         this.recipeRepository = recipeRepository;
-        this.ingredientRepository = ingredientRepository;
+        this.userRepository = userRepository;
     }
 
     public List<Recipe> searchRecipesByName(String name) {
@@ -41,10 +42,6 @@ public class RecipeService {
         return recipeRepository.findByIngredients(ingredients, ingredients.size());
     }
 
-    public Page<Recipe> getAllRecipes(Pageable pageable) {
-        return recipeRepository.findAll(pageable);
-    }
-
     /**
      * Metodă care salvează o rețetă împreună cu fișierul imagine (dacă există).
      *
@@ -52,16 +49,12 @@ public class RecipeService {
      * @param imageFile fișierul imagine, poate fi null sau gol
      * @return rețeta salvată în baza de date
      */
-    public Recipe saveRecipe(RecipeDTO recipeDTO, MultipartFile imageFile) {
+    public Recipe saveRecipe(RecipeDTO recipeDTO, MultipartFile imageFile, String username) {
         // 1. Construim entitatea Recipe din DTO
         Recipe recipe = new Recipe();
         recipe.setName(recipeDTO.getName());
         recipe.setInstructions(recipeDTO.getInstructions());
         recipe.setNotes(recipeDTO.getNotes());
-
-        // Dacă DTO-ul are un câmp imagePath (ex: link extern),
-        // îl putem salva doar dacă nu încărcăm un fișier nou.
-        // (opțional) recipe.setImagePath(recipeDTO.getImagePath());
 
         // 2. Transformăm IngredientDTO -> Ingredient și le legăm de rețetă
         List<Ingredient> ingredients = new ArrayList<>();
@@ -103,7 +96,10 @@ public class RecipeService {
                 throw new RuntimeException("Eroare la salvarea fișierului imagine", e);
             }
         }
-
+        // Obținem User din UserRepository
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("User not found: " + username));
+        recipe.setUser(user);
         // 4. Salvăm rețeta în DB (include și ingredientele)
         return recipeRepository.save(recipe);
     }
@@ -115,26 +111,6 @@ public class RecipeService {
     public Optional<Recipe> getRecipeById(Long id) {
         return recipeRepository.findById(id);
     }
-
-    public Page<Recipe> filterRecipes(String name, List<String> ingredients, Pageable pageable) {
-        boolean hasName = name != null && !name.isBlank();
-        boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
-
-        if (!hasName && !hasIngredients) {
-            return recipeRepository.findAll(pageable);
-        }
-
-        if (hasName && !hasIngredients) {
-            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
-        }
-
-        if (!hasName) {
-            return recipeRepository.findByIngredientsNameIn(ingredients, pageable);
-        }
-
-        return recipeRepository.findByNameContainingIgnoreCaseAndIngredientsNameIn(name, ingredients, pageable);
-    }
-
 
     @Transactional
     public Optional<Recipe> updateRecipe(Long id, RecipeDTO recipeDTO, MultipartFile imageFile) {
@@ -194,38 +170,25 @@ public class RecipeService {
         return Optional.of(updated);
     }
 
-
-//    public Page<Recipe> getFilteredRecipes(String name, List<String> ingredients, Pageable pageable) {
-//        if ((name == null || name.isBlank()) && (ingredients == null || ingredients.isEmpty())) {
-//            return recipeRepository.findAll(pageable);
-//        } else if (name != null && !name.isBlank() && (ingredients == null || ingredients.isEmpty())) {
-//            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
-//        } else if ((name == null || name.isBlank()) && ingredients != null && !ingredients.isEmpty()) {
-//            return recipeRepository.findByIngredientsNameIn(ingredients, pageable);
-//        } else {
-//            return recipeRepository.findByNameContainingIgnoreCaseAndIngredientsNameIn(name, ingredients, pageable);
-//        }
-//    }
-
-    public Page<Recipe> getFilteredRecipes(String name, List<String> ingredients, Pageable pageable) {
-        System.out.println("Ajuns în filtrare cu ingrediente: " + ingredients);
+    public Page<Recipe> getFilteredRecipes(String name, List<String> ingredients, Pageable pageable, String username) {
+        System.out.println("Ajuns în filtrare cu ingrediente: " + ingredients + " pentru user: " + username);
         boolean hasName = name != null && !name.isBlank();
         boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
 
         if (!hasName && !hasIngredients) {
-            return recipeRepository.findAll(pageable);
+            return recipeRepository.findByUserUsername(username, pageable);
         }
 
         if (!hasName) {
-            return recipeRepository.findByPartialIngredientNames(ingredients, pageable);
+            return recipeRepository.findByPartialIngredientNames(ingredients, username, pageable);
         }
 
         if (!hasIngredients) {
-            return recipeRepository.findByNameContainingIgnoreCase(name, pageable);
+            return recipeRepository.findByUserUsernameAndNameContainingIgnoreCase(username, name, pageable);
         }
 
         // filtrare dublă – întâi după ingrediente, apoi după nume
-        Page<Recipe> filteredByIngredients = recipeRepository.findByPartialIngredientNames(ingredients, pageable);
+        Page<Recipe> filteredByIngredients = recipeRepository.findByPartialIngredientNames(ingredients, username, pageable);
 
         String lowerName = name.toLowerCase();
         List<Recipe> filteredRecipes = filteredByIngredients
@@ -234,7 +197,5 @@ public class RecipeService {
                 .toList();
 
         return new PageImpl<>(filteredRecipes, pageable, filteredRecipes.size());
-
     }
-
 }

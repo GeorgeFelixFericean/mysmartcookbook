@@ -1,5 +1,6 @@
 package com.recipeapp.recipe_app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
@@ -22,8 +23,20 @@ public class Recipe {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String notes;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")  // coloana user_id în tabela recipe
+    @JsonIgnore
+    private User user;
 
     //getters and setters
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Long getId() {
         return id;
     }
