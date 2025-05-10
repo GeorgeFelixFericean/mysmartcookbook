@@ -75,4 +75,19 @@ public class UserController {
         }
     }
 
+    // Endpoint explicit pentru logout
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        // Invalidăm sesiunea
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+
+        // Ștergem contextul de securitate
+        SecurityContextHolder.clearContext();
+
+        return ResponseEntity.ok("Logged out successfully");
+    }
+
 }

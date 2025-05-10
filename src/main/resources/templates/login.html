@@ -8,15 +8,12 @@
     <link rel="stylesheet" href="/css/styles.css?v=2" />
 </head>
 <body>
-<!-- Fundal blurat deja definit în styles.css prin body::before -->
-
 <div id="toastMessage" class="toast-message login-toast" style="display:none;"></div>
 <!-- Conținut centrat -->
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="text-center text-white hero-text">
         <!-- Înlocuiește conținutul din interiorul <div class="text-center text-white hero-text"> -->
         <h1 class="mb-4">Welcome back! 🍽️</h1>
-
         <form id="loginForm" style="max-width: 400px; margin: 0 auto;" autocomplete="off">
             <!-- Email -->
             <div class="mb-3 text-start">
@@ -30,7 +27,6 @@
                         autocomplete="off"
                 />
             </div>
-
             <!-- Password -->
             <div class="mb-4 text-start">
                 <label for="password" class="form-label">Password:</label>
@@ -43,11 +39,14 @@
                         autocomplete="off"
                 />
             </div>
-
             <!-- Submit button -->
             <button type="submit" class="btn btn-primary w-100 fw-bold">
                 Log me in! 🔐
             </button>
+            <p class="mt-3 text-white">
+                Don’t have an account?
+                <a href="/register" class="register-link">Register here</a>
+            </p>
         </form>
     </div>
 </div>

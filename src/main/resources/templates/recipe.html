@@ -58,34 +58,6 @@
 <!-- Navbar responsive cu iconițe și text pe mobil -->
 <!-- Navbar va fi injectat aici -->
 <div id="navbar-placeholder"></div>
-<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
-<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
-<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
-<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-
-<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav ms-auto">-->
-<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
-<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Adaugă</span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Caută Rețete &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
-<!--                    <i class="bi bi-search fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Caută</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</nav>-->
-
 <!-- Buton Acasă -->
 <div class="home-button-container">
     <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
@@ -105,10 +77,12 @@
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
                 <h5 class="modal-title" id="deleteModalLabel">Delete Recipe</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Închide"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Închide"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to say goodbye to this dish? This action can't be undone — it's gone like yesterday's leftovers!
+                Are you sure you want to say goodbye to this dish? This action can't be undone — it's gone like
+                yesterday's leftovers!
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nah, keep it!</button>
@@ -150,6 +124,11 @@
 
         fetch(`/api/recipes/${recipeId}`)
             .then(response => {
+              if (response.redirected) {
+              // Serverul ne-a redirecționat către login, așa că facem redirect și pe client
+              window.location.href = response.url;
+              return;
+            }
                 if (!response.ok) throw new Error("Rețetă inexistentă sau eroare la server.");
                 return response.json();
             })
