@@ -1,3 +1,5 @@
+console.log("SCRIPTS.JS LOADED");
+
 // ===============================
 // Session validation for protected pages
 // ===============================
@@ -326,11 +328,21 @@ function filterRecipes(page = 0, size = 6) {
     const ingredients = Array.from(ingredientInputs)
         .map(input => input.value.trim())
         .filter(val => val !== "");
+    if (!name && ingredients.length === 0) {
+        console.log("No filters provided, fetching all recipes.");
+        fetchAllRecipes();
+        return;
+    }
+
     const query = new URLSearchParams();
     if (name) query.append("name", name);
     ingredients.forEach(ing => query.append("ingredients", ing));
     query.append("page", page);
     query.append("size", size);
+
+    // ✅ ADAUGĂ AICI
+    console.log("Filter values - Name:", name, "Ingredients:", ingredients);
+    console.log("Filtering recipes with query:", query.toString());
     fetch(`/api/recipes/filter?${query.toString()}`)
         .then(res => res.json())
         .then(data => {
@@ -522,6 +534,31 @@ window.addEventListener("DOMContentLoaded", () => {
 
 // 🔹 Funcție de logout: șterge userul și redirecționează
 function logoutUser() {
+    console.log("Logout button clicked");
+
     localStorage.removeItem("loggedUser");
-    window.location.href = "/";
+
+    fetch('/api/users/logout', {
+        method: 'POST',
+        credentials: 'same-origin'
+    })
+    .then(response => {
+        console.log("Logout request completed:", response.status);
+        window.location.href = "/";
+    })
+    .catch(error => {
+        console.error("Logout request failed:", error);
+        window.location.href = "/";
+    });
 }
+
+// 🟢 Atașare corectă a evenimentului pe butonul cu id="logoutButton"
+document.addEventListener("DOMContentLoaded", function() {
+    const logoutButton = document.getElementById("logoutButton");
+    if (logoutButton) {
+        console.log("Logout button found, attaching event");
+        logoutButton.addEventListener("click", logoutUser);
+    } else {
+        console.log("Logout button not found");
+    }
+});

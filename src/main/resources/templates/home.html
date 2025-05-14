@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Recipe App - Home</title>
-    <link rel="icon" type="image/png" href="/img/favicon.png" />
+    <link rel="icon" type="image/png" href="/img/favicon.png"/>
     <link rel="stylesheet" href="/css/styles.css?v=4">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- Bootstrap Icons -->
@@ -16,46 +16,6 @@
     </style>
 </head>
 <body>
-<!-- Responsive Navbar with icons & mobile text -->
-<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
-<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
-<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
-<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-
-<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav ms-auto">-->
-<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
-<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Got something tasty in mind? Add a new recipe!</span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Search Recipes &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
-<!--                    <i class="bi bi-search fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Search the vault of flavors!</span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Username Display &ndash;&gt;-->
-<!--            <li class="nav-item d-flex align-items-center text-white px-2">-->
-<!--                👋 Hello, <span id="navbarUsername" class="fw-bold mx-1">User</span>!-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Logout Button &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <button class="btn btn-sm btn-outline-light ms-2" onclick="logoutUser()">-->
-<!--                    Logout 🔓-->
-<!--                </button>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</nav>-->
 
 <!-- Navbar va fi injectat aici -->
 <div id="navbar-placeholder"></div>
@@ -76,7 +36,8 @@
                 <img src="/img/add_recipe.png" class="card-img-top" alt="Add recipe">
                 <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title">✍️ New recipe just dropped? Tell me everything.</h5>
-                    <p class="card-text mb-4">Add ingredients, scribble your instructions, maybe throw in a glam pic. Your future self will thank you.</p>
+                    <p class="card-text mb-4">Add ingredients, scribble your instructions, maybe throw in a glam pic.
+                        Your future self will thank you.</p>
                     <div class="mt-auto">
                         <a href="/add-recipe" class="btn btn-primary">✨ Add Some Deliciousness</a>
                     </div>
@@ -90,7 +51,8 @@
                 <img src="/img/all_recipes.png" class="card-img-top" alt="View all recipes">
                 <div class="card-body text-center d-flex flex-column">
                     <h5 class="card-title">🧠 "I only have eggs and cheese..." – You, every week</h5>
-                    <p class="card-text mb-4">No problem. Type what you’ve got, I’ll show you what’s possible. Culinary wizardry, unlocked. 🧙‍♂️🥘</p>
+                    <p class="card-text mb-4">No problem. Type what you’ve got, I’ll show you what’s possible. Culinary
+                        wizardry, unlocked. 🧙‍♂️🥘</p>
                     <div class="mt-auto">
                         <a href="/all-recipes" class="btn btn-warning">🔍 Show Me the Magic</a>
                     </div>
@@ -113,29 +75,49 @@
         const container = document.getElementById("navbar-placeholder");
         container.innerHTML = html;
 
-        // 🔹 Tooltips Bootstrap (doar în navbar)
+        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
         const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltips.forEach(el => new bootstrap.Tooltip(el));
 
-        // 🔹 Setăm username-ul din localStorage
+        // 🔹 Setează username-ul din localStorage în navbar
         const username = localStorage.getItem("loggedUser");
         const nameSpan = document.getElementById("navbarUsername");
         if (username && nameSpan) {
           nameSpan.textContent = username;
         }
 
-        // 🔹 Funcție globală pentru butonul Logout
+        // 🔹 Funcție globală pentru logout
         window.logoutUser = function () {
+          console.log("Logout button clicked");
+
           localStorage.removeItem("loggedUser");
-          window.location.href = "/";
+
+          fetch('/api/users/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+          })
+          .then(response => {
+            console.log("Logout request completed:", response.status);
+            window.location.href = "/";
+          })
+          .catch(error => {
+            console.error("Logout request failed:", error);
+            window.location.href = "/";
+          });
         };
+
+        // ✅ Atașare eveniment după ce navbar-ul este injectat
+        const logoutButton = document.getElementById("logoutButton");
+        if (logoutButton) {
+          console.log("Logout button found after navbar injection");
+          logoutButton.addEventListener("click", window.logoutUser);
+        } else {
+          console.log("Logout button not found after navbar injection");
+        }
       })
       .catch(error => {
         console.error("Failed to load navbar:", error);
       });
 </script>
-</body>
-
-
 </body>
 </html>

@@ -125,12 +125,6 @@
                 <textarea class="form-control" id="notes" rows="2"></textarea>
             </div>
 
-<!--            <div class="mb-3">-->
-<!--                <label for="imageFile" class="form-label">📷 Got a better food glam? Upload it!</label>-->
-<!--                <input type="file" class="form-control" id="imageFile" accept="image/*">-->
-<!--                <img id="imagePreview" style="display:none;" />-->
-<!--            </div>-->
-
             <div class="mb-3">
                 <label for="imageFile" class="form-label d-block">📷 Got a better food glam? Upload it!</label>
 
@@ -254,7 +248,7 @@
         const imageFile = document.getElementById("imageFile").files[0];
 
         if (imageFile) {
-            const maxSize = 5 * 1024 * 1024; // 5MB
+            const maxSize = 1 * 1024 * 1024; // 5MB
             if (imageFile.size > maxSize) {
                 const errorElement = document.getElementById("errorMessage"); // adaugă div-ul dacă nu-l ai deja
                 errorElement.textContent = "📸 That file’s too fabulous to fit! Max size is 5MB.";
@@ -286,24 +280,50 @@
         const container = document.getElementById("navbar-placeholder");
         container.innerHTML = html;
 
-        // Tooltips Bootstrap
+        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
         const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltips.forEach(el => new bootstrap.Tooltip(el));
 
-        // Setare username
+        // 🔹 Setează username-ul din localStorage în navbar
         const username = localStorage.getItem("loggedUser");
         const nameSpan = document.getElementById("navbarUsername");
         if (username && nameSpan) {
           nameSpan.textContent = username;
         }
 
-        // Funcție logout
+        // 🔹 Funcție globală pentru logout
         window.logoutUser = function () {
+          console.log("Logout button clicked");
+
           localStorage.removeItem("loggedUser");
-          window.location.href = "/";
+
+          fetch('/api/users/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+          })
+          .then(response => {
+            console.log("Logout request completed:", response.status);
+            window.location.href = "/";
+          })
+          .catch(error => {
+            console.error("Logout request failed:", error);
+            window.location.href = "/";
+          });
         };
+
+        // ✅ Atașare eveniment după ce navbar-ul este injectat
+        const logoutButton = document.getElementById("logoutButton");
+        if (logoutButton) {
+          console.log("Logout button found after navbar injection");
+          logoutButton.addEventListener("click", window.logoutUser);
+        } else {
+          console.log("Logout button not found after navbar injection");
+        }
       })
-      .catch(error => console.error("Navbar load error:", error));
+      .catch(error => {
+        console.error("Failed to load navbar:", error);
+      });
 </script>
+
 </body>
 </html>

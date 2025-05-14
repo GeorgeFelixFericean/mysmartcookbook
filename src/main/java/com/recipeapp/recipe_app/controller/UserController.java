@@ -4,7 +4,9 @@ package com.recipeapp.recipe_app.controller;
 import com.recipeapp.recipe_app.dto.LoginRequest;
 import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.service.UserService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -77,7 +79,7 @@ public class UserController {
 
     // Endpoint explicit pentru logout
     @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request) {
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         // Invalidăm sesiunea
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -87,6 +89,12 @@ public class UserController {
         // Ștergem contextul de securitate
         SecurityContextHolder.clearContext();
 
+        // Ștergem JSESSIONID-ul de pe client
+        Cookie cookie = new Cookie("JSESSIONID", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // Expiră imediat
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
         return ResponseEntity.ok("Logged out successfully");
     }
 

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Recipe</title>
     <link rel="icon" type="image/png" href="/img/favicon.png">
@@ -21,34 +21,6 @@
 <!-- Navbar va fi injectat aici -->
 <div id="navbar-placeholder"></div>
 
-<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
-<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
-<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
-<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-
-<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav ms-auto">-->
-<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
-<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Add recipe</span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Search Recipes &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
-<!--                    <i class="bi bi-search fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Search</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</nav>-->
-
 <!-- Home button under navbar -->
 <div class="home-button-container">
     <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
@@ -66,17 +38,20 @@
                 <label for="name" class="form-label">🍽️ What should we call this masterpiece?
                     <span class="text-muted small">(Keep it snappy — 60 characters max!)</span>
                 </label>
-                <input type="text" maxlength="60" class="form-control" id="name" placeholder="Give it a name worthy of a feast!">
+                <input type="text" maxlength="60" class="form-control" id="name"
+                       placeholder="Give it a name worthy of a feast!">
             </div>
 
             <div class="mb-3">
                 <label for="instructions" class="form-label">✨ Tell me how the magic happens</label>
-                <textarea class="form-control" id="instructions" rows="3" placeholder="Step-by-step magic..."></textarea>
+                <textarea class="form-control" id="instructions" rows="3"
+                          placeholder="Step-by-step magic..."></textarea>
             </div>
 
             <div class="mb-3">
                 <label for="notes" class="form-label">💡 Tips, twists, or secrets?</label>
-                <textarea class="form-control" id="notes" rows="2" placeholder="Any tips or swaps? Drop them here!"></textarea>
+                <textarea class="form-control" id="notes" rows="2"
+                          placeholder="Any tips or swaps? Drop them here!"></textarea>
             </div>
 
             <div class="mb-3">
@@ -87,7 +62,8 @@
 
                 <!-- Upload button -->
                 <div class="mt-2">
-                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('imageFile').click()">
+                    <button type="button" class="btn btn-secondary"
+                            onclick="document.getElementById('imageFile').click()">
                         📸 Upload some food glam!
                     </button>
 
@@ -105,12 +81,13 @@
 
             <h5 class="mt-4">🧂 What goes in the pot?</h5>
             <div id="ingredientsContainer"></div>
-            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Toss in another one!</button>
+            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Toss in another one!
+            </button>
 
             <button type="submit" class="btn btn-primary w-100">💾 All set? Save it!</button>
             <div id="saveMessage" class="text-center mt-3 fw-semibold" style="display:none;"></div>
         </form>
-<!--        <div id="errorMessage" class="text-center mt-3 fw-semibold text-danger" style="display: none;"></div>-->
+        <!--        <div id="errorMessage" class="text-center mt-3 fw-semibold text-danger" style="display: none;"></div>-->
     </div>
 </div>
 
@@ -181,24 +158,50 @@
         const container = document.getElementById("navbar-placeholder");
         container.innerHTML = html;
 
-        // Tooltips Bootstrap
+        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
         const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltips.forEach(el => new bootstrap.Tooltip(el));
 
-        // Setare username
+        // 🔹 Setează username-ul din localStorage în navbar
         const username = localStorage.getItem("loggedUser");
         const nameSpan = document.getElementById("navbarUsername");
         if (username && nameSpan) {
           nameSpan.textContent = username;
         }
 
-        // Funcție logout
+        // 🔹 Funcție globală pentru logout
         window.logoutUser = function () {
+          console.log("Logout button clicked");
+
           localStorage.removeItem("loggedUser");
-          window.location.href = "/";
+
+          fetch('/api/users/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+          })
+          .then(response => {
+            console.log("Logout request completed:", response.status);
+            window.location.href = "/";
+          })
+          .catch(error => {
+            console.error("Logout request failed:", error);
+            window.location.href = "/";
+          });
         };
+
+        // ✅ Atașare eveniment după ce navbar-ul este injectat
+        const logoutButton = document.getElementById("logoutButton");
+        if (logoutButton) {
+          console.log("Logout button found after navbar injection");
+          logoutButton.addEventListener("click", window.logoutUser);
+        } else {
+          console.log("Logout button not found after navbar injection");
+        }
       })
-      .catch(error => console.error("Navbar load error:", error));
+      .catch(error => {
+        console.error("Failed to load navbar:", error);
+      });
 </script>
+
 </body>
 </html>

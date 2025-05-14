@@ -84,6 +84,18 @@ public class RecipeController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/filter")
+    public Page<Recipe> filterRecipes(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size,
+            Principal principal
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return recipeService.getFilteredRecipes(name, ingredients, pageable, principal.getName()); // <-- AICI
+    }
+
     @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Recipe> updateRecipe(
             @PathVariable Long id,

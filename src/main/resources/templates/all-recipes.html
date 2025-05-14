@@ -38,34 +38,6 @@
 <!-- Navbar va fi injectat aici -->
 <div id="navbar-placeholder"></div>
 
-<!--<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">-->
-<!--    <a class="navbar-brand" href="/home">WhatCanICook?! 🧄🥦🍕</a>-->
-<!--    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"-->
-<!--            aria-controls="navbarNav" aria-expanded="false" aria-label="Comutare navigare">-->
-<!--        <span class="navbar-toggler-icon"></span>-->
-<!--    </button>-->
-
-<!--    <div class="collapse navbar-collapse" id="navbarNav">-->
-<!--        <ul class="navbar-nav ms-auto">-->
-<!--            &lt;!&ndash; Add Recipe &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/add-recipe" data-bs-toggle="tooltip" title="Got something tasty in mind? Add a new recipe!">-->
-<!--                    <i class="bi bi-plus-circle fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Got something tasty in mind? Add a new recipe!</span>-->
-<!--                </a>-->
-<!--            </li>-->
-
-<!--            &lt;!&ndash; Caută Rețete &ndash;&gt;-->
-<!--            <li class="nav-item">-->
-<!--                <a class="nav-link d-flex align-items-center gap-1" href="/all-recipes" data-bs-toggle="tooltip" title="Search the vault of flavors!">-->
-<!--                    <i class="bi bi-search fs-5"></i>-->
-<!--                    <span class="d-inline d-lg-none">Search the vault of flavors!</span>-->
-<!--                </a>-->
-<!--            </li>-->
-<!--        </ul>-->
-<!--    </div>-->
-<!--</nav>-->
-
 <!-- Buton Acasă sub navbar -->
 <div class="home-button-container">
     <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
@@ -127,24 +99,49 @@
         const container = document.getElementById("navbar-placeholder");
         container.innerHTML = html;
 
-        // Tooltips Bootstrap
+        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
         const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltips.forEach(el => new bootstrap.Tooltip(el));
 
-        // Setare username
+        // 🔹 Setează username-ul din localStorage în navbar
         const username = localStorage.getItem("loggedUser");
         const nameSpan = document.getElementById("navbarUsername");
         if (username && nameSpan) {
           nameSpan.textContent = username;
         }
 
-        // Funcție logout
+        // 🔹 Funcție globală pentru logout
         window.logoutUser = function () {
+          console.log("Logout button clicked");
+
           localStorage.removeItem("loggedUser");
-          window.location.href = "/";
+
+          fetch('/api/users/logout', {
+            method: 'POST',
+            credentials: 'same-origin'
+          })
+          .then(response => {
+            console.log("Logout request completed:", response.status);
+            window.location.href = "/";
+          })
+          .catch(error => {
+            console.error("Logout request failed:", error);
+            window.location.href = "/";
+          });
         };
+
+        // ✅ Atașare eveniment după ce navbar-ul este injectat
+        const logoutButton = document.getElementById("logoutButton");
+        if (logoutButton) {
+          console.log("Logout button found after navbar injection");
+          logoutButton.addEventListener("click", window.logoutUser);
+        } else {
+          console.log("Logout button not found after navbar injection");
+        }
       })
-      .catch(error => console.error("Navbar load error:", error));
+      .catch(error => {
+        console.error("Failed to load navbar:", error);
+      });
 </script>
 </body>
 </html>
