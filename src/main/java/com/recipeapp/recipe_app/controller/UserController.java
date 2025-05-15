@@ -97,5 +97,4 @@ public class UserController {
         response.addCookie(cookie);
         return ResponseEntity.ok("Logged out successfully");
     }
-
 }

@@ -26,15 +26,33 @@ public class UserService {
 
     // Salvăm un utilizator în baza de date
     public User registerUser(User user) {
+        // ===========================
+        // Verificare lungime minimă parolă
+        // ===========================
+        if (user.getPassword() == null || user.getPassword().length() < 6) {
+            throw new IllegalArgumentException("Password must be at least 6 characters long");
+        }
+
+        // Verificare format valid email
+        if (!user.getEmail().matches("^[^@]+@[^@]+\\.[^@]+$")) {
+            throw new IllegalArgumentException("Invalid email format. Example: yourname@domain.com");
+        }
+
+        // Verificăm dacă username-ul există deja
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistsException("Username is already taken");
         }
+
+        // Verificăm dacă email-ul există deja
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new UserAlreadyExistsException("Email is already in use");
         }
+
         // Criptăm parola înainte de salvare
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
+
+        // Salvăm utilizatorul
         return userRepository.save(user);
     }
 

@@ -424,11 +424,21 @@ document.addEventListener("DOMContentLoaded", () => {
                 showToast("⚠️ We need your email to send magical recipes! 📧✨", false);
                 return;
             }
+            const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+            if (!emailPattern.test(email)) {
+                showToast("⚠️ Please enter a valid email address, like yourname@domain.com 📧", false);
+                return;
+            }
+
             if (!password) {
                 showToast("⚠️ Hmm... Password missing? We must protect your kitchen secrets! 🕵️‍♂️🔒", false);
                 return;
             }
-
+            // Verificare lungime minimă a parolei
+            if (password.length < 6) {
+                showToast("⚠️ Password must be at least 6 characters long. 🛡️", false);
+                return;
+            }
             // Definim messageDiv aici, ca să fie vizibil peste tot în handler
             const messageDiv = document.getElementById("registerMessage");
             try {
