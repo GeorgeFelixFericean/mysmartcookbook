@@ -2,6 +2,7 @@
 package com.recipeapp.recipe_app.controller;
 
 import com.recipeapp.recipe_app.dto.LoginRequest;
+import com.recipeapp.recipe_app.exception.InvalidCredentialsException;
 import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -72,6 +74,13 @@ public class UserController {
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
             return ResponseEntity.ok().build();
+        } catch (InvalidCredentialsException e) {
+            // ===============================
+            // Prindem excepția de credențiale invalide
+            // ===============================
+            return ResponseEntity.badRequest()
+                    .body(Collections.singletonMap("error", e.getMessage()));
+
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

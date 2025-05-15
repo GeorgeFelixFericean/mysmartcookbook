@@ -67,13 +67,13 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isEmpty()) {
-            throw new InvalidCredentialsException("Invalid username or password");
+            throw new InvalidCredentialsException("Hmm... We couldn't find that chef in our kitchen. 🍳 Try again or check your username.");
         }
 
         User user = userOptional.get();
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidCredentialsException("Invalid username or password");
+            throw new InvalidCredentialsException("Oops! That password doesn’t smell right... 🍽️ Try again!");
         }
 
         // Dacă trece de verificări, returnăm user-ul
