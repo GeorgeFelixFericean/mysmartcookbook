@@ -1,6 +1,31 @@
 console.log("SCRIPTS.JS LOADED");
 
 // ===============================
+// Redirect if session is active (checked on server)
+// ===============================
+document.addEventListener("DOMContentLoaded", () => {
+    const currentPath = window.location.pathname;
+    const publicPaths = ["/", "/login", "/register"];
+
+    if (publicPaths.includes(currentPath)) {
+        // Verificăm sesiunea pe server
+        fetch('/api/recipes/session-test', { credentials: 'same-origin' })
+            .then(response => response.text())
+            .then(text => {
+                if (!text.includes("Login") && !text.toLowerCase().includes("welcome back")) {
+                    console.log("Session is active on server, redirecting to /home...");
+                    window.location.href = "/home";
+                }
+            })
+            .catch(error => {
+                console.error("Session check failed:", error);
+                // Nu face nimic, utilizatorul rămâne pe pagina publică
+            });
+    }
+});
+
+
+// ===============================
 // Session validation for protected pages
 // ===============================
 
@@ -140,19 +165,43 @@ function saveRecipe() {
     const name = document.getElementById("name").value;
     const instructions = document.getElementById("instructions").value;
     const notes = document.getElementById("notes").value;
+    const externalLink = document.getElementById("externalLink").value;
+
 
     // 2. Colectăm ingredientele
     let ingredients = [];
     const ingredientNames = document.getElementsByClassName("ingredient-name");
     const ingredientQuantities = document.getElementsByClassName("ingredient-quantity");
     const ingredientUnits = document.getElementsByClassName("ingredient-unit");
+
+    // ✅ Validare ingredient complet
     for (let i = 0; i < ingredientNames.length; i++) {
+        const name = ingredientNames[i].value.trim();
+        const quantityValue = ingredientQuantities[i].value.trim();
+        const unit = ingredientUnits[i].value;
+
+        if (!name) {
+            showToast("⚠️ Please add a name for each ingredient. What goes in the pot? 🥄", false);
+            return;
+        }
+
+        if (!quantityValue || isNaN(quantityValue) || parseFloat(quantityValue) <= 0) {
+            showToast("⚠️ Please add a valid quantity for " + name + ". How much goes in? 🧂", false);
+            return;
+        }
+
+        if (!unit) {
+            showToast("⚠️ Please pick a unit for " + name + ". ⚖️", false);
+            return;
+        }
+
         ingredients.push({
-            name: ingredientNames[i].value,
-            quantity: parseFloat(ingredientQuantities[i].value),
-            unit: ingredientUnits[i].value
+            name: name,
+            quantity: parseFloat(quantityValue),
+            unit: unit
         });
     }
+
 
     // Resetăm mesajele de eroare
     document.getElementById("errorMessage").style.display = "none";
@@ -168,6 +217,7 @@ function saveRecipe() {
         name: name,
         instructions: instructions,
         notes: notes,
+        externalLink: externalLink, // 🆕 adăugat
         ingredients: ingredients
     };
 

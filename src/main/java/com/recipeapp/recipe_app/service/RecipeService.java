@@ -55,6 +55,7 @@ public class RecipeService {
         recipe.setName(recipeDTO.getName());
         recipe.setInstructions(recipeDTO.getInstructions());
         recipe.setNotes(recipeDTO.getNotes());
+        recipe.setExternalLink(recipeDTO.getExternalLink()); // 🆕 Setăm linkul extern
 
         // 2. Transformăm IngredientDTO -> Ingredient și le legăm de rețetă
         List<Ingredient> ingredients = new ArrayList<>();

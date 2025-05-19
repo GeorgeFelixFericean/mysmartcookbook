@@ -23,6 +23,8 @@ public class Recipe {
     @Lob
     @Column(columnDefinition = "TEXT")
     private String notes;
+    @Column(nullable = true)  // este opțional
+    private String externalLink;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")  // coloana user_id în tabela recipe
     @JsonIgnore
@@ -83,5 +85,13 @@ public class Recipe {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getExternalLink() {
+        return externalLink;
+    }
+
+    public void setExternalLink(String externalLink) {
+        this.externalLink = externalLink;
     }
 }

@@ -1,261 +1,255 @@
 <!DOCTYPE html>
 <html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalii Rețetă</title>
-    <link rel="icon" type="image/png" href="/img/favicon.png">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Detalii Rețetă</title>
+        <link rel="icon" type="image/png" href="/img/favicon.png">
+        <link rel="stylesheet" href="/css/styles.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <style>
+            body {
+              margin: 0;
+              padding: 0;
+              font-family: 'Segoe UI', sans-serif;
+              overflow-x: hidden;
+              overflow-y: auto;
+            }
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            overflow-x: hidden;
-            overflow-y: auto;
-        }
+            body::before {
+              content: "";
+              position: fixed;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background: url("/img/Background.png") no-repeat center center;
+              background-size: cover;
+              filter: blur(6px);
+              z-index: -1;
+            }
 
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url("/img/Background.png") no-repeat center center;
-            background-size: cover;
-            filter: blur(6px);
-            z-index: -1;
-        }
+            .home-button-container {
+              position: absolute;
+              top: 70px;
+              left: 20px;
+              z-index: 10;
+            }
 
-        .home-button-container {
-            position: absolute;
-            top: 70px;
-            left: 20px;
-            z-index: 10;
-        }
+            .recipe-container {
+              max-width: 800px;
+              margin: 0 auto;
+              padding: 20px;
+            }
 
-        .recipe-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .recipe-image {
-            max-width: 100%;
-            max-height: 300px;
-            object-fit: cover;
-            border-radius: 5px;
-            display: block;
-            margin: 0 auto;
-        }
-    </style>
-</head>
-<body>
-<!-- Navbar responsive cu iconițe și text pe mobil -->
-<!-- Navbar va fi injectat aici -->
-<div id="navbar-placeholder"></div>
-<!-- Buton Acasă -->
-<div class="home-button-container">
-    <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
-        ← Take Me Home, Chef!
-    </a>
-</div>
-
-<!-- ... restul head-ului rămâne la fel ... -->
-
-<div class="recipe-container">
-    <div id="recipeDetails"></div>
-</div>
-
-<!-- Modal pentru confirmare ștergere -->
-<div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="deleteModalLabel">Delete Recipe</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Închide"></button>
-            </div>
-            <div class="modal-body">
-                Are you sure you want to say goodbye to this dish? This action can't be undone — it's gone like
-                yesterday's leftovers!
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nah, keep it!</button>
-                <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, toss it! 🗑️</button>
+            .recipe-image {
+              max-width: 100%;
+              max-height: 300px;
+              object-fit: cover;
+              border-radius: 5px;
+              display: block;
+              margin: 0 auto;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navbar responsive cu iconițe și text pe mobil -->
+        <!-- Navbar va fi injectat aici -->
+        <div id="navbar-placeholder"></div>
+        <!-- Buton Acasă -->
+        <div class="home-button-container">
+            <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill"> ← Take Me Home, Chef! </a>
+        </div>
+        <!-- ... restul head-ului rămâne la fel ... -->
+        <div class="recipe-container">
+            <div id="recipeDetails"></div>
+        </div>
+        <!-- Modal pentru confirmare ștergere -->
+        <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-danger text-white">
+                        <h5 class="modal-title" id="deleteModalLabel">Delete Recipe</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Închide"></button>
+                    </div>
+                    <div class="modal-body"> Are you sure you want to say goodbye to this dish? This action can't be undone — it's gone like yesterday's leftovers! </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Nah, keep it!</button>
+                        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Yes, toss it! 🗑️</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-<script>
-    function formatUnit(unitKey, quantity) {
-        const unit = [
-            { key: "GRAM", abbreviation: "g", plural: "g" },
-            { key: "KILOGRAM", abbreviation: "kg", plural: "kg" },
-            { key: "MILLILITER", abbreviation: "ml", plural: "ml" },
-            { key: "LITER", abbreviation: "l", plural: "l" },
-            { key: "CUP", abbreviation: "cup", plural: "cups" },
-            { key: "TABLESPOON", abbreviation: "tbsp", plural: "tbsp" },
-            { key: "TEASPOON", abbreviation: "tsp", plural: "tsp" },
-            { key: "PIECE", abbreviation: "pcs", plural: "pcs" },
-            { key: "OUNCE", abbreviation: "oz", plural: "oz" },
-            { key: "POUND", abbreviation: "lb", plural: "lbs" },
-            { key: "PINCH", abbreviation: "pinch", plural: "pinches" },
-            { key: "DASH", abbreviation: "dash", plural: "dashes" },
-            { key: "SLICE", abbreviation: "slice", plural: "slices" },
-            { key: "CLOVE", abbreviation: "clove", plural: "cloves" },
-            { key: "STALK", abbreviation: "stalk", plural: "stalks" }
-        ].find(u => u.key === unitKey);
+        <script>
+            function formatUnit(unitKey, quantity) {
+                const unit = [
+                    { key: "GRAM", abbreviation: "g", plural: "g" },
+                    { key: "KILOGRAM", abbreviation: "kg", plural: "kg" },
+                    { key: "MILLILITER", abbreviation: "ml", plural: "ml" },
+                    { key: "LITER", abbreviation: "l", plural: "l" },
+                    { key: "CUP", abbreviation: "cup", plural: "cups" },
+                    { key: "TABLESPOON", abbreviation: "tbsp", plural: "tbsp" },
+                    { key: "TEASPOON", abbreviation: "tsp", plural: "tsp" },
+                    { key: "PIECE", abbreviation: "pcs", plural: "pcs" },
+                    { key: "OUNCE", abbreviation: "oz", plural: "oz" },
+                    { key: "POUND", abbreviation: "lb", plural: "lbs" },
+                    { key: "PINCH", abbreviation: "pinch", plural: "pinches" },
+                    { key: "DASH", abbreviation: "dash", plural: "dashes" },
+                    { key: "SLICE", abbreviation: "slice", plural: "slices" },
+                    { key: "CLOVE", abbreviation: "clove", plural: "cloves" },
+                    { key: "STALK", abbreviation: "stalk", plural: "stalks" }
+                ].find(u => u.key === unitKey);
 
-        if (!unit) return unitKey.toLowerCase();
-        return quantity > 1 ? unit.plural.toLowerCase() : unit.abbreviation.toLowerCase();
-    }
-</script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const path = window.location.pathname;
-        const recipeId = path.substring(path.lastIndexOf("/") + 1);
-        let currentRecipeId = null;
-
-        fetch(`/api/recipes/${recipeId}`)
-            .then(response => {
-              if (response.redirected) {
-              // Serverul ne-a redirecționat către login, așa că facem redirect și pe client
-              window.location.href = response.url;
-              return;
+                if (!unit) return unitKey.toLowerCase();
+                return quantity > 1 ? unit.plural.toLowerCase() : unit.abbreviation.toLowerCase();
             }
-                if (!response.ok) throw new Error("Rețetă inexistentă sau eroare la server.");
-                return response.json();
-            })
-            .then(recipe => {
-                currentRecipeId = recipe.id;
-                let htmlContent = `
-                <div class="card p-3 mb-3">
-                    <h3>${recipe.name}</h3>
-                    <p><strong>✨ Step-by-step magic</strong><br>
-                        ${
-                            recipe.instructions
-                                ? (recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://"))
-                                    ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">
-                                            ${recipe.instructions} 🔗
-                                       </a>`
-                                    : recipe.instructions
-                                : "N/A"
+        </script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const path = window.location.pathname;
+                const recipeId = path.substring(path.lastIndexOf("/") + 1);
+                let currentRecipeId = null;
+
+                fetch(`/api/recipes/${recipeId}`)
+                    .then(response => {
+                      if (response.redirected) {
+                      // Serverul ne-a redirecționat către login, așa că facem redirect și pe client
+                      window.location.href = response.url;
+                      return;
+                    }
+                        if (!response.ok) throw new Error("Rețetă inexistentă sau eroare la server.");
+                        return response.json();
+                    })
+                    .then(recipe => {
+                        currentRecipeId = recipe.id;
+                        let htmlContent = `
+                        <div class="card p-3 mb-3">
+                            <h3>${recipe.name}</h3>
+                            <p><strong>✨ Step-by-step magic</strong><br>
+                                ${
+                                    recipe.instructions
+                                        ? (recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://"))
+                                            ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">
+                                                    ${recipe.instructions} 🔗
+                                               </a>`
+                                            : recipe.instructions
+                                        : "N/A"
+                                }
+                            </p>
+                            <p><strong>💡 Tips, swaps & secrets?</strong><br> ${recipe.notes || "N/A"}</p>
+                            ${recipe.externalLink ? `
+                                <p><strong>📎 Found this gem online?</strong><br>
+                                <a href="${recipe.externalLink}" target="_blank" class="link-primary text-decoration-none">
+                                    ${recipe.externalLink} 🔗
+                                </a></p>
+                            ` : ''}
+                        `;
+
+                        if (recipe.imagePath) {
+                            htmlContent += `
+                                <img src="${recipe.imagePath}" alt="Imagine rețetă" class="recipe-image my-2">
+                            `;
                         }
-                    </p>
-                    <p><strong>💡 Tips, swaps & secrets?</strong><br> ${recipe.notes || "N/A"}</p>
-                `;
 
-                if (recipe.imagePath) {
-                    htmlContent += `
-                        <img src="${recipe.imagePath}" alt="Imagine rețetă" class="recipe-image my-2">
-                    `;
-                }
+                        htmlContent += `<h5>🧂 What goes in the pot?</h5><ul>`;
+                        if (recipe.ingredients && recipe.ingredients.length > 0) {
+                            recipe.ingredients.forEach(ing => {
+                                const unitText = formatUnit(ing.unit, ing.quantity);
+                                htmlContent += `<li>${ing.name} – ${ing.quantity} ${unitText}</li>`;
+                            });
 
-                htmlContent += `<h5>🧂 What goes in the pot?</h5><ul>`;
-                if (recipe.ingredients && recipe.ingredients.length > 0) {
-                    recipe.ingredients.forEach(ing => {
-                        const unitText = formatUnit(ing.unit, ing.quantity);
-                        htmlContent += `<li>${ing.name} – ${ing.quantity} ${unitText}</li>`;
+                        } else {
+                            htmlContent += `<li>Nicio ingredientă.</li>`;
+                        }
+                        htmlContent += `</ul>`;
+
+                        htmlContent += `
+                            <div class="d-flex justify-content-end gap-2 mt-3">
+                                <a href="/edit-recipe/${recipe.id}" class="btn btn-warning">
+                                    <i class="bi bi-pencil-square"></i> Make it even tastier
+                                </a>
+                                <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
+                                    <i class="bi bi-trash"></i> Trash this dish
+                                </button>
+                            </div>
+                        </div>`;
+
+                        document.getElementById("recipeDetails").innerHTML = htmlContent;
+                    })
+                    .catch(error => {
+                        document.getElementById("recipeDetails").innerHTML = `<p style="color:red">${error.message}</p>`;
                     });
 
-                } else {
-                    htmlContent += `<li>Nicio ingredientă.</li>`;
+                document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
+                    if (!currentRecipeId) return;
+
+                    fetch(`/api/recipes/${currentRecipeId}`, {
+                        method: "DELETE"
+                    })
+                    .then(response => {
+                        if (!response.ok) throw new Error("Ștergerea a eșuat.");
+                        // Redirecționează către homepage după ștergere
+                        window.location.href = "/home";
+                    })
+                    .catch(error => {
+                        alert("Eroare la ștergere: " + error.message);
+                    });
+                });
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Injectare navbar -->
+        <script>
+            fetch("/html/navbar.html")
+              .then(response => response.text())
+              .then(html => {
+                const container = document.getElementById("navbar-placeholder");
+                container.innerHTML = html;
+
+                // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
+                const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+                tooltips.forEach(el => new bootstrap.Tooltip(el));
+
+                // 🔹 Setează username-ul din localStorage în navbar
+                const username = localStorage.getItem("loggedUser");
+                const nameSpan = document.getElementById("navbarUsername");
+                if (username && nameSpan) {
+                  nameSpan.textContent = username;
                 }
-                htmlContent += `</ul>`;
 
-                htmlContent += `
-                    <div class="d-flex justify-content-end gap-2 mt-3">
-                        <a href="/edit-recipe/${recipe.id}" class="btn btn-warning">
-                            <i class="bi bi-pencil-square"></i> Make it even tastier
-                        </a>
-                        <button class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
-                            <i class="bi bi-trash"></i> Trash this dish
-                        </button>
-                    </div>
-                </div>`;
+                // 🔹 Funcție globală pentru logout
+                window.logoutUser = function () {
+                  console.log("Logout button clicked");
 
-                document.getElementById("recipeDetails").innerHTML = htmlContent;
-            })
-            .catch(error => {
-                document.getElementById("recipeDetails").innerHTML = `<p style="color:red">${error.message}</p>`;
-            });
+                  localStorage.removeItem("loggedUser");
 
-        document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
-            if (!currentRecipeId) return;
+                  fetch('/api/users/logout', {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                  })
+                  .then(response => {
+                    console.log("Logout request completed:", response.status);
+                    window.location.href = "/";
+                  })
+                  .catch(error => {
+                    console.error("Logout request failed:", error);
+                    window.location.href = "/";
+                  });
+                };
 
-            fetch(`/api/recipes/${currentRecipeId}`, {
-                method: "DELETE"
-            })
-            .then(response => {
-                if (!response.ok) throw new Error("Ștergerea a eșuat.");
-                // Redirecționează către homepage după ștergere
-                window.location.href = "/home";
-            })
-            .catch(error => {
-                alert("Eroare la ștergere: " + error.message);
-            });
-        });
-    });
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Injectare navbar -->
-<script>
-    fetch("/html/navbar.html")
-      .then(response => response.text())
-      .then(html => {
-        const container = document.getElementById("navbar-placeholder");
-        container.innerHTML = html;
-
-        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
-        const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltips.forEach(el => new bootstrap.Tooltip(el));
-
-        // 🔹 Setează username-ul din localStorage în navbar
-        const username = localStorage.getItem("loggedUser");
-        const nameSpan = document.getElementById("navbarUsername");
-        if (username && nameSpan) {
-          nameSpan.textContent = username;
-        }
-
-        // 🔹 Funcție globală pentru logout
-        window.logoutUser = function () {
-          console.log("Logout button clicked");
-
-          localStorage.removeItem("loggedUser");
-
-          fetch('/api/users/logout', {
-            method: 'POST',
-            credentials: 'same-origin'
-          })
-          .then(response => {
-            console.log("Logout request completed:", response.status);
-            window.location.href = "/";
-          })
-          .catch(error => {
-            console.error("Logout request failed:", error);
-            window.location.href = "/";
-          });
-        };
-
-        // ✅ Atașare eveniment după ce navbar-ul este injectat
-        const logoutButton = document.getElementById("logoutButton");
-        if (logoutButton) {
-          console.log("Logout button found after navbar injection");
-          logoutButton.addEventListener("click", window.logoutUser);
-        } else {
-          console.log("Logout button not found after navbar injection");
-        }
-      })
-      .catch(error => {
-        console.error("Failed to load navbar:", error);
-      });
-</script>
-</body>
+                // ✅ Atașare eveniment după ce navbar-ul este injectat
+                const logoutButton = document.getElementById("logoutButton");
+                if (logoutButton) {
+                  console.log("Logout button found after navbar injection");
+                  logoutButton.addEventListener("click", window.logoutUser);
+                } else {
+                  console.log("Logout button not found after navbar injection");
+                }
+              })
+              .catch(error => {
+                console.error("Failed to load navbar:", error);
+              });
+        </script>
+    </body>
 </html>

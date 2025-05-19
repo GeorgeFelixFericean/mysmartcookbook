@@ -7,6 +7,7 @@ public class RecipeDTO {
     private String instructions;
     private String imagePath;
     private String notes;
+    private String externalLink; // 🆕 Link extern (opțional)
     private List<IngredientDTO> ingredients;
 
     public RecipeDTO() {
@@ -43,6 +44,14 @@ public class RecipeDTO {
 
     public void setNotes(String notes) {
         this.notes = notes;
+    }
+
+    public String getExternalLink() {
+        return externalLink;
+    }
+
+    public void setExternalLink(String externalLink) {
+        this.externalLink = externalLink;
     }
 
     public List<IngredientDTO> getIngredients() {
