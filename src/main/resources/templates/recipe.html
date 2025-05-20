@@ -57,9 +57,27 @@
         <!-- Navbar responsive cu iconițe și text pe mobil -->
         <!-- Navbar va fi injectat aici -->
         <div id="navbar-placeholder"></div>
+        <!-- 🔔 Toast pentru erori -->
+        <div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+            <div id="errorToast" class="toast align-items-center text-bg-danger border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body fw-semibold">
+                        🔍 Oops! This recipe seems to have vanished... or maybe it never existed! 🥲
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        </div>
         <!-- Buton Acasă -->
         <div class="home-button-container">
-            <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill"> ← Take Me Home, Chef! </a>
+            <div class="d-flex flex-column gap-2">
+                <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
+                    ← Take Me Home, Chef!
+                </a>
+                <a href="/all-recipes" class="btn btn-outline-dark px-4 py-2 fw-semibold shadow rounded-pill">
+                    ← Back to the flavor vault!
+                </a>
+            </div>
         </div>
         <!-- ... restul head-ului rămâne la fel ... -->
         <div class="recipe-container">
@@ -182,7 +200,8 @@
                         document.getElementById("recipeDetails").innerHTML = htmlContent;
                     })
                     .catch(error => {
-                        document.getElementById("recipeDetails").innerHTML = `<p style="color:red">${error.message}</p>`;
+                      const toast = new bootstrap.Toast(document.getElementById("errorToast"));
+                      toast.show();
                     });
 
                 document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
