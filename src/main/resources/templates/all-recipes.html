@@ -1,147 +1,140 @@
 <!DOCTYPE html>
 <html lang="ro">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toate Rețetele</title>
-    <link rel="icon" type="image/png" href="/img/favicon.png">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Toate Rețetele</title>
+        <link rel="icon" type="image/png" href="/img/favicon.png">
+        <!-- Fișierul tău CSS (fundal blurat etc.) -->
+        <link rel="stylesheet" href="/css/styles.css">
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <!-- Bootstrap Icons -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+        <style>
+            body {
+              overflow-x: hidden;
+            }
 
-    <!-- Fișierul tău CSS (fundal blurat etc.) -->
-    <link rel="stylesheet" href="/css/styles.css">
+            .home-button-container {
+              position: absolute;
+              top: 70px;
+              /* Sub navbar */
+              left: 20px;
+              z-index: 10;
+            }
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-
-    <style>
-        body {
-            overflow-x: hidden;
-        }
-
-        .home-button-container {
-            position: absolute;
-            top: 70px; /* Sub navbar */
-            left: 20px;
-            z-index: 10;
-        }
-
-        .content-container {
-            margin-top: 30px;
-            padding-top: 20px;
-        }
-    </style>
-</head>
-<body>
-
-<!-- Navbar responsive cu iconițe și text pe mobil -->
-<!-- Navbar va fi injectat aici -->
-<div id="navbar-placeholder"></div>
-
-<!-- Buton Acasă sub navbar -->
-<div class="home-button-container">
-    <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill">
-        ← Take Me Home, Chef!
-    </a>
-</div>
-
-<div class="container content-container my-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="p-4 shadow" style="background-color: rgba(255, 255, 255, 0.85); border-radius: 8px;">
-                <h2 class="text-center mb-4">🍽️ Your recipe vault is ready. Let's explore the flavors!</h2>
-                <!-- FORMULAR FILTRARE -->
-                <form id="filter-form" class="mb-4">
-                    <div class="mb-3">
-                        <input type="text" id="filter-name" class="form-control" placeholder="Got a dish in mind? 🍲">
+            .content-container {
+              margin-top: 30px;
+              padding-top: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navbar responsive cu iconițe și text pe mobil -->
+        <!-- Navbar va fi injectat aici -->
+        <div id="navbar-placeholder"></div>
+        <!-- Buton Acasă sub navbar -->
+        <div class="home-button-container">
+            <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill"> ← Take Me Home, Chef! </a>
+        </div>
+        <div class="container content-container my-4">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="p-4 shadow" style="background-color: rgba(255, 255, 255, 0.85); border-radius: 8px;">
+                        <h2 class="text-center mb-4">🍽️ Your recipe vault is ready. Let's explore the flavors!</h2>
+                        <!-- FORMULAR FILTRARE -->
+                        <form id="filter-form" class="mb-4">
+                            <div class="mb-3">
+                                <input type="text" id="filter-name" class="form-control" placeholder="Got a dish in mind? 🍲">
+                            </div>
+                            <div id="ingredient-container" class="mb-3">
+                                <input type="text" class="form-control mb-2 ingredient-input" placeholder="What’s inside? 🧂">
+                            </div>
+                            <div class="d-flex flex-wrap gap-2">
+                                <button type="button" class="btn btn-outline-dark" onclick="addIngredientInput()">➕ Toss in another one!</button>
+                                <button type="button" class="btn btn-primary" onclick="filterRecipes()">✨ Let’s cook up some matches!</button>
+                                <button type="button" class="btn btn-outline-danger" onclick="resetFilters()">🔄 Start fresh!</button>
+                            </div>
+                        </form>
+                        <!-- CONTAINER PENTRU REȚETE -->
+                        <div id="allRecipesContainer" class="mt-5"></div>
+                        <!-- Pagination -->
+                        <div id="paginationContainer" class="text-center mt-4"></div>
                     </div>
-                    <div id="ingredient-container" class="mb-3">
-                        <input type="text" class="form-control mb-2 ingredient-input" placeholder="What’s inside? 🧂">
-                    </div>
-                    <div class="d-flex flex-wrap gap-2">
-                        <button type="button" class="btn btn-outline-dark" onclick="addIngredientInput()">➕ Toss in another one!</button>
-                        <button type="button" class="btn btn-primary" onclick="filterRecipes()">✨ Let’s cook up some matches!</button>
-                        <button type="button" class="btn btn-outline-danger" onclick="resetFilters()">🔄 Start fresh!</button>
-                    </div>
-                </form>
-                <!-- CONTAINER PENTRU REȚETE -->
-                <div id="allRecipesContainer" class="mt-5"></div>
-                <!-- Pagination -->
-                <div id="paginationContainer" class="text-center mt-4"></div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
 
-<script src="/js/scripts.js"></script>
-<script>
-    function addIngredientInput() {
-        const container = document.getElementById('ingredient-container');
-        const input = document.createElement('input');
-        input.type = 'text';
-        input.className = 'form-control mb-2 ingredient-input';
-        input.placeholder = `What else? 🧂`;
-        container.appendChild(input);
-    }
+        <script src="/js/scripts.js"></script>
+        <script>
+            function addIngredientInput() {
+                const container = document.getElementById('ingredient-container');
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'form-control mb-2 ingredient-input';
+                input.placeholder = `What else? 🧂`;
+                container.appendChild(input);
+            }
 
-    // Inițializare tooltips
-    document.addEventListener('DOMContentLoaded', function() {
-        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
-    });
-</script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<!-- Injectare navbar -->
-<script>
-    fetch("/html/navbar.html")
-      .then(response => response.text())
-      .then(html => {
-        const container = document.getElementById("navbar-placeholder");
-        container.innerHTML = html;
+            // Inițializare tooltips
+            document.addEventListener('DOMContentLoaded', function() {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Injectare navbar -->
+        <script>
+            fetch("/html/navbar.html")
+              .then(response => response.text())
+              .then(html => {
+                const container = document.getElementById("navbar-placeholder");
+                container.innerHTML = html;
 
-        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
-        const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltips.forEach(el => new bootstrap.Tooltip(el));
+                // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
+                const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
+                tooltips.forEach(el => new bootstrap.Tooltip(el));
 
-        // 🔹 Setează username-ul din localStorage în navbar
-        const username = localStorage.getItem("loggedUser");
-        const nameSpan = document.getElementById("navbarUsername");
-        if (username && nameSpan) {
-          nameSpan.textContent = username;
-        }
+                // 🔹 Setează username-ul din localStorage în navbar
+                const username = localStorage.getItem("loggedUser");
+                const nameSpan = document.getElementById("navbarUsername");
+                if (username && nameSpan) {
+                  nameSpan.textContent = username;
+                }
 
-        // 🔹 Funcție globală pentru logout
-        window.logoutUser = function () {
-          console.log("Logout button clicked");
+                // 🔹 Funcție globală pentru logout
+                window.logoutUser = function () {
+                  console.log("Logout button clicked");
 
-          localStorage.removeItem("loggedUser");
+                  localStorage.removeItem("loggedUser");
 
-          fetch('/api/users/logout', {
-            method: 'POST',
-            credentials: 'same-origin'
-          })
-          .then(response => {
-            console.log("Logout request completed:", response.status);
-            window.location.href = "/";
-          })
-          .catch(error => {
-            console.error("Logout request failed:", error);
-            window.location.href = "/";
-          });
-        };
+                  fetch('/api/users/logout', {
+                    method: 'POST',
+                    credentials: 'same-origin'
+                  })
+                  .then(response => {
+                    console.log("Logout request completed:", response.status);
+                    window.location.href = "/";
+                  })
+                  .catch(error => {
+                    console.error("Logout request failed:", error);
+                    window.location.href = "/";
+                  });
+                };
 
-        // ✅ Atașare eveniment după ce navbar-ul este injectat
-        const logoutButton = document.getElementById("logoutButton");
-        if (logoutButton) {
-          console.log("Logout button found after navbar injection");
-          logoutButton.addEventListener("click", window.logoutUser);
-        } else {
-          console.log("Logout button not found after navbar injection");
-        }
-      })
-      .catch(error => {
-        console.error("Failed to load navbar:", error);
-      });
-</script>
-</body>
+                // ✅ Atașare eveniment după ce navbar-ul este injectat
+                const logoutButton = document.getElementById("logoutButton");
+                if (logoutButton) {
+                  console.log("Logout button found after navbar injection");
+                  logoutButton.addEventListener("click", window.logoutUser);
+                } else {
+                  console.log("Logout button not found after navbar injection");
+                }
+              })
+              .catch(error => {
+                console.error("Failed to load navbar:", error);
+              });
+        </script>
+    </body>
 </html>

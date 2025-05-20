@@ -41,23 +41,82 @@ if (protectedPaths.includes(path) || isProtectedDynamicPath) {
     window.location.href = '/login';
   });
 }
-const unitOptions = [
-  { key: "GRAM", abbreviation: "g", plural: "g", label: "gram" },
-  { key: "KILOGRAM", abbreviation: "kg", plural: "kg", label: "kilogram" },
-  { key: "MILLILITER", abbreviation: "ml", plural: "ml", label: "milliliter" },
-  { key: "LITER", abbreviation: "l", plural: "l", label: "liter" },
-  { key: "CUP", abbreviation: "cup", plural: "cups", label: "cup" },
-  { key: "TABLESPOON", abbreviation: "tbsp", plural: "tbsp", label: "tablespoon" },
-  { key: "TEASPOON", abbreviation: "tsp", plural: "tsp", label: "teaspoon" },
-  { key: "PIECE", abbreviation: "pcs", plural: "pcs", label: "piece" },
-  { key: "OUNCE", abbreviation: "oz", plural: "oz", label: "ounce" },
-  { key: "POUND", abbreviation: "lb", plural: "lbs", label: "pound" },
-  { key: "PINCH", abbreviation: "pinch", plural: "pinches", label: "pinch" },
-  { key: "DASH", abbreviation: "dash", plural: "dashes", label: "dash" },
-  { key: "SLICE", abbreviation: "slice", plural: "slices", label: "slice" },
-  { key: "CLOVE", abbreviation: "clove", plural: "cloves", label: "clove" },
-  { key: "STALK", abbreviation: "stalk", plural: "stalks", label: "stalk" }
-];
+const unitOptions = [{
+  key: "GRAM",
+  abbreviation: "g",
+  plural: "g",
+  label: "gram"
+}, {
+  key: "KILOGRAM",
+  abbreviation: "kg",
+  plural: "kg",
+  label: "kilogram"
+}, {
+  key: "MILLILITER",
+  abbreviation: "ml",
+  plural: "ml",
+  label: "milliliter"
+}, {
+  key: "LITER",
+  abbreviation: "l",
+  plural: "l",
+  label: "liter"
+}, {
+  key: "CUP",
+  abbreviation: "cup",
+  plural: "cups",
+  label: "cup"
+}, {
+  key: "TABLESPOON",
+  abbreviation: "tbsp",
+  plural: "tbsp",
+  label: "tablespoon"
+}, {
+  key: "TEASPOON",
+  abbreviation: "tsp",
+  plural: "tsp",
+  label: "teaspoon"
+}, {
+  key: "PIECE",
+  abbreviation: "pcs",
+  plural: "pcs",
+  label: "piece"
+}, {
+  key: "OUNCE",
+  abbreviation: "oz",
+  plural: "oz",
+  label: "ounce"
+}, {
+  key: "POUND",
+  abbreviation: "lb",
+  plural: "lbs",
+  label: "pound"
+}, {
+  key: "PINCH",
+  abbreviation: "pinch",
+  plural: "pinches",
+  label: "pinch"
+}, {
+  key: "DASH",
+  abbreviation: "dash",
+  plural: "dashes",
+  label: "dash"
+}, {
+  key: "SLICE",
+  abbreviation: "slice",
+  plural: "slices",
+  label: "slice"
+}, {
+  key: "CLOVE",
+  abbreviation: "clove",
+  plural: "cloves",
+  label: "clove"
+}, {
+  key: "STALK",
+  abbreviation: "stalk",
+  plural: "stalks",
+  label: "stalk"
+}];
 /***********************
  * ADD RECIPE LOGIC
  ***********************/
@@ -252,24 +311,49 @@ function fetchAllRecipes(page = 0, size = 6) {
           `).join('')}
         </div>
       `;
-    // pagination buttons
+    // 🔁 Înlocuire sistem vechi de paginare cu versiune numerică
     const paginationContainer = document.getElementById("paginationContainer");
     paginationContainer.innerHTML = "";
+    // ✅ Verificăm dacă există mai multe pagini
     if (data.totalPages > 1) {
-      const prevDisabled = page === 0 ? "disabled" : "";
-      const nextDisabled = page === data.totalPages - 1 ? "disabled" : "";
-      paginationContainer.innerHTML = `
-          <div class="d-flex justify-content-center mt-4 gap-3">
-            <button class="btn btn-warning btn-sm" ${prevDisabled} onclick="fetchAllRecipes(${page - 1})">
-                ⬅️ Back to more bites
-            </button>
-
-            <button class="btn btn-warning btn-sm" ${nextDisabled} onclick="fetchAllRecipes(${page + 1})">
-                Next yummy batch 🍽️
-            </button>
-
-          </div>
+      const nav = document.createElement("nav");
+      const ul = document.createElement("ul");
+      ul.className = "pagination justify-content-center flex-wrap";
+      // 🔹 Buton "Previous"
+      const prevLi = document.createElement("li");
+      prevLi.className = `page-item ${page === 0 ? "disabled" : ""}`;
+      prevLi.innerHTML = `
+        <button class="page-link" ${page === 0 ? "disabled" : ""} onclick="fetchAllRecipes(${page - 1})">⬅️ Back to more bites</button>
+      `;
+      ul.appendChild(prevLi);
+      // 🔹 Calculăm intervalul de pagini de afișat (maxim 5)
+      const maxVisiblePages = 5;
+      let startPage = Math.max(0, page - Math.floor(maxVisiblePages / 2));
+      let endPage = startPage + maxVisiblePages - 1;
+      // ⚠️ Corectăm capătul dacă depășește limita
+      if (endPage >= data.totalPages) {
+        endPage = data.totalPages - 1;
+        startPage = Math.max(0, endPage - maxVisiblePages + 1);
+      }
+      // 🔹 Butoane numerice
+      for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement("li");
+        li.className = `page-item ${i === page ? "active" : ""}`;
+        li.innerHTML = `
+          <button class="page-link" onclick="fetchAllRecipes(${i})">${i + 1}</button>
         `;
+        ul.appendChild(li);
+      }
+      // 🔹 Buton "Next"
+      const nextLi = document.createElement("li");
+      nextLi.className = `page-item ${page === data.totalPages - 1 ? "disabled" : ""}`;
+      nextLi.innerHTML = `
+        <button class="page-link" ${page === data.totalPages - 1 ? "disabled" : ""} onclick="fetchAllRecipes(${page + 1})">Next yummy batch 🍽️</button>
+      `;
+      ul.appendChild(nextLi);
+      // 🔚 Adăugăm totul în container
+      nav.appendChild(ul);
+      paginationContainer.appendChild(nav);
     }
   }).catch(error => {
     console.error("Error loading recipes:", error);
@@ -318,7 +402,7 @@ function filterRecipes(page = 0, size = 6) {
                     class="btn btn-sm btn-outline-primary"
                     onclick="goToRecipe(${recipe.id})"
                   >
-                    Details
+                    🍴 Show me the dish!
                   </button>
                 </div>
               </div>
@@ -326,18 +410,49 @@ function filterRecipes(page = 0, size = 6) {
           `).join('')}
         </div>
       `;
-    // pagination buttons
+    // 🔁 Înlocuire sistem vechi de paginare cu versiune numerică
     const paginationContainer = document.getElementById("paginationContainer");
     paginationContainer.innerHTML = "";
+    // ✅ Verificăm dacă există mai multe pagini
     if (data.totalPages > 1) {
-      const prevDisabled = page === 0 ? "disabled" : "";
-      const nextDisabled = page === data.totalPages - 1 ? "disabled" : "";
-      paginationContainer.innerHTML = `
-          <div class="d-flex justify-content-center mt-4 gap-3">
-            <button class="btn btn-outline-secondary" ${prevDisabled} onclick="filterRecipes(${page - 1})">← Previous</button>
-            <button class="btn btn-outline-secondary" ${nextDisabled} onclick="filterRecipes(${page + 1})">Next →</button>
-          </div>
-        `;
+      const nav = document.createElement("nav");
+      const ul = document.createElement("ul");
+      ul.className = "pagination justify-content-center flex-wrap";
+      // 🔹 Buton "Previous"
+      const prevLi = document.createElement("li");
+      prevLi.className = `page-item ${page === 0 ? "disabled" : ""}`;
+      prevLi.innerHTML = `
+    <button class="page-link" ${page === 0 ? "disabled" : ""} onclick="filterRecipes(${page - 1})">⬅️ Back to more bites</button>
+  `;
+      ul.appendChild(prevLi);
+      // 🔹 Calculăm intervalul de pagini de afișat (maxim 5)
+      const maxVisiblePages = 5;
+      let startPage = Math.max(0, page - Math.floor(maxVisiblePages / 2));
+      let endPage = startPage + maxVisiblePages - 1;
+      // ⚠️ Corectăm capătul dacă depășește limita
+      if (endPage >= data.totalPages) {
+        endPage = data.totalPages - 1;
+        startPage = Math.max(0, endPage - maxVisiblePages + 1);
+      }
+      // 🔹 Butoane numerice
+      for (let i = startPage; i <= endPage; i++) {
+        const li = document.createElement("li");
+        li.className = `page-item ${i === page ? "active" : ""}`;
+        li.innerHTML = `
+      <button class="page-link" onclick="filterRecipes(${i})">${i + 1}</button>
+    `;
+        ul.appendChild(li);
+      }
+      // 🔹 Buton "Next"
+      const nextLi = document.createElement("li");
+      nextLi.className = `page-item ${page === data.totalPages - 1 ? "disabled" : ""}`;
+      nextLi.innerHTML = `
+    <button class="page-link" ${page === data.totalPages - 1 ? "disabled" : ""} onclick="filterRecipes(${page + 1})">Next yummy batch 🍽️</button>
+  `;
+      ul.appendChild(nextLi);
+      // 🔚 Adăugăm totul în container
+      nav.appendChild(ul);
+      paginationContainer.appendChild(nav);
     }
   }).catch(error => console.error("Error filtering recipes:", error));
 }
@@ -459,7 +574,7 @@ function resetFilters() {
   document.getElementById("filter-name").value = "";
   const ingredientContainer = document.getElementById("ingredient-container");
   ingredientContainer.innerHTML = `
-    <input type="text" class="form-control mb-2 ingredient-input" placeholder="Ingredient 1">
+    <input type="text" class="form-control mb-2 ingredient-input" placeholder="What’s inside? 🧂">
   `;
   fetchAllRecipes(0); // reîncarcă toate rețetele
 }
