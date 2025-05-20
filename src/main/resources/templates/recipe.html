@@ -156,9 +156,13 @@
                         if (recipe.ingredients && recipe.ingredients.length > 0) {
                             recipe.ingredients.forEach(ing => {
                                 const unitText = formatUnit(ing.unit, ing.quantity);
-                                htmlContent += `<li>${ing.name} – ${ing.quantity} ${unitText}</li>`;
+                                // 🔹 Formatăm cantitatea cu maxim 2 zecimale, fără format științific
+                                const formattedQuantity = parseFloat(ing.quantity).toLocaleString("en-US", {
+                                  maximumFractionDigits: 2,
+                                  useGrouping: false
+                                });
+                                htmlContent += `<li>${ing.name} – ${formattedQuantity} ${unitText}</li>`;
                             });
-
                         } else {
                             htmlContent += `<li>Nicio ingredientă.</li>`;
                         }
