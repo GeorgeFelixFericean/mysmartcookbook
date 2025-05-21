@@ -136,15 +136,16 @@
                 fetch(`/api/recipes/${recipeId}`)
                     .then(res => res.json())
                     .then(recipe => {
+                        console.log("📷 imagePath:", recipe.imagePath);
                         document.getElementById("name").value = recipe.name || "";
                         document.getElementById("instructions").value = recipe.instructions || "";
                         document.getElementById("notes").value = recipe.notes || "";
                         document.getElementById("externalLink").value = recipe.externalLink || "";
                         if (recipe.imagePath) {
-                            const img = document.getElementById("imagePreview");
-                            img.src = recipe.imagePath;
-                            img.style.display = "block";
+                          const container = document.getElementById("imagePreview");
+                          container.innerHTML = `<img src="${recipe.imagePath}" alt="Preview" class="img-fluid rounded shadow" style="max-height: 250px;">`;
                         }
+
 
                         document.getElementById("cancelButton").href = `/recipe/${recipeId}`;
 
@@ -224,7 +225,7 @@
                 const imageFile = document.getElementById("imageFile").files[0];
 
                 if (imageFile) {
-                    const maxSize = 1 * 1024 * 1024; // 5MB
+                    const maxSize = 5 * 1024 * 1024; // 5MB
                     if (imageFile.size > maxSize) {
                         const errorElement = document.getElementById("errorMessage"); // adaugă div-ul dacă nu-l ai deja
                         errorElement.textContent = "📸 That file’s too fabulous to fit! Max size is 5MB.";
