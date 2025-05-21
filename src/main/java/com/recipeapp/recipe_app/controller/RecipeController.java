@@ -100,7 +100,8 @@ public class RecipeController {
     public ResponseEntity<Recipe> updateRecipe(
             @PathVariable Long id,
             @RequestPart("recipeDTO") String recipeDTOString,
-            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile
+            @RequestPart(value = "imageFile", required = false) MultipartFile imageFile,
+            @RequestPart(value = "deleteImage", required = false) String deleteImageFlag
     ) {
         ObjectMapper objectMapper = new ObjectMapper();
         RecipeDTO recipeDTO;
@@ -109,8 +110,8 @@ public class RecipeController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
-
-        Optional<Recipe> updatedRecipe = recipeService.updateRecipe(id, recipeDTO, imageFile);
+        boolean deleteImage = "true".equalsIgnoreCase(deleteImageFlag); // 🔹 transformăm flagul în boolean
+        Optional<Recipe> updatedRecipe = recipeService.updateRecipe(id, recipeDTO, imageFile, deleteImage); // 🔹 pasăm și flagul
         return updatedRecipe.map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }

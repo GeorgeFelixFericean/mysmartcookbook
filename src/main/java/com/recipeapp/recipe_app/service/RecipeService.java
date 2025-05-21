@@ -114,14 +114,16 @@ public class RecipeService {
     }
 
     @Transactional
-    public Optional<Recipe> updateRecipe(Long id, RecipeDTO recipeDTO, MultipartFile imageFile) {
+    public Optional<Recipe> updateRecipe(Long id, RecipeDTO recipeDTO, MultipartFile imageFile, boolean deleteImage) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
         if (optionalRecipe.isEmpty()) {
             return Optional.empty();
         }
 
         Recipe recipe = optionalRecipe.get();
-
+        if (deleteImage) {
+            recipe.setImagePath(null); // 🔹 Ștergem calea din DB
+        }
         // Actualizăm doar câmpurile transmise
         if (recipeDTO.getName() != null) {
             recipe.setName(recipeDTO.getName());

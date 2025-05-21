@@ -143,9 +143,26 @@
                         document.getElementById("externalLink").value = recipe.externalLink || "";
                         if (recipe.imagePath) {
                           const container = document.getElementById("imagePreview");
-                          container.innerHTML = `<img src="${recipe.imagePath}" alt="Preview" class="img-fluid rounded shadow" style="max-height: 250px;">`;
-                        }
+                          container.innerHTML = `
+                            <div style="position: relative; display: inline-block;">
+                              <img src="${recipe.imagePath}" alt="Preview" class="img-fluid rounded shadow" style="max-height: 250px;">
+                              <button type="button" id="removeImageBtn" class="btn btn-sm btn-dark position-absolute top-0 end-0 m-1 rounded-circle"
+                                      style="line-height: 1; padding: 0.25rem 0.5rem;">
+                                &times;
+                              </button>
+                            </div>
+                          `;
 
+                          // ✅ Global flag pentru marcare ștergere
+                          window.imageMarkedForDeletion = false;
+
+                          // ✅ Acțiune la click pe "x"
+                          document.getElementById("removeImageBtn").addEventListener("click", () => {
+                            document.getElementById("imagePreview").innerHTML = "";
+                            document.getElementById("imageFile").value = "";
+                            window.imageMarkedForDeletion = true;
+                          });
+                        }
 
                         document.getElementById("cancelButton").href = `/recipe/${recipeId}`;
 
@@ -160,6 +177,16 @@
                                 reader.onload = function(e) {
                                     const container = document.getElementById("imagePreview");
                                     container.innerHTML = `<img src="${e.target.result}" alt="New preview" class="img-fluid rounded shadow" style="max-height: 250px;">`;
+                                    // 🔹 Flag ca să știm că userul a șters imaginea veche
+                                    window.imageMarkedForDeletion = false;
+
+                                    // 🔹 Ascultă click pe butonul „x”
+                                    document.getElementById("removeImageBtn").addEventListener("click", () => {
+                                      const container = document.getElementById("imagePreview");
+                                      container.innerHTML = ""; // curăță preview-ul
+                                      document.getElementById("imageFile").value = ""; // resetează inputul file
+                                      window.imageMarkedForDeletion = true; // marchează ștergerea
+                                    });
                                 };
                                 reader.readAsDataURL(file);
                             }
@@ -195,21 +222,21 @@
                             </button>
                         </div>
                     </div>`;
-
-
                 container.insertAdjacentHTML("beforeend", html);
             }
 
             document.getElementById("editRecipeForm").addEventListener("submit", function(event) {
                 event.preventDefault();
 
+                console.log("🔵 Submit handler triggered");
                 const formData = new FormData();
                 const name = document.getElementById("name").value.trim();
                 if (!name) {
-                    console.log("⚠️ Triggered empty name validation");
+                    console.log("🟡 Name is empty – stopping submit");
                     showToast("⚠️ Don't leave your masterpiece nameless!", false);
                     return;
                 }
+                console.log("🟢 Name is valid:", name);
                 const recipeDTO = {
                     name: document.getElementById("name").value,
                     instructions: document.getElementById("instructions").value,
@@ -231,8 +258,13 @@
                         });
                     }
                 }
-
+                console.log("📦 DTO:", recipeDTO);
                 formData.append("recipeDTO", new Blob([JSON.stringify(recipeDTO)], { type: "application/json" }));
+                // ✅ Trimite flag-ul pentru ștergere imagine (dacă e marcat)
+                if (window.imageMarkedForDeletion) {
+                    console.log("❌ Image marked for deletion");
+                    formData.append("deleteImage", "true");
+                }
 
                 const imageFile = document.getElementById("imageFile").files[0];
 
@@ -246,18 +278,22 @@
                     }
 
                     formData.append("imageFile", imageFile);
+                    console.log("🖼️ New image selected:", imageFile.name);
                 }
 
-
+                console.log("🟣 Pregătesc fetch...");
                 fetch(`/api/recipes/${recipeId}`, {
                     method: "PUT",
                     body: formData
                 })
                 .then(response => {
+                    console.log("✅ fetch done, status:", response.status);
                     if (!response.ok) throw new Error("Eroare la salvarea modificărilor.");
                     window.location.href = `/recipe/${recipeId}`;
                 })
-                .catch(error => alert(error.message));
+                .catch(error => {
+                    console.error("❌ Fetch failed:", error.message);
+                });
             });
         </script>
         <!-- Injectare navbar -->
