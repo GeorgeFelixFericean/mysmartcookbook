@@ -135,6 +135,10 @@ public class RecipeService {
             recipe.setNotes(recipeDTO.getNotes());
         }
 
+        if (recipeDTO.getExternalLink() != null) {
+            recipe.setExternalLink(recipeDTO.getExternalLink());
+        }
+
         // Dacă a fost trimis un fișier imagine nou
         if (imageFile != null && !imageFile.isEmpty()) {
             try {

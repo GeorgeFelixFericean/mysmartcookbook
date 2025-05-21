@@ -85,8 +85,10 @@
                 <h2 class="text-center mb-4">🍴 Tweak Your Tasty Creation</h2>
                 <form id="editRecipeForm" enctype="multipart/form-data">
                     <div class="mb-3">
-                        <label for="name" class="form-label">🏷️ Dish Name (make it epic)</label>
-                        <input type="text" class="form-control" id="name">
+                        <label for="name" class="form-label">🏷️ Give it a name worthy of a feast
+                            <span class="text-muted small">(Keep it snappy — 60 characters max!)</span>
+                        </label>
+                        <input type="text" class="form-control" id="name" maxlength="60">
                     </div>
                     <div class="mb-3">
                         <label for="instructions" class="form-label">✨ How does the magic happen?</label>
@@ -95,6 +97,10 @@
                     <div class="mb-3">
                         <label for="notes" class="form-label">💡 Tips, swaps, or secrets?</label>
                         <textarea class="form-control" id="notes" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="externalLink" class="form-label">📎 Found this gem online?</label>
+                        <input type="url" class="form-control" id="externalLink" placeholder="https://...">
                     </div>
                     <div class="mb-3">
                         <label for="imageFile" class="form-label d-block">📷 Got a better food glam? Upload it!</label>
@@ -133,7 +139,7 @@
                         document.getElementById("name").value = recipe.name || "";
                         document.getElementById("instructions").value = recipe.instructions || "";
                         document.getElementById("notes").value = recipe.notes || "";
-
+                        document.getElementById("externalLink").value = recipe.externalLink || "";
                         if (recipe.imagePath) {
                             const img = document.getElementById("imagePreview");
                             img.src = recipe.imagePath;
@@ -195,6 +201,7 @@
                     name: document.getElementById("name").value,
                     instructions: document.getElementById("instructions").value,
                     notes: document.getElementById("notes").value,
+                    externalLink: document.getElementById("externalLink").value,
                     ingredients: []
                 };
 
