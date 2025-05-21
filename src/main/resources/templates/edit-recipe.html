@@ -152,6 +152,18 @@
                         recipe.ingredients.forEach(ingredient => {
                             addIngredientField(ingredient.name, ingredient.quantity, ingredient.unit);
                         });
+                        // 🔽 AICI ADAUGĂM 🔽
+                        document.getElementById("imageFile").addEventListener("change", function(event) {
+                            const file = event.target.files[0];
+                            if (file) {
+                                const reader = new FileReader();
+                                reader.onload = function(e) {
+                                    const container = document.getElementById("imagePreview");
+                                    container.innerHTML = `<img src="${e.target.result}" alt="New preview" class="img-fluid rounded shadow" style="max-height: 250px;">`;
+                                };
+                                reader.readAsDataURL(file);
+                            }
+                        });
                     });
             });
 
