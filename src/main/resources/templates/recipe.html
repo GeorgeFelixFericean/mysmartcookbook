@@ -214,8 +214,8 @@
             })
             .then(response => {
                 if (!response.ok) throw new Error("Ștergerea a eșuat.");
-                // Redirecționează către homepage după ștergere
-                window.location.href = "/home";
+                // Redirecționează către retete după ștergere
+                window.location.href = "/all-recipes";
             })
             .catch(error => {
                 alert("Eroare la ștergere: " + error.message);

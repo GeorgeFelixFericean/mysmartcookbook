@@ -134,8 +134,6 @@ function addIngredientField() {
         <input type="number"
                placeholder="How much?"
                class="form-control ingredient-quantity"
-               min="0.01"
-               max="100000" // ✅ Limităm cantitatea introdusă la un maxim rezonabil (100000) pentru a preveni valori absurde
                step="0.01"
                style="flex:1">
     <select class="form-control ingredient-unit" style="flex:1">
@@ -214,6 +212,11 @@ function saveRecipe() {
   // 6. Luăm fișierul imagine din <input type="file" id="imageFile">
   const imageFile = document.getElementById("imageFile").files[0];
   if (imageFile) {
+    const maxSize = 5 * 1024 * 1024;
+    if (imageFile.size > maxSize) {
+      showToast("📸 Easy there, Gordon! This photo’s over the limit. We only accept files under 5MB 😅", false);
+      return;
+    }
     formData.append("imageFile", imageFile);
   }
   // 7. Trimitem la backend FĂRĂ să setăm manual Content-Type
