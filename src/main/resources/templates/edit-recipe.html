@@ -180,7 +180,13 @@
                         const reader = new FileReader();
                         reader.onload = function(e) {
                             const container = document.getElementById("imagePreview");
-                            container.innerHTML = `<img src="${e.target.result}" alt="New preview" class="img-fluid rounded shadow" style="max-height: 250px;">`;
+                            container.innerHTML = `
+                              <div style="position: relative; display: inline-block;">
+                                <img src="${e.target.result}" alt="New preview" class="img-fluid rounded shadow" style="max-height: 250px;">
+                                <button type="button" id="removeImageBtn" class="btn btn-sm btn-dark position-absolute top-0 end-0 m-1 rounded-circle"
+                                  style="line-height: 1; padding: 0.25rem 0.5rem;">&times;</button>
+                              </div>
+                            `;
                             // 🔹 Flag ca să știm că userul a șters imaginea veche
                             window.imageMarkedForDeletion = false;
 
@@ -314,9 +320,7 @@
         if (imageFile) {
             const maxSize = 5 * 1024 * 1024; // 5MB
             if (imageFile.size > maxSize) {
-                const errorElement = document.getElementById("errorMessage"); // adaugă div-ul dacă nu-l ai deja
-                errorElement.textContent = "📸 That file’s too fabulous to fit! Max size is 5MB.";
-                errorElement.style.display = "block";
+                showToast("📸 That file’s too fabulous to fit! Max size is 5MB.", false);
                 return; // oprește submitul
             }
 
