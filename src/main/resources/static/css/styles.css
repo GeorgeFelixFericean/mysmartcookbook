@@ -484,12 +484,12 @@ body.add-recipe-page {
 /* ===============================
    Styles for Login Page - Register Link
    =============================== */
-.register-link {
+.navigation-link {
 	color: white;
 	text-decoration: underline;
 }
 
-.register-link:hover {
+.navigation-link:hover {
 	color: #ffc107;
 	/* Bootstrap Yellow */
 }
