@@ -204,6 +204,9 @@
             .catch(error => {
               const toast = new bootstrap.Toast(document.getElementById("errorToast"));
               toast.show();
+              setTimeout(() => {
+                window.location.href = "/home";
+              }, 2500);
             });
 
         document.getElementById("confirmDeleteBtn").addEventListener("click", function () {
@@ -255,11 +258,11 @@
           })
           .then(response => {
             console.log("Logout request completed:", response.status);
-            window.location.href = "/";
+            window.location.href = "/?logout=success";
           })
           .catch(error => {
             console.error("Logout request failed:", error);
-            window.location.href = "/";
+            window.location.href = "/?logout=success";
           });
         };
 

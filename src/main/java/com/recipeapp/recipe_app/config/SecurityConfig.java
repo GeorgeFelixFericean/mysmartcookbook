@@ -1,5 +1,6 @@
 package com.recipeapp.recipe_app.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -9,6 +10,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 public class SecurityConfig {
+    // Comentariu: Injectăm entry point-ul personalizat pentru redirect la login cu mesaj
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     // Bean pentru encoderul de parole
     @Bean
@@ -24,27 +28,19 @@ public class SecurityConfig {
                         .frameOptions(frame -> frame.disable())
                 )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/",
-                                "/home",
-                                "/add-recipe",
-                                "/all-recipes",
-                                "/edit-recipe",
-                                "/recipe/**",
-                                "/login",
-                                "/register",
-                                "/api/users/register",
-                                "/api/users/login",
-                                "/h2-console/**",
-                                "/css/**",
-                                "/js/**",
-                                "/img/**",
-                                "/html/**").permitAll()
-                        .requestMatchers("/api/recipes/**").authenticated()
+                        .requestMatchers(
+                                "/", "/login", "/register",
+                                "/api/users/register", "/api/users/login",
+                                "/h2-console/**", "/css/**", "/js/**", "/img/**", "/html/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
                         .permitAll()
+                )
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint) // Comentariu: entry point personalizat
                 )
                 .logout(logout -> logout.permitAll());
         return http.build();

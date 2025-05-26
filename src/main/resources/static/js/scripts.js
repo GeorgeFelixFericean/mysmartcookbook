@@ -598,10 +598,10 @@ function logoutUser() {
     credentials: 'same-origin'
   }).then(response => {
     console.log("Logout request completed:", response.status);
-    window.location.href = "/";
+    window.location.href = "/?logout=success";
   }).catch(error => {
     console.error("Logout request failed:", error);
-    window.location.href = "/";
+    window.location.href = "/?logout=success";
   });
 }
 // 🟢 Atașare corectă a evenimentului pe butonul cu id="logoutButton"
@@ -612,5 +612,15 @@ document.addEventListener("DOMContentLoaded", function() {
     logoutButton.addEventListener("click", logoutUser);
   } else {
     console.log("Logout button not found");
+  }
+});
+
+// 🔔 Toast pentru confirmare logout
+document.addEventListener("DOMContentLoaded", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get("logout") === "success") {
+    showToast("👋 You have been logged out successfully.", true);
+    // Eliminăm parametrii din URL (ca să nu rămână după refresh)
+    window.history.replaceState({}, document.title, "/");
   }
 });

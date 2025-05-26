@@ -77,6 +77,19 @@
 <!-- Navbar responsive cu iconițe și text pe mobil -->
 <!-- Navbar va fi injectat aici -->
 <div id="navbar-placeholder"></div>
+<!-- 🔔 Toast pentru erori -->
+<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
+    <div id="errorToast" class="toast align-items-center text-bg-danger border-0 shadow" role="alert"
+         aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+            <div class="toast-body fw-semibold">
+                🔍 Oops! This recipe seems to have vanished... or maybe it never existed! 🥲
+            </div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+        </div>
+    </div>
+</div>
 <div class="home-button-container">
     <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill"> ← Take Me Home, Chef! </a>
 </div>
@@ -138,7 +151,18 @@
     const recipeId = window.location.pathname.split("/").pop();
     document.addEventListener("DOMContentLoaded", () => {
         fetch(`/api/recipes/${recipeId}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    // 🛑 Rețetă inexistentă – afișăm toast și redirecționăm
+                    const toast = new bootstrap.Toast(document.getElementById("errorToast"));
+                    toast.show();
+                    setTimeout(() => {
+                        window.location.href = "/home";
+                    }, 2500);
+                    throw new Error("Recipe not found");
+                }
+                return res.json();
+            })
             .then(recipe => {
                 console.log("📷 imagePath:", recipe.imagePath);
                 document.getElementById("name").value = recipe.name || "";
@@ -336,7 +360,10 @@
         .then(response => {
             console.log("✅ fetch done, status:", response.status);
             if (!response.ok) throw new Error("Eroare la salvarea modificărilor.");
-            window.location.href = `/recipe/${recipeId}`;
+            showToast("✅ Recipe updated successfully! 🍽️", true);
+            setTimeout(() => {
+              window.location.href = `/recipe/${recipeId}`;
+            }, 2000);
         })
         .catch(error => {
             console.error("❌ Fetch failed:", error.message);
@@ -374,11 +401,11 @@
           })
           .then(response => {
             console.log("Logout request completed:", response.status);
-            window.location.href = "/";
+            window.location.href = "/?logout=success";
           })
           .catch(error => {
             console.error("Logout request failed:", error);
-            window.location.href = "/";
+            window.location.href = "/?logout=success";
           });
         };
 
