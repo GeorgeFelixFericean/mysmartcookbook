@@ -9,7 +9,7 @@ public class PageController {
 
     @GetMapping("/")
     public String landingPage() {
-        return "landing"; // va încărca landing.html din templates
+        return "index"; // va încărca index.html din templates
     }
 
     @GetMapping("/login")
@@ -53,5 +53,30 @@ public class PageController {
     @GetMapping("/edit-recipe/{id}")
     public String editRecipePage(@PathVariable Long id) {
         return "edit-recipe"; // Va încărca edit-recipe.html din templates
+    }
+
+    @GetMapping("/public-recipes")
+    public String publicRecipesPage() {
+        return "public-recipes"; // caută public-recipes.html în templates
+    }
+
+    @GetMapping("/public-recipes-user")
+    public String publicRecipesForLoggedInUsers() {
+        return "public-recipes-user"; // va încărca public-recipes-user.html din templates
+    }
+
+    @GetMapping("/public-recipe-user/{id}")
+    public String publicRecipeUserDetailsPage(@PathVariable Long id) {
+        return "public-recipe-user";
+    }
+
+    @GetMapping("/public-recipe-free/{id}")
+    public String publicRecipeFreeDetailsPage(@PathVariable Long id) {
+        return "public-recipe-free";
+    }
+
+    @GetMapping("/demo-tour")
+    public String demoTourPage() {
+        return "demo-tour"; // caută demo-tour.html în /templates
     }
 }

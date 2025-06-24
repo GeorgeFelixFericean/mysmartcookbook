@@ -31,7 +31,10 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/", "/login", "/register",
                                 "/api/users/register", "/api/users/login",
-                                "/h2-console/**", "/css/**", "/js/**", "/img/**", "/html/**"
+                                "/h2-console/**", "/css/**", "/css_old/**", "/js/**", "/img/**", "/html/**", "/fonts/**",
+                                "/template-test/**", "/template-test/css/**", "/template-test/img/**", "/api/recipes/public",
+                                "/uploads/**", "/*.jpg", "/public-recipes", "/public-recipe-free/**",
+                                "/api/recipes/public/by-id/**", "/demo-tour"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

@@ -1,426 +1,360 @@
 <!DOCTYPE html>
-<html lang="ro">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Recipe – WhatCanIEat?!</title>
-    <link rel="icon" type="image/png" href="/img/favicon.png">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title -->
+    <title>Delicious - Food Blog Template | Edit Recipe</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="/img/core-img/favicon.ico">
+
+    <!-- Core Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css">
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <style>
-        body.edit-recipe-page {
-          height: 100vh;
-          overflow: hidden;
-        }
-
-        .edit-recipe-wrapper {
-          height: calc(100vh - 56px - 50px);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          padding: 20px;
-        }
-
-        .edit-recipe-container {
-          background-color: rgba(255, 255, 255, 0.95);
-          border-radius: 12px;
-          max-width: 650px;
-          width: 100%;
-          padding: 25px 30px;
-          overflow-y: auto;
-          max-height: calc(90vh - 50px);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-          animation: fadeInForm 0.5s ease-out forwards;
-          scrollbar-width: none;
-        }
-
-        .edit-recipe-container::-webkit-scrollbar {
-          display: none;
-        }
-
-        .edit-recipe-container input,
-        .edit-recipe-container textarea,
-        .edit-recipe-container label {
-          margin-bottom: 3px;
-        }
-
-        .home-button-container {
-          position: absolute;
-          top: 70px;
-          left: 20px;
-          z-index: 10;
-        }
-
-        #imagePreview {
-          display: block;
-          max-width: 100%;
-          max-height: 250px;
-          margin-bottom: 10px;
-          border-radius: 5px;
-        }
-
-        @keyframes fadeInForm {
-          from {
-            opacity: 0;
-            transform: translateY(-10px);
-          }
-
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-    </style>
 </head>
-<body class="edit-recipe-page">
-<!-- Navbar responsive cu iconițe și text pe mobil -->
-<!-- Navbar va fi injectat aici -->
-<div id="navbar-placeholder"></div>
-<!-- 🔔 Toast pentru erori -->
-<div class="position-fixed top-0 end-0 p-3" style="z-index: 1100">
-    <div id="errorToast" class="toast align-items-center text-bg-danger border-0 shadow" role="alert"
-         aria-live="assertive" aria-atomic="true">
-        <div class="d-flex">
-            <div class="toast-body fw-semibold">
-                🔍 Oops! This recipe seems to have vanished... or maybe it never existed! 🥲
+
+<body>
+<!-- Preloader -->
+<div id="preloader">
+    <i class="circle-preloader"></i>
+    <img src="/img/core-img/preloader.png" alt="">
+</div>
+
+<!-- ✅ Toast container (pentru mesaje flotante) -->
+<div id="toastMessage" class="toast-message"></div>
+
+<!-- ##### Header Area Start ##### -->
+<header class="header-area">
+
+    <!-- Top Header Area -->
+    <div class="top-header-area">
+        <div class="container h-100">
+            <div class="row h-100 align-items-center justify-content-between">
+                <!-- Breaking News -->
+                <div class="col-12 col-sm-6">
+                    <div class="breaking-news">
+                        <div id="breakingNewsTicker" class="ticker">
+                            <ul>
+                                <li><a href="#">Hello, <span id="navbarUsername" class="fw-bold mx-1">User</span>!</a>
+                                </li>
+                                <li><a href="#">Review your recipe in detail.</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Social Info -->
+                <div class="col-12 col-sm-6">
+                    <div class="top-social-info text-right">
+                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    </div>
+                </div>
             </div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-                    aria-label="Close"></button>
+        </div>
+    </div>
+
+    <!-- Navbar Area -->
+    <div class="delicious-main-menu">
+        <div class="classy-nav-container breakpoint-off">
+            <div class="container">
+                <!-- Menu -->
+                <nav class="classy-navbar justify-content-between" id="deliciousNav">
+
+                    <!-- Logo -->
+                    <a class="nav-brand" href="/home"><img src="/img/core-img/logo.png" alt=""></a>
+
+                    <!-- Navbar Toggler -->
+                    <div class="classy-navbar-toggler">
+                        <span class="navbarToggler"><span></span><span></span><span></span></span>
+                    </div>
+
+                    <!-- Menu -->
+                    <div class="classy-menu">
+
+                        <!-- close btn -->
+                        <div class="classycloseIcon">
+                            <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                        </div>
+
+                        <!-- Nav Start -->
+                        <div class="classynav">
+                            <ul>
+                                <!-- Navbar Tab: Home (active by default on home page) -->
+                                <li><a href="/home">Home</a></li>
+
+                                <!-- Navbar Tab: Add new recipe (placeholder) -->
+                                <li><a href="/add-recipe">Add Recipe</a></li>
+
+                                <!-- Navbar Tab: User's saved recipes -->
+                                <li class="active"><a href="/all-recipes">Your Recipes</a></li>
+
+                                <!-- Navbar Tab: Our Recipes (publicly available sample recipes -->
+                                <li><a href="#">Our Recipes</a></li>
+
+                                <!-- Navbar Tab: Logout -->
+                                <li>
+                                    <a id="logoutButton" onclick="logoutUser()"
+                                       style="cursor: pointer;">Logout</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- Nav End -->
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </div>
+</header>
+<!-- ##### Header Area End ##### -->
+
+<!-- ##### Breadcumb Area Start ##### -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url(/img/bg-img/breadcumb3.jpg);">
+    <div class="container h-100">
+        <div class="row h-100 align-items-center">
+            <div class="col-12">
+                <div class="breadcumb-text text-center">
+                    <h2>Edit Recipe</h2>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="home-button-container">
-    <a href="/home" class="btn btn-primary px-4 py-2 fw-semibold shadow rounded-pill"> ← Take Me Home, Chef! </a>
-</div>
-<div class="edit-recipe-wrapper">
-    <div class="edit-recipe-container scaled-form">
-        <h2 class="text-center mb-4">🍴 Tweak Your Tasty Creation</h2>
-        <form id="editRecipeForm" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="name" class="form-label">🏷️ Give it a name worthy of a feast
-                    <span class="text-muted small">(Keep it snappy — 60 characters max!)</span>
-                </label>
-                <input type="text" class="form-control" id="name" maxlength="60">
-            </div>
-            <div class="mb-3">
-                <label for="instructions" class="form-label">✨ How does the magic happen?</label>
-                <textarea class="form-control" id="instructions" rows="3"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="notes" class="form-label">💡 Tips, swaps, or secrets?</label>
-                <textarea class="form-control" id="notes" rows="2"></textarea>
-            </div>
-            <div class="mb-3">
-                <label for="externalLink" class="form-label">📎 Found this gem online?</label>
-                <input type="url" class="form-control" id="externalLink" placeholder="https://...">
-            </div>
-            <div class="mb-3">
-                <label for="imageFile" class="form-label d-block">📷 Got a better food glam? Upload it!</label>
-                <!-- Butonul de upload stilizat -->
-                <button type="button" class="btn btn-secondary btn-sm"
-                        onclick="document.getElementById('imageFile').click()"> 📁 Pick your glam shot!
-                </button>
-                <!-- Inputul real, ascuns -->
-                <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;"/>
-                <!-- Textul care apare când nu e imagine -->
-                <div id="fileStatusText" class="text-muted small fst-italic mt-1"> Still waiting for a <span
-                        class="fst-italic">masterpiece</span>...
+<!-- ##### Breadcumb Area End ##### -->
+
+
+<!--TODO-->
+<!-- ##### Edit Recipe Form Start ##### -->
+<section class="receipe-post-area section-padding-80">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-8">
+                <div class="contact-form bg-white p-5 rounded shadow-sm">
+                    <!-- Titlu formular -->
+                    <h4 class="text-center mb-4">Edit your delicious recipe</h4>
+
+                    <!-- Start formular -->
+                    <form id="editRecipeForm" enctype="multipart/form-data" novalidate>
+                        <!-- Recipe Name -->
+                        <div class="form-group">
+                            <label for="name" class="fw-semibold">Recipe Name <span class="text-muted small">(max 60 characters)</span></label>
+                            <input type="text" class="form-control" id="name" name="name" maxlength="60"
+                                   placeholder="e.g. Creamy Mushroom Pasta">
+                        </div>
+                        <!-- Instructions -->
+                        <div class="form-group mt-3">
+                            <label for="instructions" class="fw-semibold">Instructions</label>
+                            <textarea
+                                    class="form-control"
+                                    id="instructions"
+                                    name="instructions"
+                                    rows="4"
+                                    placeholder="Step-by-step preparation, one line per step or a full description…"></textarea>
+                        </div>
+                        <!-- Notes -->
+                        <div class="form-group mt-3">
+                            <label for="notes" class="fw-semibold">Additional Notes <span class="text-muted small">(optional)</span></label>
+                            <textarea
+                                    class="form-control"
+                                    id="notes"
+                                    name="notes"
+                                    rows="3"
+                                    placeholder="Add personal tips, suggestions or secret ingredients…"></textarea>
+                        </div>
+                        <!-- External Link -->
+                        <div class="form-group mt-3">
+                            <label for="externalLink" class="fw-semibold">External Link <span class="text-muted small">(optional)</span></label>
+                            <input
+                                    type="url"
+                                    class="form-control"
+                                    id="externalLink"
+                                    name="externalLink"
+                                    placeholder="https://example.com/full-recipe">
+                        </div>
+                        <!-- Image Upload -->
+                        <div class="form-group mt-4">
+                            <label for="imageFile" class="fw-semibold d-block">Upload Image <span
+                                    class="text-muted small">(optional)</span></label>
+
+                            <!-- Buton stilizat pentru upload -->
+                            <button type="button" class="btn btn-outline-primary btn-sm"
+                                    onclick="document.getElementById('imageFile').click()">
+                                <i class="bi bi-upload"></i> Choose a photo
+                            </button>
+
+                            <!-- Inputul real, ascuns -->
+                            <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;"/>
+
+                            <!-- Preview imagine -->
+                            <div id="imagePreview" class="mt-3"></div>
+                        </div>
+                        <!-- Ingredients Section -->
+                        <div class="form-group mt-4">
+                            <label class="fw-semibold">Ingredients</label>
+                            <div id="ingredientsContainer"></div>
+
+                            <!-- Add Ingredient Button -->
+                            <button type="button" class="btn btn-outline-success btn-sm mt-3"
+                                    onclick="addIngredientField()">
+                                <i class="bi bi-plus-circle"></i> Add Ingredient
+                            </button>
+                        </div>
+                        <!-- Action Buttons -->
+                        <div class="form-group mt-4 d-flex gap-3 flex-wrap">
+                            <button type="submit" class="btn delicious-btn w-100 w-md-auto">
+                                <i class="bi bi-save"></i> Save Recipe
+                            </button>
+                        </div>
+                        <div class="form-group mt-4 d-flex gap-3 flex-wrap">
+                            <a id="cancelButton" class="btn btn-outline-secondary w-100 w-md-auto">
+                                <i class="bi bi-x-circle"></i> Cancel
+                            </a>
+                        </div>
+                    </form> <!-- End of form -->
                 </div>
-                <!-- Preview imagine -->
-                <div id="imagePreview" class="mt-3"></div>
             </div>
-            <h5>🥄 The tasty components!</h5>
-            <div id="ingredientsContainer"></div>
-            <button type="button" class="btn btn-secondary mb-3" onclick="addIngredientField()">➕ Toss in another one!
-            </button>
-            <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-warning w-100">💾 Save the delicious upgrade</button>
-                <a id="cancelButton" class="btn btn-outline-secondary w-100">❌ Never mind, go back!</a>
+        </div>
+    </div>
+</section>
+
+
+<!-- ##### Follow Us Instagram Area Start ##### -->
+<div class="follow-us-instagram">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h5>Follow Us Instragram</h5>
             </div>
-        </form>
-        <!-- Error message for oversized images or other form issues -->
-        <div id="errorMessage" class="text-danger text-center fw-semibold mt-2" style="display: none;"></div>
+        </div>
+    </div>
+    <!-- Instagram Feeds -->
+    <div class="insta-feeds d-flex flex-wrap">
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta1.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta2.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta3.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta4.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta5.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta6.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
+
+        <!-- Single Insta Feeds -->
+        <div class="single-insta-feeds">
+            <img src="/img/bg-img/insta7.jpg" alt="">
+            <!-- Icon -->
+            <div class="insta-icon">
+                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+            </div>
+        </div>
     </div>
 </div>
-<!-- 🔔 Toast pentru mesaje de eroare -->
-<div id="toastMessage" class="toast-message"></div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="/js/scripts.js"></script>
-<script>
-    const recipeId = window.location.pathname.split("/").pop();
-    document.addEventListener("DOMContentLoaded", () => {
-        fetch(`/api/recipes/${recipeId}`)
-            .then(res => {
-                if (!res.ok) {
-                    // 🛑 Rețetă inexistentă – afișăm toast și redirecționăm
-                    const toast = new bootstrap.Toast(document.getElementById("errorToast"));
-                    toast.show();
-                    setTimeout(() => {
-                        window.location.href = "/home";
-                    }, 2500);
-                    throw new Error("Recipe not found");
-                }
-                return res.json();
-            })
-            .then(recipe => {
-                console.log("📷 imagePath:", recipe.imagePath);
-                document.getElementById("name").value = recipe.name || "";
-                document.getElementById("instructions").value = recipe.instructions || "";
-                document.getElementById("notes").value = recipe.notes || "";
-                document.getElementById("externalLink").value = recipe.externalLink || "";
-                if (recipe.imagePath) {
-                  const container = document.getElementById("imagePreview");
-                  container.innerHTML = `
-                    <div style="position: relative; display: inline-block;">
-                      <img src="${recipe.imagePath}" alt="Preview" class="img-fluid rounded shadow" style="max-height: 250px;">
-                      <button type="button" id="removeImageBtn" class="btn btn-sm btn-dark position-absolute top-0 end-0 m-1 rounded-circle"
-                              style="line-height: 1; padding: 0.25rem 0.5rem;">
-                        &times;
-                      </button>
-                    </div>
-                  `;
+<!-- ##### Follow Us Instagram Area End ##### -->
 
-                  // ✅ Global flag pentru marcare ștergere
-                  window.imageMarkedForDeletion = false;
-
-                  // ✅ Acțiune la click pe "x"
-                  document.getElementById("removeImageBtn").addEventListener("click", () => {
-                    document.getElementById("imagePreview").innerHTML = "";
-                    document.getElementById("imageFile").value = "";
-                    window.imageMarkedForDeletion = true;
-                  });
-                }
-
-                document.getElementById("cancelButton").href = `/recipe/${recipeId}`;
-
-                recipe.ingredients.forEach(ingredient => {
-                    addIngredientField(ingredient.name, ingredient.quantity, ingredient.unit);
-                });
-                // 🔽 AICI ADAUGĂM 🔽
-                document.getElementById("imageFile").addEventListener("change", function(event) {
-                    const file = event.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            const container = document.getElementById("imagePreview");
-                            container.innerHTML = `
-                              <div style="position: relative; display: inline-block;">
-                                <img src="${e.target.result}" alt="New preview" class="img-fluid rounded shadow" style="max-height: 250px;">
-                                <button type="button" id="removeImageBtn" class="btn btn-sm btn-dark position-absolute top-0 end-0 m-1 rounded-circle"
-                                  style="line-height: 1; padding: 0.25rem 0.5rem;">&times;</button>
-                              </div>
-                            `;
-                            // 🔹 Flag ca să știm că userul a șters imaginea veche
-                            window.imageMarkedForDeletion = false;
-
-                            // 🔹 Ascultă click pe butonul „x”
-                            document.getElementById("removeImageBtn").addEventListener("click", () => {
-                              const container = document.getElementById("imagePreview");
-                              container.innerHTML = ""; // curăță preview-ul
-                              document.getElementById("imageFile").value = ""; // resetează inputul file
-                              window.imageMarkedForDeletion = true; // marchează ștergerea
-                            });
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                });
-            });
-    });
-
-    function addIngredientField(name = "", quantity = "", unit = "") {
-        const container = document.getElementById("ingredientsContainer");
-        const html = `
-            <div class="row mb-2 ingredient-row align-items-center">
-                <div class="col-md-4 col-12 mb-2 mb-md-0">
-                    <input type="text" class="form-control" name="ingredientName" placeholder="Ingredient" value="${name}">
+<!-- ##### Footer Area Start ##### -->
+<footer class="footer-area">
+    <div class="container h-100">
+        <div class="row h-100">
+            <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+                <!-- Footer Social Info -->
+                <div class="footer-social-info text-right">
+                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
                 </div>
-                <div class="col-md-3 col-6 mb-2 mb-md-0">
-                    <input type="number" step="any" class="form-control" name="ingredientQuantity" placeholder="Qty" value="${quantity}">
+                <!-- Footer Logo -->
+                <div class="footer-logo">
+                    <a href="index.html"><img src="/img/core-img/logo.png" alt=""></a>
                 </div>
-                <div class="col-md-3 col-6 mb-2 mb-md-0">
-                    <select class="form-select" name="ingredientUnit">
-                        <option value="" disabled ${!unit ? "selected hidden" : ""}>Pick a unit ⚖️</option>
-                        <option value="GRAM" ${unit === "GRAM" ? "selected" : ""}>g</option>
-                        <option value="KILOGRAM" ${unit === "KILOGRAM" ? "selected" : ""}>kg</option>
-                        <option value="MILLILITER" ${unit === "MILLILITER" ? "selected" : ""}>ml</option>
-                        <option value="LITER" ${unit === "LITER" ? "selected" : ""}>l</option>
-                        <option value="CUP" ${unit === "CUP" ? "selected" : ""}>cup</option>
-                        <option value="TABLESPOON" ${unit === "TABLESPOON" ? "selected" : ""}>tbsp</option>
-                        <option value="TEASPOON" ${unit === "TEASPOON" ? "selected" : ""}>tsp</option>
-                        <option value="PIECE" ${unit === "PIECE" ? "selected" : ""}>pcs</option>
-                        <option value="OUNCE" ${unit === "OUNCE" ? "selected" : ""}>oz</option>
-                        <option value="POUND" ${unit === "POUND" ? "selected" : ""}>lb</option>
-                        <option value="PINCH" ${unit === "PINCH" ? "selected" : ""}>pinch</option>
-                        <option value="DASH" ${unit === "DASH" ? "selected" : ""}>dash</option>
-                        <option value="SLICE" ${unit === "SLICE" ? "selected" : ""}>slice</option>
-                        <option value="CLOVE" ${unit === "CLOVE" ? "selected" : ""}>clove</option>
-                        <option value="STALK" ${unit === "STALK" ? "selected" : ""}>stalk</option>
-                    </select>
-                </div>
-                <div class="col-md-2 col-12 text-md-end">
-                    <button type="button" class="btn btn-outline-danger btn-sm w-100 w-md-auto mt-2 mt-md-0" onclick="this.closest('.ingredient-row').remove()">
-                        🗑️ Toss it out!
-                    </button>
-                </div>
-            </div>`;
-        container.insertAdjacentHTML("beforeend", html);
-    }
+                <!-- Copywrite -->
+                <p>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    All rights reserved | This template is made with <i class="fa fa-heart-o"
+                                                                        aria-hidden="true"></i>
+                    by
+                    <a href="https://colorlib.com" target="_blank">Colorlib</a>
+                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- ##### Footer Area Start ##### -->
 
-    document.getElementById("editRecipeForm").addEventListener("submit", function(event) {
-        event.preventDefault();
-
-        console.log("🔵 Submit handler triggered");
-        const formData = new FormData();
-        const name = document.getElementById("name").value.trim();
-        if (!name) {
-            console.log("🟡 Name is empty – stopping submit");
-            showToast("⚠️ Don't leave your masterpiece nameless!", false);
-            return;
-        }
-        console.log("🟢 Name is valid:", name);
-        const recipeDTO = {
-            name: document.getElementById("name").value,
-            instructions: document.getElementById("instructions").value,
-            notes: document.getElementById("notes").value,
-            externalLink: document.getElementById("externalLink").value,
-            ingredients: []
-        };
-
-        const names = document.getElementsByName("ingredientName");
-        const quantities = document.getElementsByName("ingredientQuantity");
-        const units = document.getElementsByName("ingredientUnit");
-
-        for (let i = 0; i < names.length; i++) {
-            const ingName = names[i].value.trim();
-            const quantity = quantities[i].value;
-            const unit = units[i].value;
-
-            // 🔹 Validare nume gol
-            if (!ingName) {
-                showToast("⚠️ Ingredient name can't be empty!", false);
-                return;
-            }
-
-            // 🔹 Limită de caractere
-            if (ingName.length > 50) {
-                showToast("⚠️ Ingredient name is too long (max 50 characters).", false);
-                return;
-            }
-
-            // 🔹 Validare cantitate
-            const parsedQty = parseFloat(quantity);
-            if (isNaN(parsedQty) || parsedQty <= 0) {
-                showToast("⚠️ Quantity must be a number greater than 0.", false);
-                return;
-            }
-            if (parsedQty > 100000) {
-                showToast("⚠️ That’s too much! Quantity must be under 100,000.", false);
-                return;
-            }
-
-            if (!unit) {
-                showToast("⚠️ Please pick a unit of measure!", false);
-                return;
-            }
-
-            recipeDTO.ingredients.push({
-                name: ingName,
-                quantity: parseFloat(quantity),
-                unit: unit
-            });
-        }
-
-        console.log("📦 DTO:", recipeDTO);
-        formData.append("recipeDTO", new Blob([JSON.stringify(recipeDTO)], { type: "application/json" }));
-        // ✅ Trimite flag-ul pentru ștergere imagine (dacă e marcat)
-        if (window.imageMarkedForDeletion) {
-            console.log("❌ Image marked for deletion");
-            formData.append("deleteImage", "true");
-        }
-
-        const imageFile = document.getElementById("imageFile").files[0];
-
-        if (imageFile) {
-            const maxSize = 5 * 1024 * 1024; // 5MB
-            if (imageFile.size > maxSize) {
-                showToast("📸 That file’s too fabulous to fit! Max size is 5MB.", false);
-                return; // oprește submitul
-            }
-
-            formData.append("imageFile", imageFile);
-            console.log("🖼️ New image selected:", imageFile.name);
-        }
-
-        console.log("🟣 Pregătesc fetch...");
-        fetch(`/api/recipes/${recipeId}`, {
-            method: "PUT",
-            body: formData
-        })
-        .then(response => {
-            console.log("✅ fetch done, status:", response.status);
-            if (!response.ok) throw new Error("Eroare la salvarea modificărilor.");
-            showToast("✅ Recipe updated successfully! 🍽️", true);
-            setTimeout(() => {
-              window.location.href = `/recipe/${recipeId}`;
-            }, 2000);
-        })
-        .catch(error => {
-            console.error("❌ Fetch failed:", error.message);
-        });
-    });
-</script>
-<!-- Injectare navbar -->
-<script>
-    fetch("/html/navbar.html")
-      .then(response => response.text())
-      .then(html => {
-        const container = document.getElementById("navbar-placeholder");
-        container.innerHTML = html;
-
-        // 🔹 Activează tooltip-urile Bootstrap doar pentru elementele din navbar
-        const tooltips = container.querySelectorAll('[data-bs-toggle="tooltip"]');
-        tooltips.forEach(el => new bootstrap.Tooltip(el));
-
-        // 🔹 Setează username-ul din localStorage în navbar
-        const username = localStorage.getItem("loggedUser");
-        const nameSpan = document.getElementById("navbarUsername");
-        if (username && nameSpan) {
-          nameSpan.textContent = username;
-        }
-
-        // 🔹 Funcție globală pentru logout
-        window.logoutUser = function () {
-          console.log("Logout button clicked");
-
-          localStorage.removeItem("loggedUser");
-
-          fetch('/api/users/logout', {
-            method: 'POST',
-            credentials: 'same-origin'
-          })
-          .then(response => {
-            console.log("Logout request completed:", response.status);
-            window.location.href = "/?logout=success";
-          })
-          .catch(error => {
-            console.error("Logout request failed:", error);
-            window.location.href = "/?logout=success";
-          });
-        };
-
-        // ✅ Atașare eveniment după ce navbar-ul este injectat
-        const logoutButton = document.getElementById("logoutButton");
-        if (logoutButton) {
-          console.log("Logout button found after navbar injection");
-          logoutButton.addEventListener("click", window.logoutUser);
-        } else {
-          console.log("Logout button not found after navbar injection");
-        }
-      })
-      .catch(error => {
-        console.error("Failed to load navbar:", error);
-      });
-</script>
+<!-- ##### All Javascript Files ##### -->
+<!-- jQuery-2.2.4 js -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<!--<script src="/js/bootstrap/popper.min.js"></script>-->
+<!-- Bootstrap js -->
+<!--<script src="/js/bootstrap/bootstrap.min.js"></script>-->
+<!-- All Plugins js -->
+<script src="/js/plugins/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+<!-- DeepSeek js -->
+<script src="/js/deepseek.js"></script>
+<!-- Bootstrap Bundle JS (include și modal) -->
+<script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/js/edit-recipe.js"></script>
 </body>
 </html>

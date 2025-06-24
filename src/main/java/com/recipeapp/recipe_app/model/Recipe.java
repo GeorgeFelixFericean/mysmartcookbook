@@ -29,6 +29,9 @@ public class Recipe {
     @JoinColumn(name = "user_id")  // coloana user_id în tabela recipe
     @JsonIgnore
     private User user;
+    @Column(nullable = false)
+    private boolean isPublic = false; // implicit false – doar rețetele marcate explicit vor fi vizibile public
+
 
     //getters and setters
     public User getUser() {
@@ -93,5 +96,13 @@ public class Recipe {
 
     public void setExternalLink(String externalLink) {
         this.externalLink = externalLink;
+    }
+
+    public boolean isPublic() {
+        return isPublic;
+    }
+
+    public void setPublic(boolean aPublic) {
+        isPublic = aPublic;
     }
 }

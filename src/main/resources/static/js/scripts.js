@@ -240,13 +240,39 @@ function saveRecipe() {
 
 function showToast(message, isSuccess = true) {
   const toast = document.getElementById("toastMessage");
-  toast.className = `toast-message ${isSuccess ? "toast-success" : "toast-error"}`;
-  toast.textContent = message;
-  toast.style.display = "block";
+
+  // Eliminăm clasele anterioare (dacă există)
+  toast.classList.remove("toast-success", "toast-error");
+
+  // Adăugăm clasa corespunzătoare
+  toast.classList.add(isSuccess ? "toast-success" : "toast-error");
+
+  // Inserăm mesajul și butonul X
+  toast.innerHTML = `
+    <span>${message}</span>
+    <div class="close-btn" onclick="hideToast()">×</div>
+  `;
+
+  toast.classList.remove("hide");
+  toast.style.display = "flex";
+
+  // Auto-hide după 5 secunde
+  setTimeout(() => {
+    hideToast();
+  }, 5000);
+}
+
+function hideToast() {
+  const toast = document.getElementById("toastMessage");
+  toast.classList.add("hide");
+
+  // Șterge din DOM după animație (pentru siguranță)
   setTimeout(() => {
     toast.style.display = "none";
-  }, 3000);
+    toast.classList.remove("hide");
+  }, 300);
 }
+
 /***********************
  * SEARCH BY INGREDIENTS
  ***********************/
@@ -474,25 +500,25 @@ document.addEventListener("DOMContentLoaded", () => {
       const password = document.getElementById("password").value;
       // Validări de câmpuri goale
       if (!username) {
-        showToast("⚠️ Oops! You forgot to pick a username. Even chefs need names! 🍽️", false);
+        showToast("Please enter a username.", false);
         return;
       }
       if (!email) {
-        showToast("⚠️ We need your email to send magical recipes! 📧✨", false);
+        showToast("Email address is required.", false);
         return;
       }
       const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
       if (!emailPattern.test(email)) {
-        showToast("⚠️ Please enter a valid email address, like yourname@domain.com 📧", false);
+        showToast("Please enter a valid email address (e.g., yourname@domain.com).", false);
         return;
       }
       if (!password) {
-        showToast("⚠️ Hmm... Password missing? We must protect your kitchen secrets! 🕵️‍♂️🔒", false);
+        showToast("Password is required.", false);
         return;
       }
       // Verificare lungime minimă a parolei
       if (password.length < 6) {
-        showToast("⚠️ Password must be at least 6 characters long. 🛡️", false);
+        showToast("Password must be at least 6 characters long.", false);
         return;
       }
       // Definim messageDiv aici, ca să fie vizibil peste tot în handler
@@ -511,7 +537,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         if (response.ok) {
           // Dacă înregistrarea a avut succes
-          showToast("🎉 Yay! Your account is ready. Let's get cooking! 🍳", true);
+          showToast("Registration complete. You can now log in.", true);
           // Redirect către login după 2 secunde
           setTimeout(() => {
             window.location.href = "/login";

@@ -5,7 +5,6 @@ import com.recipeapp.recipe_app.exception.UserAlreadyExistsException;
 import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,13 +66,13 @@ public class UserService {
         Optional<User> userOptional = userRepository.findByUsername(username);
 
         if (userOptional.isEmpty()) {
-            throw new InvalidCredentialsException("Hmm... We couldn't find that chef in our kitchen. 🍳 Try again or check your username.");
+            throw new InvalidCredentialsException("Invalid username. Please try again.");
         }
 
         User user = userOptional.get();
 
         if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new InvalidCredentialsException("Oops! That password doesn’t smell right... 🍽️ Try again!");
+            throw new InvalidCredentialsException("Incorrect password. Please try again.");
         }
 
         // Dacă trece de verificări, returnăm user-ul

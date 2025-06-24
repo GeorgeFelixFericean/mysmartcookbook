@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -78,10 +80,25 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id) {
+    public ResponseEntity<Recipe> getRecipeById(@PathVariable Long id, Principal principal) {
         Optional<Recipe> recipeOpt = recipeService.getRecipeById(id);
-        return recipeOpt.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        if (recipeOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Recipe recipe = recipeOpt.get();
+
+        // 🔒 Blochează accesul la rețetele lui "system"
+        if ("system".equalsIgnoreCase(recipe.getUser().getUsername())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        // 🔐 Blochează accesul la alte rețete care nu aparțin userului logat
+        if (!recipe.getUser().getUsername().equals(principal.getName())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        return ResponseEntity.ok(recipe);
     }
 
     @GetMapping("/filter")
@@ -123,4 +140,63 @@ public class RecipeController {
         }
         return ResponseEntity.ok("Authenticated as: " + principal.getName());
     }
+
+    @GetMapping("/public")
+    public Page<Recipe> getPublicRecipes(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return recipeService.getFilteredPublicRecipes(name, ingredients, pageable);
+    }
+
+    @GetMapping("/public-authenticated")
+    public Page<Recipe> getPublicRecipesForLoggedInUsers(
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) List<String> ingredients,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "9") int size
+    ) {
+        Pageable pageable = PageRequest.of(page, size);
+        return recipeService.getFilteredPublicRecipesForSystemUser(name, ingredients, pageable);
+    }
+
+    @PostMapping("/copy/{id}")
+    public ResponseEntity<Recipe> copyRecipeToUser(@PathVariable Long id, Principal principal) {
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        Recipe copied = recipeService.copyRecipeToUser(id, principal.getName());
+        if (copied == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(copied);
+    }
+
+    @GetMapping("/public/by-id/{id}")
+    public ResponseEntity<Map<String, Object>> getPublicRecipeById(@PathVariable Long id) {
+        Optional<Recipe> opt = recipeService.getRecipeById(id);
+        if (opt.isEmpty()) return ResponseEntity.notFound().build();
+
+        Recipe recipe = opt.get();
+        if (recipe.getUser() == null || !"system".equalsIgnoreCase(recipe.getUser().getUsername())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", recipe.getId());
+        response.put("name", recipe.getName());
+        response.put("instructions", recipe.getInstructions());
+        response.put("notes", recipe.getNotes());
+        response.put("imagePath", recipe.getImagePath());
+        response.put("externalLink", recipe.getExternalLink());
+        response.put("user", Map.of("username", recipe.getUser().getUsername()));
+        response.put("ingredients", recipe.getIngredients());
+
+        return ResponseEntity.ok(response);
+    }
+
+
 }

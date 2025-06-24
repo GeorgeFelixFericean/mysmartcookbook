@@ -1,10 +1,10 @@
 package com.recipeapp.recipe_app.service;
 
+import com.recipeapp.recipe_app.dto.IngredientDTO;
 import com.recipeapp.recipe_app.dto.RecipeDTO;
 import com.recipeapp.recipe_app.model.Ingredient;
 import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.model.User;
-import com.recipeapp.recipe_app.repository.IngredientRepository;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
 import com.recipeapp.recipe_app.repository.UserRepository;
 import org.springframework.data.domain.Page;
@@ -204,5 +204,81 @@ public class RecipeService {
                 .toList();
 
         return new PageImpl<>(filteredRecipes, pageable, filteredRecipes.size());
+    }
+
+    public Page<Recipe> getFilteredPublicRecipes(String name, List<String> ingredients, Pageable pageable) {
+        System.out.println("🟢 Filtrare PUBLICĂ: name=" + name + ", ingredients=" + ingredients);
+
+        boolean hasName = name != null && !name.isBlank();
+        boolean hasIngredients = ingredients != null && !ingredients.isEmpty();
+
+        // ✅ Fără filtre: returnăm toate rețetele publice (ale userului 'system')
+        if (!hasName && !hasIngredients) {
+            return recipeRepository.findByUserUsername("system", pageable);
+        }
+
+        // ✅ Doar ingrediente
+        if (!hasName) {
+            return recipeRepository.findByPartialIngredientNames(ingredients, "system", pageable);
+        }
+
+        // ✅ Doar nume
+        if (!hasIngredients) {
+            return recipeRepository.findByUserUsernameAndNameContainingIgnoreCase("system", name, pageable);
+        }
+
+        // ✅ Ambele filtre
+        Page<Recipe> filteredByIngredients = recipeRepository.findByPartialIngredientNames(ingredients, "system", pageable);
+
+        String lowerName = name.toLowerCase();
+        List<Recipe> filteredRecipes = filteredByIngredients
+                .stream()
+                .filter(r -> r.getName().toLowerCase().contains(lowerName))
+                .toList();
+
+        return new PageImpl<>(filteredRecipes, pageable, filteredRecipes.size());
+    }
+
+    public Page<Recipe> getFilteredPublicRecipesForSystemUser(String name, List<String> ingredients, Pageable pageable) {
+        return getFilteredPublicRecipes(name, ingredients, pageable);
+    }
+
+    public Recipe copyRecipeToUser(Long originalId, String targetUsername) {
+        Optional<Recipe> originalOpt = recipeRepository.findById(originalId);
+        if (originalOpt.isEmpty()) return null;
+
+        Recipe original = originalOpt.get();
+
+        // Verificăm dacă rețeta aparține userului 'system'
+        if (!"system".equalsIgnoreCase(original.getUser().getUsername())) {
+            throw new RuntimeException("Recipe is not public and cannot be copied.");
+        }
+
+        // Găsim utilizatorul curent
+        User targetUser = userRepository.findByUsername(targetUsername)
+                .orElseThrow(() -> new RuntimeException("User not found: " + targetUsername));
+
+        // Creăm o copie
+        Recipe copy = new Recipe();
+        copy.setName(original.getName());
+        copy.setInstructions(original.getInstructions());
+        copy.setNotes(original.getNotes());
+        copy.setExternalLink(original.getExternalLink());
+        copy.setImagePath(original.getImagePath()); // Copiem calea, nu fișierul
+
+        // Copiem ingredientele
+        List<Ingredient> copiedIngredients = original.getIngredients().stream().map(origIng -> {
+            Ingredient ing = new Ingredient();
+            ing.setName(origIng.getName());
+            ing.setQuantity(origIng.getQuantity());
+            ing.setUnit(origIng.getUnit());
+            ing.setRecipe(copy); // legătură bidirecțională
+            return ing;
+        }).collect(Collectors.toList());
+
+        copy.setIngredients(copiedIngredients);
+        copy.setUser(targetUser);
+
+        return recipeRepository.save(copy);
     }
 }

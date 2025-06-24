@@ -22,4 +22,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long>, RecipeRep
     Page<Recipe> findByUserUsername(String username, Pageable pageable);
 
     Page<Recipe> findByUserUsernameAndNameContainingIgnoreCase(String username, String name, Pageable pageable);
+
+    // Găsește toate rețetele publice (pentru afișare pe landing page)
+    List<Recipe> findByIsPublicTrue();
 }
