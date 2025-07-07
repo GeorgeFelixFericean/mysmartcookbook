@@ -3,26 +3,41 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="">
+    <meta name="description"
+          content="MySmartCookbook helps you find recipes based on what ingredients you already have. Add, search, and cook smarter – all in one personal cookbook.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title -->
-    <title>WhatCanIEat?! – Your Smart Personal Cookbook</title>
+    <title>MySmartCookbook – The Smart Way to Cook with What You Have</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="/img/core-img/favicon.ico">
+    <!-- ✅ Favicon Clasic -->
+    <link rel="icon" type="image/x-icon" href="/img/core-img/favicon.ico">
+
+    <!-- ✅ PNG Favicons for modern browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/core-img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/core-img/favicon-16x16.png">
+
+    <!-- ✅ iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/core-img/apple-touch-icon.png">
+
+    <!-- ✅ Optional: Manifest for PWA/Android -->
+    <link rel="manifest" href="/img/core-img/site.webmanifest">
+
+    <!-- Font Awesome 6.5 (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-<!-- Preloader -->
+
+<!-- PreLoader -->
 <div id="preloader">
     <i class="circle-preloader"></i>
-    <img src="/img/core-img/preloader.png" alt="">
+    <img src="/img/core-img/preloader.png" alt="Loading icon">
 </div>
 
 <!-- ##### Header Area Start ##### -->
@@ -32,14 +47,14 @@
     <div class="top-header-area">
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-between">
+
                 <!-- Breaking News -->
                 <div class="col-12 col-sm-6">
                     <div class="breaking-news">
                         <div id="breakingNewsTicker" class="ticker">
                             <ul>
-                                <li><a href="#">WhatCanIEat?! Today you cook like a pro!</a></li>
-                                <li><a href="#">No idea what to eat? We do!</a></li>
-                                <li><a href="#">From chaos to kitchen — we’ve got your back.</a></li>
+                                <li><a href="#">MySmartCookbook – Discover the smart way to cook!</a></li>
+                                <li><a href="#">Your digital kitchen assistant is always ready.</a></li>
                             </ul>
                         </div>
                     </div>
@@ -48,13 +63,12 @@
                 <!-- Top Social Info -->
                 <div class="col-12 col-sm-6">
                     <div class="top-social-info text-right">
-                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                        <a href="https://www.facebook.com/george.fericean"><i class="fa fa-facebook"
-                                                                              aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -65,13 +79,14 @@
     <div class="delicious-main-menu">
         <div class="classy-nav-container breakpoint-off">
             <div class="container">
+
                 <!-- Menu -->
                 <nav class="classy-navbar justify-content-between" id="deliciousNav">
 
                     <!-- Logo -->
-                    <a class="nav-brand" href="/"><img src="img/core-img/logo.png" alt=""></a>
+                    <a class="nav-brand" href="/"><img src="img/core-img/logo.png" alt="MySmartCookbook logo"></a>
 
-                    <!-- Navbar Toggler -->
+                    <!-- Navbar Toggle -->
                     <div class="classy-navbar-toggler">
                         <span class="navbarToggler"><span></span><span></span><span></span></span>
                     </div>
@@ -87,20 +102,20 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul>
-                                <!-- Navbar Tab: Home (active by default on landing page) -->
+                                <!-- Navbar Tab: Home (active) -->
                                 <li class="active"><a href="/">Home</a></li>
 
-                                <!-- Navbar Tab: Demo Tour (placeholder) -->
+                                <!-- Navbar Tab: Demo Tour -->
                                 <li><a href="/demo-tour">How It Works</a></li>
 
-                                <!-- Navbar Tab: Free Recipes (publicly available sample recipes) -->
-                                <li><a href="/public-recipes">Try Our Recipes</a></li>
+                                <!-- Navbar Tab: Free Recipes -->
+                                <li><a href="/public-recipes">Featured Recipes</a></li>
 
                                 <!-- Navbar Tab: Login -->
-                                <li><a href="/login">Login</a></li>
+                                <li><a href="/login">Sign In</a></li>
 
                                 <!-- Navbar Tab: Register -->
-                                <li><a href="/register">Register</a></li>
+                                <li><a href="/register">Create Account</a></li>
                             </ul>
                         </div>
                         <!-- Nav End -->
@@ -115,16 +130,19 @@
 <!-- ##### Hero Area Start ##### -->
 <section class="hero-area">
     <div class="hero-slides owl-carousel">
+
         <!-- Single Hero Slide -->
         <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg1.jpg);">
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
-                            <h2 data-animation="fadeInUp" data-delay="300ms">Cook with what you already have</h2>
-                            <p data-animation="fadeInUp" data-delay="700ms">Search by ingredient. Stop wasting food.</p>
-                            <a href="#" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">Try
-                                Recipes</a>
+                            <h2 data-animation="fadeInUp" data-delay="300ms">Explore Our Smart Recipes</h2>
+                            <p data-animation="fadeInUp" data-delay="700ms">No login needed. Search by keywords or
+                                ingredients and explore our curated recipes — cook smart with what you have.</p>
+                            <a href="/public-recipes" class="btn delicious-btn" data-animation="fadeInUp"
+                               data-delay="1000ms">Browse
+                                Featured Recipes</a>
                         </div>
                     </div>
                 </div>
@@ -137,11 +155,11 @@
                 <div class="row h-100 align-items-center">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
-                            <h2 data-animation="fadeInUp" data-delay="300ms">Your personal recipe vault</h2>
-                            <p data-animation="fadeInUp" data-delay="700ms">Add, edit, and manage all your favorite
-                                meals.</p>
-                            <a href="/register" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">Sign Up
-                                Free</a>
+                            <h2 data-animation="fadeInUp" data-delay="300ms">Your Smart Cookbook</h2>
+                            <p data-animation="fadeInUp" data-delay="700ms">Save your favorite meals, add your own
+                                recipes, and keep everything organized — all in one personalized cooking space.</p>
+                            <a href="/register" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">Create
+                                Account</a>
                         </div>
                     </div>
                 </div>
@@ -154,10 +172,12 @@
                 <div class="row h-100 align-items-center">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
-                            <h2 data-animation="fadeInUp" data-delay="300ms">Plan. Cook. Enjoy.</h2>
-                            <p data-animation="fadeInUp" data-delay="700ms">From weekday meals to party dinners.</p>
-                            <a href="#" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">How It
-                                Works</a>
+                            <h2 data-animation="fadeInUp" data-delay="300ms">How It Works</h2>
+                            <p data-animation="fadeInUp" data-delay="700ms">Add your own recipes or browse ours. Search
+                                by ingredients. Save your favorites. Discover what’s possible — in just a few taps.</p>
+                            <a href="/demo-tour" class="btn delicious-btn" data-animation="fadeInUp"
+                               data-delay="1000ms">Take the
+                                Tour</a>
                         </div>
                     </div>
                 </div>
@@ -167,126 +187,42 @@
 </section>
 <!-- ##### Hero Area End ##### -->
 
-<!-- ##### Top Catagory Area Start ##### -->
+<!-- ##### Top Category Area Start ##### -->
 <section class="top-catagory-area section-padding-80-0">
     <div class="container">
         <div class="row">
-            <!-- Top Catagory Area -->
+
+            <!-- Top Category Area -->
             <div class="col-12 col-lg-6">
                 <div class="single-top-catagory">
                     <img src="img/bg-img/bg4.jpg" alt="">
+
                     <!-- Content -->
                     <div class="top-cta-content">
-                        <h3>Cook with what you already have</h3>
-                        <h6>Search by ingredients in your fridge</h6>
-                        <a href="/public-recipes" class="btn delicious-btn">Try Now</a>
+                        <h3>Curious?</h3>
+                        <h6>How MySmartCookbook Works</h6>
+                        <a href="/demo-tour" class="btn delicious-btn">Take the Tour</a>
                     </div>
                 </div>
             </div>
-            <!-- Top Catagory Area -->
+
+            <!-- Top Category Area -->
             <div class="col-12 col-lg-6">
                 <div class="single-top-catagory">
                     <img src="img/bg-img/bg5.jpg" alt="">
+
                     <!-- Content -->
                     <div class="top-cta-content">
-                        <h3>Your digital recipe collection</h3>
-                        <h6>Save, edit, and organize your favorite meals</h6>
-                        <a href="receipe-post.html" class="btn delicious-btn">See How</a>
+                        <h3>Hungry?</h3>
+                        <h6>Explore Featured Recipes</h6>
+                        <a href="/public-recipes" class="btn delicious-btn">Start Browsing</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- ##### Top Catagory Area End ##### -->
-
-<!-- ##### Best Receipe Area Start ##### -->
-<section class="best-receipe-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section-heading">
-                    <h3>My Handpicked Must-Try Recipes</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r1.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Sushi Easy Receipy</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r2.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Homemade Burger</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r3.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Vegan Smoothie</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r4.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Calabasa soup</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r5.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Homemade Breakfast</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r6.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Healthy Fruit Desert</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<!-- ##### Best Receipe Area End ##### -->
+<!-- ##### Top Category Area End ##### -->
 
 <!-- ##### CTA Area Start ##### -->
 <section class="cta-area bg-img bg-overlay" style="background-image: url(img/bg-img/bg6.jpg);">
@@ -295,9 +231,10 @@
             <div class="col-12">
                 <!-- Cta Content -->
                 <div class="cta-content text-center">
-                    <h2>Explore More Recipes — Totally Free!</h2>
-                    <p>Create a free account and unlock the full recipe vault. No strings attached, just pure flavor.</p>
-                    <a href="/register" class="btn delicious-btn">Join Free & Explore More</a>
+                    <h2>Start Your Smart Cookbook Today</h2>
+                    <p>Save your favorite recipes, add your own creations, and cook with confidence — all in one free
+                        account.</p>
+                    <a href="/register" class="btn delicious-btn">Join Free & Start Cooking Smarter</a>
                 </div>
             </div>
         </div>
@@ -305,177 +242,17 @@
 </section>
 <!-- ##### CTA Area End ##### -->
 
-<!-- ##### Small Receipe Area Start ##### -->
+<!-- ##### Small Recipes Area Start ##### -->
 <section class="small-receipe-area section-padding-80-0">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section-heading">
-                    <h3>Fresh from the Kitchen — Our Newest Recipes</h3>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr1.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Homemade italian pasta</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr2.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Baked Bread</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr3.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Scalops on salt</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr4.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Fruits on plate</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr5.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Macaroons</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr6.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Chocolate tart</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr7.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Berry Desert</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr8.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Zucchini Grilled on peper</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Small Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-small-receipe-area d-flex">
-                    <!-- Receipe Thumb -->
-                    <div class="receipe-thumb">
-                        <img src="img/bg-img/sr9.jpg" alt="">
-                    </div>
-                    <!-- Receipe Content -->
-                    <div class="receipe-content">
-                        <span>January 04, 2018</span>
-                        <a href="receipe-post.html">
-                            <h5>Chicken Salad</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!--    TODO    -->
 </section>
-<!-- ##### Small Receipe Area End ##### -->
+<!-- ##### Small Recipes Area End ##### -->
 
 <!-- ##### Quote Subscribe Area Start ##### -->
 <section id="contact-section" class="quote-subscribe-adds">
     <div class="container">
         <div class="row align-items-stretch">
+
             <!-- Quote -->
             <div class="col-12 col-lg-4 d-flex flex-column">
                 <div class="quote-area h-100 text-center">
@@ -491,17 +268,18 @@
             <!-- Newsletter -->
             <div class="col-12 col-lg-4 d-flex flex-column">
                 <div class="newsletter-area h-100">
-                    <h4 class="text-center">Got something to say? We'd love to hear from you!</h4>
+                    <h4 class="text-center">Got a tip, a craving, or a crazy idea? Let’s hear it!</h4>
+
                     <!-- Form -->
                     <div class="newsletter-form bg-img bg-overlay" style="background-image: url(img/bg-img/bg7.jpg);">
-                        <form action="mailto:your@email.com" method="post" enctype="text/plain">
-                            <input type="text" name="name" placeholder="Your name (optional)">
-                            <textarea name="message" placeholder="Your message..."
+                        <form id="contact-form">
+                            <input type="text" id="contactName" placeholder="Your name (optional)">
+                            <textarea id="contactMessage" placeholder="Your message..."
                                       style="width: 100%; padding: 12px; font-family: 'Open Sans', sans-serif; font-size: 14px; font-style: italic; border: none; border-radius: 4px;"></textarea>
                             <button type="submit" class="btn delicious-btn w-100">Send Message</button>
                         </form>
-                        <p><em>Questions, recipe ideas, feedback or just a kind word — drop us a message. We read
-                            everything.</em></p>
+                        <p><em>Recipes, feedback, or your grandma’s secret sauce — we read every message you send.</em>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -509,7 +287,7 @@
             <!-- Adds -->
             <div class="col-12 col-lg-4 d-flex flex-column">
                 <div class="delicious-add h-100 d-flex align-items-center justify-content-center">
-                    <img src="img/bg-img/add.jpg" alt=""
+                    <img src="img/bg-img/add.png" alt=""
                          style="width: 100%; height: 100%; object-fit: cover;"/>
                 </div>
             </div>
@@ -518,107 +296,32 @@
 </section>
 <!-- ##### Quote Subscribe Area End ##### -->
 
-<!-- ##### Follow Us Instagram Area Start ##### -->
-<div class="follow-us-instagram">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h5>Follow Us Instragram</h5>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram Feeds -->
-    <div class="insta-feeds d-flex flex-wrap">
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta1.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta2.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta3.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta4.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta5.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta6.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta7.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Follow Us Instagram Area End ##### -->
-
 <!-- ##### Footer Area Start ##### -->
 <footer class="footer-area">
     <div class="container h-100">
         <div class="row h-100">
             <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+
                 <!-- Footer Social Info -->
                 <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                 </div>
+
                 <!-- Footer Logo -->
                 <div class="footer-logo">
                     <a href="/"><img src="img/core-img/logo.png" alt=""></a>
                 </div>
-                <!-- Copywrite -->
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                    All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by
-                    <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+
+                <!-- CopyWrite -->
+                <p>
+                    Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
+                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+                </p>
             </div>
         </div>
     </div>
@@ -636,7 +339,8 @@
 <script src="/js/plugins/plugins.js"></script>
 <!-- Active js -->
 <script src="/js/active.js"></script>
-<!-- DeepSeek js -->
-<script src="/js/deepseek.js"></script>
+<!-- Scripts js -->
+<script src="/js/scripts.js"></script>
+<div id="toastMessage" class="toast-message" style="display:none;"></div>
 </body>
 </html>

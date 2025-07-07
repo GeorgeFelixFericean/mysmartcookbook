@@ -3,16 +3,29 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="">
+    <meta name="description" content="All your favorite recipes in one place. Easy to find, simple to cook.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title -->
-    <title>WhatCanIEat?! – Your Smart Personal Cookbook | All Recipes</title>
+    <title>MySmartCookbook – My Recipes</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="/img/core-img/favicon.ico">
+    <!-- Favicon Classic -->
+    <link rel="icon" type="image/x-icon" href="/img/core-img/favicon.ico">
+
+    <!-- PNG Favicons for modern browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/core-img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/core-img/favicon-16x16.png">
+
+    <!-- ✅ iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/core-img/apple-touch-icon.png">
+
+    <!-- ✅ Optional: Manifest for PWA/Android -->
+    <link rel="manifest" href="/img/core-img/site.webmanifest">
+
+    <!-- Font Awesome 6.5 (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="/css/style.css">
@@ -21,7 +34,7 @@
 </head>
 
 <body>
-<!-- Preloader -->
+<!-- PreLoader -->
 <div id="preloader">
     <i class="circle-preloader"></i>
     <img src="/img/core-img/preloader.png" alt="">
@@ -34,6 +47,7 @@
     <div class="top-header-area">
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-between">
+
                 <!-- Breaking News -->
                 <div class="col-12 col-sm-6">
                     <div class="breaking-news">
@@ -41,7 +55,7 @@
                             <ul>
                                 <li><a href="#">Hello, <span id="navbarUsername" class="fw-bold mx-1">User</span>!</a>
                                 </li>
-                                <li><a href="#">Browse your collection or search for something specific.</a></li>
+                                <li><a href="#">Search your saved recipes by name or ingredients.</a></li>
                             </ul>
                         </div>
                     </div>
@@ -50,13 +64,12 @@
                 <!-- Top Social Info -->
                 <div class="col-12 col-sm-6">
                     <div class="top-social-info text-right">
-                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                        <a href="https://www.facebook.com/george.fericean"><i class="fa fa-facebook"
-                                                                              aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -67,13 +80,14 @@
     <div class="delicious-main-menu">
         <div class="classy-nav-container breakpoint-off">
             <div class="container">
+
                 <!-- Menu -->
                 <nav class="classy-navbar justify-content-between" id="deliciousNav">
 
                     <!-- Logo -->
                     <a class="nav-brand" href="/home"><img src="img/core-img/logo.png" alt=""></a>
 
-                    <!-- Navbar Toggler -->
+                    <!-- Navbar Toggle -->
                     <div class="classy-navbar-toggler">
                         <span class="navbarToggler"><span></span><span></span><span></span></span>
                     </div>
@@ -89,17 +103,17 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul>
-                                <!-- Navbar Tab: Home (active by default on home page) -->
+                                <!-- Navbar Tab: Home -->
                                 <li><a href="/home">Home</a></li>
 
-                                <!-- Navbar Tab: Add new recipe (placeholder) -->
+                                <!-- Navbar Tab: Add new recipe -->
                                 <li><a href="/add-recipe">Add Recipe</a></li>
 
                                 <!-- Navbar Tab: User's saved recipes -->
-                                <li class="active"><a href="/all-recipes">Your Recipes</a></li>
+                                <li class="active"><a href="/all-recipes">My Recipes</a></li>
 
-                                <!-- Navbar Tab: Our Recipes (publicly available sample recipes -->
-                                <li><a href="/public-recipes-user">Our Recipes</a></li>
+                                <!-- Navbar Tab: Featured Recipes -->
+                                <li><a href="/public-recipes-user">Featured Recipes</a></li>
 
                                 <!-- Navbar Tab: Logout -->
                                 <li>
@@ -117,30 +131,30 @@
 </header>
 <!-- ##### Header Area End ##### -->
 
-<!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img bg-overlay" style="background-image: url(/img/bg-img/breadcrumb5.jpg);">
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url(/img/bg-img/breadcrumb8.jpg);">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-12">
                 <div class="breadcumb-text text-center">
-                    <h2>Explore Recipes</h2>
+                    <h2>Browse Your Personal Cookbook</h2>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### Breadcrumb Area End ##### -->
 
 <!-- ##### All Recipes Area Start ##### -->
 <section class="best-recipe-area section-padding-80 bg-img">
-<!--         style="background-image: url('img/bg-img/bg17.jpg'); background-size: cover; background-position: center;">-->
     <div class="container">
         <div class="row justify-content-center">
-            <!-- Titlu secțiune -->
+
+            <!-- Title  -->
             <div class="col-12 col-lg-8">
                 <div class="section-heading text-center">
-                    <h3>Your personal recipe collection</h3>
-                    <p>Find the perfect match for today’s meal.</p>
+                    <h3>All Your Recipes in One Place</h3>
+                    <p>Search, browse, and rediscover your favorite meals anytime.</p>
                 </div>
             </div>
         </div>
@@ -149,36 +163,45 @@
         <div class="receipe-post-search mb-80">
             <div class="container">
                 <form id="filter-form">
-                    <!-- Nume rețetă -->
-                    <div class="mb-3">
-                        <input type="text" id="filter-name" class="form-control"
-                               placeholder="Search by recipe name">
-                    </div>
 
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <!-- Recipe name (with autocomplete) -->
+                        <input type="text"
+                               id="filter-name"
+                               class="form-control"
+                               placeholder="Search by recipe name"
+                               list="recipe-suggestions"
+                               autocomplete="off">
+                    </div>
                     <div class="row g-3 align-items-center mb-3">
-                        <!-- Primul ingredient -->
+
+                        <!-- First ingredient -->
                         <div class="col-12 col-lg-6" id="ingredient-container">
-                            <input type="text" class="form-control ingredient-input mb-2"
-                                   placeholder="Enter ingredient name">
+                            <input type="text"
+                                   class="form-control ingredient-input mb-2"
+                                   placeholder="Search by ingredient"
+                                   list="ingredient-suggestions"
+                                   autocomplete="off">
                         </div>
 
-                        <!-- Butoane -->
+                        <!-- Buttons -->
                         <div class="col-12 col-lg-6 d-flex flex-wrap gap-2">
                             <button type="button" class="btn delicious-btn w-100 mb-2" onclick="addIngredientInput()"><i
-                                    class="bi bi-plus-circle me-3"></i> Add Ingredient (maximum 10 ingredients)
+                                    class="bi bi-plus-circle me-3"></i> Add Ingredient (maximum 10)
                             </button>
                         </div>
                     </div>
 
                     <div class="mb-3">
                         <button type="button" class="btn delicious-btn w-100 mb-2" onclick="filterRecipes()">
-                            <i class="bi bi-search me-3"></i> Show Results
+                            <i class="bi bi-search me-3"></i> Search recipes
                         </button>
                     </div>
 
                     <div class="mb-3">
                         <button type="button" class="btn btn-outline-secondary w-100 mb-2" onclick="resetFilters()">
-                            <i class="bi bi-arrow-counterclockwise me-3"></i> Reset Filters
+                            <i class="bi bi-arrow-counterclockwise me-3"></i> Clear Filters
                         </button>
                     </div>
 
@@ -187,125 +210,45 @@
         </div>
         <!-- ##### Search Area End ##### -->
 
-        <!-- Rezultate rețete -->
+        <!-- Results -->
         <div class="row justify-content-center">
-            <div class="col-lg-10" id="allRecipesContainer">
-                <!-- Aici vor fi inserate cardurile de rețete dinamic -->
-            </div>
+            <div class="col-lg-10" id="allRecipesContainer"></div>
         </div>
 
-
-        <!-- Paginare -->
+        <!-- Pagination -->
         <div class="row">
-            <div class="col-12 text-center mt-4 mb-5" id="paginationContainer">
-                <!-- Aici apare paginarea -->
-            </div>
+            <div class="col-12 text-center mt-4 mb-5" id="paginationContainer"></div>
         </div>
     </div>
 </section>
 <!-- ##### All Recipes Area End ##### -->
-
-<!-- ##### Follow Us Instagram Area Start ##### -->
-<div class="follow-us-instagram">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h5>Follow Us Instragram</h5>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram Feeds -->
-    <div class="insta-feeds d-flex flex-wrap">
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta1.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta2.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta3.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta4.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta5.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta6.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta7.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Follow Us Instagram Area End ##### -->
 
 <!-- ##### Footer Area Start ##### -->
 <footer class="footer-area">
     <div class="container h-100">
         <div class="row h-100">
             <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+
                 <!-- Footer Social Info -->
                 <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                 </div>
+
                 <!-- Footer Logo -->
                 <div class="footer-logo">
                     <a href="/home"><img src="img/core-img/logo.png" alt=""></a>
                 </div>
-                <!-- Copywrite -->
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                    All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by
-                    <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+
+                <!-- CopyWrite -->
+                <p>
+                    Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
+                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+                </p>
             </div>
         </div>
     </div>
@@ -323,7 +266,9 @@
 <script src="/js/plugins/plugins.js"></script>
 <!-- Active js -->
 <script src="/js/active.js"></script>
-<!-- DeepSeek js -->
-<script src="/js/deepseek.js"></script>
+<!-- Scripts js -->
+<script src="/js/scripts.js"></script>
+<!-- ✅ Toast container – necesar pentru showToast() -->
+<div id="toastMessage" class="toast-container hide"></div>
 </body>
 </html>

@@ -43,9 +43,9 @@
             loop: true,
             nav: true,
             navText: ['Prev', 'Next'],
-            dots: true,
+            dots: false,
             autoplay: true,
-            autoplayTimeout: 5000,
+            autoplayTimeout: 8000,
             smartSpeed: 1000
         });
 

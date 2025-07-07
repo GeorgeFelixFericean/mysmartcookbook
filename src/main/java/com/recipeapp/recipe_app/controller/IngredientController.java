@@ -38,4 +38,10 @@ public class IngredientController {
         ingredientService.deleteIngredient(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<String>> autocompleteIngredients(@RequestParam String prefix) {
+        List<String> suggestions = ingredientService.autocompleteIngredientNames(prefix);
+        return ResponseEntity.ok(suggestions);
+    }
 }

@@ -85,19 +85,16 @@ public class RecipeController {
         if (recipeOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-
         Recipe recipe = recipeOpt.get();
+        String currentUsername = principal.getName();
+        String recipeOwner = recipe.getUser().getUsername();
 
-        // 🔒 Blochează accesul la rețetele lui "system"
-        if ("system".equalsIgnoreCase(recipe.getUser().getUsername())) {
+        // 🔒 Permitem accesul doar dacă:
+        // (1) rețeta e publică
+        // sau (2) userul logat este creatorul rețetei
+        if (!recipeOwner.equals(currentUsername)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
-
-        // 🔐 Blochează accesul la alte rețete care nu aparțin userului logat
-        if (!recipe.getUser().getUsername().equals(principal.getName())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-
         return ResponseEntity.ok(recipe);
     }
 
@@ -198,5 +195,9 @@ public class RecipeController {
         return ResponseEntity.ok(response);
     }
 
-
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<String>> autocompleteRecipeNames(@RequestParam String prefix) {
+        List<String> suggestions = recipeService.autocompleteRecipeNames(prefix);
+        return ResponseEntity.ok(suggestions);
+    }
 }

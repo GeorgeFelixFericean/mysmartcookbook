@@ -1,4 +1,3 @@
-// ========== Load Public Recipes on Landing Page ==========
 document.addEventListener("DOMContentLoaded", function () {
     fetch("/api/recipes/public")
         .then(response => response.json())
@@ -26,4 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => {
             console.error("Error loading public recipes:", error);
         });
+
+    // 🔄 activăm autocomplete-ul după ce pagina e încărcată
+    setupIngredientAutocomplete();
+    setupRecipeAutocomplete();
 });

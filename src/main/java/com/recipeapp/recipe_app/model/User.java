@@ -20,6 +20,13 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private boolean enabled = false;  // Implicit false la crearea contului
+
+    @Column(length = 64)
+    private String activationCode;
+
+
     // Constructor implicit (necesar pentru JPA)
     public User() {}
 
@@ -61,6 +68,22 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public String getActivationCode() {
+        return activationCode;
+    }
+
+    public void setActivationCode(String activationCode) {
+        this.activationCode = activationCode;
     }
 
     // Pentru comparație între obiecte

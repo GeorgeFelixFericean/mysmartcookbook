@@ -3,16 +3,30 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="">
+    <meta name="description"
+          content="Edit your saved recipe. Update ingredients, instructions, notes or images in just a few steps.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title -->
-    <title>Delicious - Food Blog Template | Edit Recipe</title>
+    <title>MySmartCookbook – Edit Recipe</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="/img/core-img/favicon.ico">
+    <!-- ✅ Favicon Classic -->
+    <link rel="icon" type="image/x-icon" href="/img/core-img/favicon.ico">
+
+    <!-- ✅ PNG Favicons for modern browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/core-img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/core-img/favicon-16x16.png">
+
+    <!-- ✅ iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/core-img/apple-touch-icon.png">
+
+    <!-- ✅ Optional: Manifest for PWA/Android -->
+    <link rel="manifest" href="/img/core-img/site.webmanifest">
+
+    <!-- Font Awesome 6.5 (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="/css/style.css">
@@ -21,13 +35,13 @@
 </head>
 
 <body>
-<!-- Preloader -->
+<!-- PreLoader -->
 <div id="preloader">
     <i class="circle-preloader"></i>
     <img src="/img/core-img/preloader.png" alt="">
 </div>
 
-<!-- ✅ Toast container (pentru mesaje flotante) -->
+<!-- ✅ Toast container -->
 <div id="toastMessage" class="toast-message"></div>
 
 <!-- ##### Header Area Start ##### -->
@@ -37,6 +51,7 @@
     <div class="top-header-area">
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-between">
+
                 <!-- Breaking News -->
                 <div class="col-12 col-sm-6">
                     <div class="breaking-news">
@@ -44,7 +59,7 @@
                             <ul>
                                 <li><a href="#">Hello, <span id="navbarUsername" class="fw-bold mx-1">User</span>!</a>
                                 </li>
-                                <li><a href="#">Review your recipe in detail.</a></li>
+                                <li><a href="#">Editing a saved recipe</a></li>
                             </ul>
                         </div>
                     </div>
@@ -53,12 +68,12 @@
                 <!-- Top Social Info -->
                 <div class="col-12 col-sm-6">
                     <div class="top-social-info text-right">
-                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -91,17 +106,17 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul>
-                                <!-- Navbar Tab: Home (active by default on home page) -->
+                                <!-- Navbar Tab: Home -->
                                 <li><a href="/home">Home</a></li>
 
-                                <!-- Navbar Tab: Add new recipe (placeholder) -->
+                                <!-- Navbar Tab: Add new recipe -->
                                 <li><a href="/add-recipe">Add Recipe</a></li>
 
                                 <!-- Navbar Tab: User's saved recipes -->
-                                <li class="active"><a href="/all-recipes">Your Recipes</a></li>
+                                <li class="active"><a href="/all-recipes">My Recipes</a></li>
 
-                                <!-- Navbar Tab: Our Recipes (publicly available sample recipes -->
-                                <li><a href="#">Our Recipes</a></li>
+                                <!-- Navbar Tab: Featured Recipes -->
+                                <li><a href="/public-recipes-user">Featured Recipes</a></li>
 
                                 <!-- Navbar Tab: Logout -->
                                 <li>
@@ -119,8 +134,8 @@
 </header>
 <!-- ##### Header Area End ##### -->
 
-<!-- ##### Breadcumb Area Start ##### -->
-<div class="breadcumb-area bg-img bg-overlay" style="background-image: url(/img/bg-img/breadcumb3.jpg);">
+<!-- ##### Breadcrumb Area Start ##### -->
+<div class="breadcumb-area bg-img bg-overlay" style="background-image: url(/img/bg-img/breadcrumb11.jpg);">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-12">
@@ -131,11 +146,8 @@
         </div>
     </div>
 </div>
-<!-- ##### Breadcumb Area End ##### -->
+<!-- ##### Breadcrumb Area End ##### -->
 
-
-<!--TODO-->
-<!-- ##### Edit Recipe Form Start ##### -->
 <section class="receipe-post-area section-padding-80">
     <div class="container">
         <div class="row justify-content-center">
@@ -184,8 +196,9 @@
                         </div>
                         <!-- Image Upload -->
                         <div class="form-group mt-4">
-                            <label for="imageFile" class="fw-semibold d-block">Upload Image <span
-                                    class="text-muted small">(optional)</span></label>
+                            <label for="imageFile" class="fw-semibold d-block">Upload a new image or replace the
+                                existing one<span
+                                        class="text-muted small">(optional)</span></label>
 
                             <!-- Buton stilizat pentru upload -->
                             <button type="button" class="btn btn-outline-primary btn-sm"
@@ -193,10 +206,9 @@
                                 <i class="bi bi-upload"></i> Choose a photo
                             </button>
 
-                            <!-- Inputul real, ascuns -->
                             <input type="file" id="imageFile" name="imageFile" accept="image/*" style="display: none;"/>
 
-                            <!-- Preview imagine -->
+                            <!-- Preview image -->
                             <div id="imagePreview" class="mt-3"></div>
                         </div>
                         <!-- Ingredients Section -->
@@ -213,12 +225,12 @@
                         <!-- Action Buttons -->
                         <div class="form-group mt-4 d-flex gap-3 flex-wrap">
                             <button type="submit" class="btn delicious-btn w-100 w-md-auto">
-                                <i class="bi bi-save"></i> Save Recipe
+                                <i class="bi bi-save me-3"></i> Update Recipe
                             </button>
                         </div>
                         <div class="form-group mt-4 d-flex gap-3 flex-wrap">
                             <a id="cancelButton" class="btn btn-outline-secondary w-100 w-md-auto">
-                                <i class="bi bi-x-circle"></i> Cancel
+                                <i class="bi bi-x-circle me-3"></i> Cancel Editing
                             </a>
                         </div>
                     </form> <!-- End of form -->
@@ -228,84 +240,6 @@
     </div>
 </section>
 
-
-<!-- ##### Follow Us Instagram Area Start ##### -->
-<div class="follow-us-instagram">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h5>Follow Us Instragram</h5>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram Feeds -->
-    <div class="insta-feeds d-flex flex-wrap">
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta1.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta2.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta3.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta4.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta5.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta6.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="/img/bg-img/insta7.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Follow Us Instagram Area End ##### -->
-
 <!-- ##### Footer Area Start ##### -->
 <footer class="footer-area">
     <div class="container h-100">
@@ -313,26 +247,21 @@
             <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
                 <!-- Footer Social Info -->
                 <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                 </div>
                 <!-- Footer Logo -->
                 <div class="footer-logo">
-                    <a href="index.html"><img src="/img/core-img/logo.png" alt=""></a>
+                    <a href="/home"><img src="/img/core-img/logo.png" alt=""></a>
                 </div>
-                <!-- Copywrite -->
+                <!-- CopyWrite -->
                 <p>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                    All rights reserved | This template is made with <i class="fa fa-heart-o"
-                                                                        aria-hidden="true"></i>
-                    by
-                    <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+                    Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
+                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
                 </p>
             </div>
         </div>
@@ -351,8 +280,8 @@
 <script src="/js/plugins/plugins.js"></script>
 <!-- Active js -->
 <script src="/js/active.js"></script>
-<!-- DeepSeek js -->
-<script src="/js/deepseek.js"></script>
+<!-- Scripts js -->
+<script src="/js/scripts.js"></script>
 <!-- Bootstrap Bundle JS (include și modal) -->
 <script src="/js/bootstrap/bootstrap.bundle.min.js"></script>
 <script src="/js/edit-recipe.js"></script>

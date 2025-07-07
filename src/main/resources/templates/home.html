@@ -3,24 +3,36 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="">
+    <meta name="description" content="Organize your recipes, discover new ideas, and cook smarter every day.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <!-- Title -->
-    <title>WhatCanIEat?! – Your Smart Personal Cookbook | Home</title>
+    <title>MySmartCookbook – Your Personal Cookbook</title>
 
-    <!-- Favicon -->
-    <link rel="icon" href="/img/core-img/favicon.ico">
+    <!-- ✅ Favicon Classic -->
+    <link rel="icon" type="image/x-icon" href="/img/core-img/favicon.ico">
+
+    <!-- ✅ PNG Favicons for modern browsers -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/core-img/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/core-img/favicon-16x16.png">
+
+    <!-- ✅ iOS -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/core-img/apple-touch-icon.png">
+
+    <!-- ✅ Optional: Manifest pentru PWA/Android -->
+    <link rel="manifest" href="/img/core-img/site.webmanifest">
+
+    <!-- Font Awesome 6.5 (CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Core Stylesheet -->
     <link rel="stylesheet" href="/css/style.css">
-
 </head>
 
 <body>
-<!-- Preloader -->
+<!-- PreLoader -->
 <div id="preloader">
     <i class="circle-preloader"></i>
     <img src="/img/core-img/preloader.png" alt="">
@@ -33,6 +45,7 @@
     <div class="top-header-area">
         <div class="container h-100">
             <div class="row h-100 align-items-center justify-content-between">
+
                 <!-- Breaking News -->
                 <div class="col-12 col-sm-6">
                     <div class="breaking-news">
@@ -41,7 +54,6 @@
                                 <li><a href="#">Hello, <span id="navbarUsername" class="fw-bold mx-1">User</span>!</a>
                                 </li>
                                 <li><a href="#">Welcome back to your kitchen!</a></li>
-                                <li><a href="#">Everything’s prepped. What’s cooking today?</a></li>
                             </ul>
                         </div>
                     </div>
@@ -50,13 +62,12 @@
                 <!-- Top Social Info -->
                 <div class="col-12 col-sm-6">
                     <div class="top-social-info text-right">
-                        <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
-                        <a href="https://www.facebook.com/george.fericean"><i class="fa fa-facebook"
-                                                                              aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                         <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                        <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -67,13 +78,14 @@
     <div class="delicious-main-menu">
         <div class="classy-nav-container breakpoint-off">
             <div class="container">
+
                 <!-- Menu -->
                 <nav class="classy-navbar justify-content-between" id="deliciousNav">
 
                     <!-- Logo -->
                     <a class="nav-brand" href="/home"><img src="img/core-img/logo.png" alt=""></a>
 
-                    <!-- Navbar Toggler -->
+                    <!-- Navbar Toggle -->
                     <div class="classy-navbar-toggler">
                         <span class="navbarToggler"><span></span><span></span><span></span></span>
                     </div>
@@ -89,17 +101,17 @@
                         <!-- Nav Start -->
                         <div class="classynav">
                             <ul>
-                                <!-- Navbar Tab: Home (active by default on home page) -->
+                                <!-- Navbar Tab: Home (active) -->
                                 <li class="active"><a href="/home">Home</a></li>
 
-                                <!-- Navbar Tab: Add new recipe (placeholder) -->
+                                <!-- Navbar Tab: Add new recipe -->
                                 <li><a href="/add-recipe">Add Recipe</a></li>
 
                                 <!-- Navbar Tab: User's saved recipes -->
-                                <li><a href="/all-recipes">Your Recipes</a></li>
+                                <li><a href="/all-recipes">My Recipes</a></li>
 
-                                <!-- Navbar Tab: Our Recipes (publicly available sample recipes -->
-                                <li><a href="/public-recipes-user">Our Recipes</a></li>
+                                <!-- Navbar Tab: Our Recipes -->
+                                <li><a href="/public-recipes-user">Featured Recipes</a></li>
 
                                 <!-- Navbar Tab: Logout -->
                                 <li>
@@ -120,8 +132,9 @@
 <!-- ##### Hero Area Start ##### -->
 <section class="hero-area">
     <div class="hero-slides owl-carousel">
+
         <!-- Single Hero Slide -->
-        <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg13.jpg);">
+        <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg8.jpg);">
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
@@ -129,7 +142,8 @@
                             <h2 data-animation="fadeInUp" data-delay="300ms">Got something tasty in mind?</h2>
                             <p data-animation="fadeInUp" data-delay="700ms">Write it down before you forget it. Save
                                 your favorite recipes now.</p>
-                            <a href="/add-recipe" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">Add a
+                            <a href="/add-recipe" class="btn delicious-btn" data-animation="fadeInUp"
+                               data-delay="1000ms">Add a
                                 New Recipe</a>
                         </div>
                     </div>
@@ -138,15 +152,16 @@
         </div>
 
         <!-- Single Hero Slide -->
-        <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg14.jpg);">
+        <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg9.jpg);">
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
-                            <h2 data-animation="fadeInUp" data-delay="300ms">Your kitchen. Your rules.</h2>
-                            <p data-animation="fadeInUp" data-delay="700ms">Browse your personal collection of saved
-                                recipes — always at your fingertips.</p>
-                            <a href="/all-recipes" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">View
+                            <h2 data-animation="fadeInUp" data-delay="300ms">All your recipes, one smart place.</h2>
+                            <p data-animation="fadeInUp" data-delay="700ms">Your saved recipes, ready whenever
+                                inspiration strikes.</p>
+                            <a href="/all-recipes" class="btn delicious-btn" data-animation="fadeInUp"
+                               data-delay="1000ms">View
                                 My Recipes</a>
                         </div>
                     </div>
@@ -155,16 +170,17 @@
         </div>
 
         <!-- Single Hero Slide -->
-        <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg15.jpg);">
+        <div class="single-hero-slide bg-img" style="background-image: url(img/bg-img/bg10.jpg);">
             <div class="container h-100">
                 <div class="row h-100 align-items-center">
                     <div class="col-12 col-md-9 col-lg-7 col-xl-6">
                         <div class="hero-slides-content" data-animation="fadeInUp" data-delay="100ms">
-                            <h2 data-animation="fadeInUp" data-delay="300ms">Need a new idea for dinner?</h2>
-                            <p data-animation="fadeInUp" data-delay="700ms">Start with one of our curated recipes — no
-                                need to search far.</p>
-                            <a href="#" class="btn delicious-btn" data-animation="fadeInUp" data-delay="1000ms">Try one
-                                of our delicious picks</a>
+                            <h2 data-animation="fadeInUp" data-delay="300ms">Looking for inspiration?</h2>
+                            <p data-animation="fadeInUp" data-delay="700ms">Explore a curated selection of recipes
+                                handpicked to spark your next meal idea.</p>
+                            <a href="/public-recipes-user" class="btn delicious-btn" data-animation="fadeInUp"
+                               data-delay="1000ms">Explore
+                                Featured Recipes</a>
                         </div>
                     </div>
                 </div>
@@ -174,26 +190,16 @@
 </section>
 <!-- ##### Hero Area End ##### -->
 
-<!-- ##### Top Catagory Area Start ##### -->
+<!-- ##### Top Category Area Start ##### -->
 <section class="top-catagory-area section-padding-80-0">
     <div class="container">
         <div class="row">
-            <!-- Top Catagory Area -->
+
+            <!-- Top Category Area -->
             <div class="col-12 col-lg-6">
                 <div class="single-top-catagory">
-                    <img src="img/bg-img/bg9.jpg" alt="">
-                    <!-- Content -->
-                    <div class="top-cta-content">
-                        <h3>Cook with what you’ve got</h3>
-                        <h6>Find recipes based on what’s already in your fridge</h6>
-                        <a href="/all-recipes" class="btn delicious-btn">Search Recipes</a>
-                    </div>
-                </div>
-            </div>
-            <!-- Top Catagory Area -->
-            <div class="col-12 col-lg-6">
-                <div class="single-top-catagory">
-                    <img src="img/bg-img/bg10.jpg" alt="">
+                    <img src="img/bg-img/bg11.jpg" alt="">
+
                     <!-- Content -->
                     <div class="top-cta-content">
                         <h3>Add to your cookbook</h3>
@@ -202,101 +208,26 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
-<!-- ##### Top Catagory Area End ##### -->
 
-<!-- ##### Best Receipe Area Start ##### -->
-<section class="best-receipe-area">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <div class="section-heading">
-                    <h3>Our Must-Try Recipes</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r1.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Sushi Easy Receipy</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r2.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Homemade Burger</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r3.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Vegan Smoothie</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r4.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Calabasa soup</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r5.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Homemade Breakfast</h5>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Single Best Receipe Area -->
-            <div class="col-12 col-sm-6 col-lg-4">
-                <div class="single-best-receipe-area mb-30">
-                    <img src="img/bg-img/r6.jpg" alt="">
-                    <div class="receipe-content">
-                        <a href="receipe-post.html">
-                            <h5>Healthy Fruit Desert</h5>
-                        </a>
+            <!-- Top Category Area -->
+            <div class="col-12 col-lg-6">
+                <div class="single-top-catagory">
+                    <img src="img/bg-img/bg12.jpg" alt="">
+                    <!-- Content -->
+                    <div class="top-cta-content">
+                        <h3>Cook with what you’ve got</h3>
+                        <h6>Find recipes based on what’s already in your fridge</h6>
+                        <a href="/all-recipes" class="btn delicious-btn">Search Recipes</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </section>
-<!-- ##### Best Receipe Area End ##### -->
+<!-- ##### Top Category Area End ##### -->
 
 <!-- ##### CTA Area Start ##### -->
-<section class="cta-area bg-img bg-overlay" style="background-image: url(img/bg-img/bg6.jpg);">
+<section class="cta-area bg-img bg-overlay" style="background-image: url(img/bg-img/bg13.jpg);">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-12">
@@ -304,7 +235,7 @@
                 <div class="cta-content text-center">
                     <h2>Need a Spark of Inspiration?</h2>
                     <p>We’ve cooked up a list of recipes to help you decide what to make next.</p>
-                    <a href="#" class="btn delicious-btn">See Our Suggestions</a>
+                    <a href="/public-recipes-user" class="btn delicious-btn">See Our Suggestions</a>
                 </div>
             </div>
         </div>
@@ -312,107 +243,32 @@
 </section>
 <!-- ##### CTA Area End ##### -->
 
-<!-- ##### Follow Us Instagram Area Start ##### -->
-<div class="follow-us-instagram">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                <h5>Follow Us Instragram</h5>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram Feeds -->
-    <div class="insta-feeds d-flex flex-wrap">
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta1.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta2.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta3.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta4.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta5.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta6.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-
-        <!-- Single Insta Feeds -->
-        <div class="single-insta-feeds">
-            <img src="img/bg-img/insta7.jpg" alt="">
-            <!-- Icon -->
-            <div class="insta-icon">
-                <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- ##### Follow Us Instagram Area End ##### -->
-
 <!-- ##### Footer Area Start ##### -->
 <footer class="footer-area">
     <div class="container h-100">
         <div class="row h-100">
             <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+
                 <!-- Footer Social Info -->
                 <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-dribbble" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-behance" aria-hidden="true"></i></a>
                     <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                 </div>
+
                 <!-- Footer Logo -->
                 <div class="footer-logo">
                     <a href="/home"><img src="img/core-img/logo.png" alt=""></a>
                 </div>
-                <!-- Copywrite -->
-                <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                    All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by
-                    <a href="https://colorlib.com" target="_blank">Colorlib</a>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+
+                <!-- CopyWrite -->
+                <p>
+                    Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
+                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+                </p>
             </div>
         </div>
     </div>
@@ -430,7 +286,7 @@
 <script src="/js/plugins/plugins.js"></script>
 <!-- Active js -->
 <script src="/js/active.js"></script>
-<!-- DeepSeek js -->
-<script src="/js/deepseek.js"></script>
+<!-- Scripts js -->
+<script src="/js/scripts.js"></script>
 </body>
 </html>

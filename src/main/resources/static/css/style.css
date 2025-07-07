@@ -1629,3 +1629,16 @@ position: absolute;
 #editRecipeDemoTexts .list-group-item.active p {
     color: white;
 }
+
+/* 🔧 Ascundem butoanele owl-carousel Prev/Next pe mobil */
+@media (max-width: 576px) {
+    .owl-nav {
+        display: none !important;
+    }
+}
+
+/* Highlight link on hover to make it more noticeable */
+a.text-muted:hover {
+	color: #ff7037 !important; /* Use any accent color if preferred */
+	text-decoration: underline;
+}

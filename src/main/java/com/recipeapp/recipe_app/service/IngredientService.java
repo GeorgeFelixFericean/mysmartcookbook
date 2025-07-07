@@ -30,4 +30,8 @@ public class IngredientService {
     public void deleteIngredient(Long id) {
         ingredientRepository.deleteById(id);
     }
+
+    public List<String> autocompleteIngredientNames(String prefix) {
+        return ingredientRepository.findDistinctNamesStartingWith(prefix);
+    }
 }

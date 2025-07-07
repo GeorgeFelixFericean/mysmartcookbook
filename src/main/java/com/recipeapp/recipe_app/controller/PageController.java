@@ -45,8 +45,6 @@ public class PageController {
 
     @GetMapping("/recipe/{id}")
     public String recipeDetailsPage(@PathVariable Long id) {
-        // Nu încărcăm datele direct aici,
-        // doar returnăm pagina "recipe.html"
         return "recipe";
     }
 
@@ -79,4 +77,20 @@ public class PageController {
     public String demoTourPage() {
         return "demo-tour"; // caută demo-tour.html în /templates
     }
+
+    @GetMapping("/forgot-password")
+    public String showForgotPasswordPage() {
+        return "forgot-password"; // sau "forgot-password.html" dacă e în /templates/
+    }
+
+    @GetMapping("/reset-password")
+    public String showResetPasswordPage() {
+        return "reset-password"; // trebuie să corespundă exact cu numele fișierului din /templates
+    }
+
+    @GetMapping("/public-recipe-free")
+    public String redirectPublicFreeToHome() {
+        return "redirect:/home";
+    }
+
 }

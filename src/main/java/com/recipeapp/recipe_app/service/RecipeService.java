@@ -281,4 +281,8 @@ public class RecipeService {
 
         return recipeRepository.save(copy);
     }
+
+    public List<String> autocompleteRecipeNames(String prefix) {
+        return recipeRepository.findDistinctNamesStartingWith(prefix);
+    }
 }

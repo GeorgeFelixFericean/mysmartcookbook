@@ -9,18 +9,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
 
     @Autowired
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, EmailService emailService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     // Salvăm un utilizator în baza de date
@@ -51,8 +54,22 @@ public class UserService {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
-        // Salvăm utilizatorul
-        return userRepository.save(user);
+        // Setăm contul ca inactiv
+        user.setEnabled(false);
+
+        // Generăm un cod unic de activare
+        String activationCode = UUID.randomUUID().toString();
+        user.setActivationCode(activationCode);
+
+        User savedUser = userRepository.save(user);
+
+        // 🔗 Construim linkul de activare
+        String activationLink = "http://localhost:8080/api/users/activate?code=" + savedUser.getActivationCode();
+
+        // ✉️ Trimitem emailul
+        emailService.sendActivationEmail(savedUser.getEmail(), savedUser.getUsername(), activationLink);
+
+        return savedUser;
     }
 
     /**
@@ -71,6 +88,11 @@ public class UserService {
 
         User user = userOptional.get();
 
+        // 🔒 Verificăm dacă contul este activat
+        if (!user.isEnabled()) {
+            throw new InvalidCredentialsException("Account not activated. Please check your email.");
+        }
+
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new InvalidCredentialsException("Incorrect password. Please try again.");
         }
@@ -80,5 +102,23 @@ public class UserService {
     }
 
 
-    // Poți adăuga mai târziu metode pentru login, găsire după email etc.
+    public boolean activateUser(String code) {
+        Optional<User> optionalUser = userRepository.findByActivationCode(code);
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+
+            // Activăm contul
+            user.setEnabled(true);
+
+            // Ștergem codul de activare (nu mai e nevoie)
+            user.setActivationCode(null);
+
+            // Salvăm modificările
+            userRepository.save(user);
+            return true;
+        }
+
+        return false; // Cod invalid
+    }
 }

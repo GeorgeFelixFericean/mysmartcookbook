@@ -18,12 +18,13 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users") // Prefix pentru toate rutele din controller
-@CrossOrigin(origins = "*") // Permite accesul frontendului din altă origine (dev mode)
+@RequestMapping("/api/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
@@ -33,27 +34,11 @@ public class UserController {
         this.userService = userService;
     }
 
-    /**
-     * Endpoint pentru înregistrarea unui utilizator nou.
-     * Primește JSON de tipul:
-     * {
-     * "username": "testuser",
-     * "email": "test@example.com",
-     * "password": "password123"
-     * }
-     */
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
-        // Aici poți adăuga validări suplimentare dacă e cazul
         return userService.registerUser(user);
     }
 
-    /**
-     * Endpoint pentru autentificarea utilizatorilor.
-     *
-     * @param loginRequest DTO care conține username și password
-     * @return 200 OK dacă login-ul reușește, 401 Unauthorized dacă eșuează
-     */
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         try {
@@ -105,5 +90,18 @@ public class UserController {
         cookie.setHttpOnly(true);
         response.addCookie(cookie);
         return ResponseEntity.ok("Logged out successfully");
+    }
+
+    @GetMapping("/activate")
+    public void activateAccount(@RequestParam("code") String code, HttpServletResponse response) throws IOException {
+        boolean activated = userService.activateUser(code);
+
+        if (activated) {
+            // Redirect cu parametru de succes
+            response.sendRedirect("/login?activated=true");
+        } else {
+            // Redirect cu parametru de eroare
+            response.sendRedirect("/login?activationFailed=true");
+        }
     }
 }

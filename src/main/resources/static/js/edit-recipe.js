@@ -3,7 +3,7 @@ const recipeId = window.location.pathname.split("/").pop();
         fetch(`/api/recipes/${recipeId}`)
             .then(res => {
                 if (!res.ok) {
-                    // 🛑 Rețetă inexistentă – afișăm toast și redirecționăm
+                    // Recipe does not exist – we display toast and redirect
                     const toast = new bootstrap.Toast(document.getElementById("errorToast"));
                     toast.show();
                     setTimeout(() => {
@@ -20,7 +20,7 @@ const recipeId = window.location.pathname.split("/").pop();
                 document.getElementById("notes").value = recipe.notes || "";
                 document.getElementById("externalLink").value = recipe.externalLink || "";
                 const container = document.getElementById("imagePreview");
-                const imageSrc = recipe.imagePath || "/img/placeholder.jpg";
+                const imageSrc = recipe.imagePath || "/img/core-img/placeholder.jpg";
 
                 container.innerHTML = `
                   <div class="position-relative d-inline-block" style="max-width: 100%;">

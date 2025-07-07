@@ -20,6 +20,7 @@ public class DataInitializer {
                 systemUser.setUsername("system");
                 systemUser.setEmail(systemEmail);
                 systemUser.setPassword(passwordEncoder.encode("dummy-password"));
+                systemUser.setEnabled(true);
                 userRepository.save(systemUser);
 
                 System.out.println("✅ System user created");
