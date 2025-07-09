@@ -77,22 +77,10 @@ const UNIT_OPTIONS = [{
 	plural: "stalks",
 	label: "stalk"
 }];
-
-const PUBLIC_PATHS = [
-    "/",
-    "/login",
-    "/register",
-    "/public-recipes",
-    "/demo-tour",
-    "/forgot-password",
-    "/reset-password",
-    "/public-recipe-free"
-];
-
+const PUBLIC_PATHS = ["/", "/login", "/register", "/public-recipes", "/demo-tour", "/forgot-password", "/reset-password", "/public-recipe-free"];
 const PROTECTED_PATHS = ['/home', '/add-recipe', '/all-recipes'];
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 let toastTimeoutId = null; // stores the current toast timeout
-
 // ===============================
 // SESSION MANAGEMENT
 // ===============================
@@ -101,28 +89,23 @@ function checkSession(path, isProtected) {
 		credentials: 'same-origin'
 	}).then(response => response.text()).then(text => {
 		const isLoggedIn = !text.includes("Login") && !text.toLowerCase().includes("welcome back");
-
 		if (isProtected && !isLoggedIn) {
 			console.warn("Session expired or not authenticated, redirecting to login...");
 			window.location.href = '/login';
 			return false;
 		}
-
 		if (!isProtected && isLoggedIn) {
-            console.log("Session is active on server, redirecting...");
-
-            if (path === "/public-recipes") {
-                window.location.href = "/public-recipes-user";
-
-            } else if (path.startsWith("/public-recipe-free/")) {
-                const id = path.split("/").pop();
-                window.location.href = `/public-recipe-user/${id}`;
-            }else {
-                window.location.href = "/home";
-            }
-            return false;
-        }
-
+			console.log("Session is active on server, redirecting...");
+			if (path === "/public-recipes") {
+				window.location.href = "/public-recipes-user";
+			} else if (path.startsWith("/public-recipe-free/")) {
+				const id = path.split("/").pop();
+				window.location.href = `/public-recipe-user/${id}`;
+			} else {
+				window.location.href = "/home";
+			}
+			return false;
+		}
 		return true;
 	}).catch(error => {
 		console.error("Session check failed:", error);
@@ -130,29 +113,23 @@ function checkSession(path, isProtected) {
 		return !isProtected;
 	});
 }
-
 // ===============================
 // TOAST NOTIFICATIONS
 // ===============================
 function showToast(message, isSuccess = true) {
 	const toast = document.getElementById("toastMessage");
-
 	// Clear any previous timeout so it doesn't auto-hide too early
 	clearTimeout(toastTimeoutId);
-
 	// Remove previous classes and hide status
 	toast.classList.remove("toast-success", "toast-error", "hide");
-
 	// Add appropriate class
 	toast.classList.add(isSuccess ? "toast-success" : "toast-error");
-
 	// Set content and show
 	toast.innerHTML = `
 		<span>${message}</span>
 		<div class="close-btn" onclick="hideToast()">×</div>
 	`;
 	toast.style.display = "flex";
-
 	// Set new timeout to hide after 5 seconds
 	toastTimeoutId = setTimeout(() => {
 		hideToast();
@@ -172,15 +149,12 @@ function hideToast() {
 // ===============================
 function addIngredientField() {
 	const container = document.getElementById("ingredientsContainer");
-
 	const div = document.createElement("div");
 	div.className = "ingredient-entry rounded p-3 mb-3 bg-light-subtle";
-
 	let unitOptionsHtml = `<option value="" disabled selected hidden>Select unit</option>`;
 	UNIT_OPTIONS.forEach(unit => {
 		unitOptionsHtml += `<option value="${unit.key}" title="${unit.label}">${unit.abbreviation}</option>`;
 	});
-
 	div.innerHTML = `
 		<div class="form-row">
 			<div class="form-group col-md-5">
@@ -205,7 +179,6 @@ function addIngredientField() {
 			</div>
 		</div>
 	`;
-
 	container.appendChild(div);
 }
 
@@ -213,7 +186,6 @@ function removeIngredientField(btn) {
 	const entry = btn.closest(".ingredient-entry");
 	if (entry) entry.remove();
 }
-
 async function saveRecipe() {
 	const name = document.getElementById("name").value;
 	const instructions = document.getElementById("instructions").value;
@@ -232,18 +204,18 @@ async function saveRecipe() {
 			return;
 		}
 		if (name.length > 50) {
-        	showToast("Ingredient name is too long. Maximum 50 characters allowed.", false);
-        	return;
-        }
+			showToast("Ingredient name is too long. Maximum 50 characters allowed.", false);
+			return;
+		}
 		const parsedQuantity = parseFloat(quantityValue);
 		if (!quantityValue || isNaN(parsedQuantity)) {
 			showToast("Please enter a valid quantity for \"" + name + "\".", false);
 			return;
 		}
 		if (parsedQuantity <= 0) {
-            showToast("Quantity must be greater than zero for \"" + name + "\".", false);
-            return;
-        }
+			showToast("Quantity must be greater than zero for \"" + name + "\".", false);
+			return;
+		}
 		if (parsedQuantity > 100000) {
 			showToast("Quantity too large for \"" + name + "\". Maximum allowed is 100,000.", false);
 			return;
@@ -299,45 +271,37 @@ async function saveRecipe() {
 		showToast("Failed to save recipe. " + error.message, false);
 	}
 }
-
 // ===============================
 // IMAGE HANDLING – Remove selected image
 // ===============================
 function removeSelectedImage() {
 	const previewContainer = document.getElementById("imagePreviewContainer");
 	previewContainer.innerHTML = "";
-
 	const statusText = document.getElementById("fileStatusText");
 	if (statusText) statusText.textContent = "No image selected yet.";
-
 	const fileInput = document.getElementById("imageFile");
 	if (fileInput) fileInput.value = "";
-
 	const errorDiv = document.getElementById("errorMessage");
 	if (errorDiv) {
 		errorDiv.classList.add("d-none");
 		errorDiv.textContent = "";
 	}
 }
-
 // ===============================
 // RECIPE DISPLAY & PAGINATION
 // ===============================
 function renderRecipeCards(recipes) {
-  const currentPath = window.location.pathname;
-  const isPublicPage = currentPath.includes("public-recipes");
-  const isLoggedIn = !!localStorage.getItem("loggedUser");
-
-  return recipes.map(recipe => {
-    let baseUrl;
-
-    if (isPublicPage) {
-      baseUrl = isLoggedIn ? "/public-recipe-user" : "/public-recipe-free";
-    } else {
-      baseUrl = "/recipe";
-    }
-
-    return `
+	const currentPath = window.location.pathname;
+	const isPublicPage = currentPath.includes("public-recipes");
+	const isLoggedIn = !!localStorage.getItem("loggedUser");
+	return recipes.map(recipe => {
+		let baseUrl;
+		if (isPublicPage) {
+			baseUrl = isLoggedIn ? "/public-recipe-user" : "/public-recipe-free";
+		} else {
+			baseUrl = "/recipe";
+		}
+		return `
       <div class="col-sm-6 col-md-4 col-lg-4 mb-4">
         <div class="card shadow-sm h-100">
           <img src="${recipe.imagePath || '/img/core-img/placeholder.jpg'}"
@@ -353,7 +317,7 @@ function renderRecipeCards(recipes) {
         </div>
       </div>
     `;
-  }).join('');
+	}).join('');
 }
 
 function renderPagination(data, page, callback) {
@@ -362,12 +326,10 @@ function renderPagination(data, page, callback) {
 		paginationContainer.innerHTML = "";
 		return;
 	}
-
 	const maxVisiblePages = 5;
 	let startPage = Math.max(0, page - Math.floor(maxVisiblePages / 2));
 	let endPage = Math.min(data.totalPages - 1, startPage + maxVisiblePages - 1);
 	startPage = Math.max(0, endPage - maxVisiblePages + 1);
-
 	let paginationHtml = `
 	<div class="pagination-wrapper text-center mx-auto">
 	  <ul class="pagination justify-content-center flex-wrap mb-0">
@@ -378,7 +340,6 @@ function renderPagination(data, page, callback) {
 	      </button>
 	    </li>
 	`;
-
 	for (let i = startPage; i <= endPage; i++) {
 		paginationHtml += `
 	    <li class="page-item ${i === page ? "active" : ""}">
@@ -386,7 +347,6 @@ function renderPagination(data, page, callback) {
 	    </li>
 	  `;
 	}
-
 	paginationHtml += `
 	    <li class="page-item ${page === data.totalPages - 1 ? "disabled" : ""}">
 	      <button class="page-link" ${page === data.totalPages - 1 ? "disabled" : ""}
@@ -397,10 +357,8 @@ function renderPagination(data, page, callback) {
 	  </ul>
 	</div>
 	`;
-
 	paginationContainer.innerHTML = paginationHtml;
 }
-
 async function fetchAllRecipes(page = 0, size = 6) {
 	try {
 		const name = document.getElementById('filter-name')?.value || "";
@@ -422,7 +380,6 @@ async function fetchAllRecipes(page = 0, size = 6) {
                 </div>
               </div>
             `;
-
 			document.getElementById("paginationContainer").innerHTML = "";
 			return;
 		}
@@ -433,33 +390,27 @@ async function fetchAllRecipes(page = 0, size = 6) {
             </div>
           </div>
         `;
-
-
 		renderPagination(data, page, 'fetchAllRecipes');
 	} catch (error) {
 		console.error("Error loading recipes:", error);
 		document.getElementById("allRecipesContainer").innerHTML = "<p class='text-center text-danger'>Oops! Something went wrong...</p>";
 	}
 }
-
 // ===============================
 // PUBLIC RECIPE MANAGEMENT
 // ===============================
 async function fetchPublicRecipes(page = 0, size = 6) {
 	try {
 		const name = document.getElementById('filter-name')?.value || "";
-		const ingredients = Array.from(document.querySelectorAll('.ingredient-input'))
-			.map(input => input.value.trim())
-			.filter(val => val !== "");
-
-		const params = new URLSearchParams({ page, size });
+		const ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value.trim()).filter(val => val !== "");
+		const params = new URLSearchParams({
+			page,
+			size
+		});
 		if (name) params.append("name", name);
 		ingredients.forEach(ing => params.append("ingredients", ing));
-
 		const response = await fetch(`/api/recipes/public?${params.toString()}`);
-
 		const data = await response.json();
-
 		const container = document.getElementById("allRecipesContainer");
 		if (!data.content?.length) {
 			container.innerHTML = `
@@ -471,7 +422,6 @@ async function fetchPublicRecipes(page = 0, size = 6) {
 			document.getElementById("paginationContainer").innerHTML = "";
 			return;
 		}
-
 		container.innerHTML = `
 			<div class="container">
 				<div class="row justify-content-center g-4">
@@ -479,7 +429,6 @@ async function fetchPublicRecipes(page = 0, size = 6) {
 				</div>
 			</div>
 		`;
-
 		renderPagination(data, page, 'fetchPublicRecipes');
 	} catch (error) {
 		console.error("Error loading public recipes:", error);
@@ -490,39 +439,34 @@ async function fetchPublicRecipes(page = 0, size = 6) {
 
 function filterPublicRecipes(page = 0, size = 6) {
 	const name = document.getElementById('filter-name').value;
-	const ingredients = Array.from(document.querySelectorAll('.ingredient-input'))
-		.map(input => input.value.trim())
-		.filter(val => val !== "");
-
-	const params = new URLSearchParams({ page, size });
+	const ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value.trim()).filter(val => val !== "");
+	const params = new URLSearchParams({
+		page,
+		size
+	});
 	if (name) params.append("name", name);
 	ingredients.forEach(ing => params.append("ingredients", ing));
-
-	fetch(`/api/recipes/public?${params.toString()}`)
-		.then(res => res.json())
-		.then(data => {
-			const container = document.getElementById("allRecipesContainer");
-			if (!data.content?.length) {
-				container.innerHTML = `
+	fetch(`/api/recipes/public?${params.toString()}`).then(res => res.json()).then(data => {
+		const container = document.getElementById("allRecipesContainer");
+		if (!data.content?.length) {
+			container.innerHTML = `
 					<div class="col-12 d-flex justify-content-center mt-4">
 						<div class="no-results-message text-center">
 							<p>No featured recipes match your filters. Try adjusting them and search again.</p>
 						</div>
 					</div>`;
-				document.getElementById("paginationContainer").innerHTML = "";
-				return;
-			}
-
-			container.innerHTML = `
+			document.getElementById("paginationContainer").innerHTML = "";
+			return;
+		}
+		container.innerHTML = `
 				<div class="row row-cols-1 row-cols-md-3 g-4">
 					${renderRecipeCards(data.content)}
 				</div>`;
-			renderPagination(data, page, 'filterPublicRecipes');
-		})
-		.catch(error => {
-			console.error("Error filtering public recipes:", error);
-			showToast("🚨 Failed to filter public recipes", false);
-		});
+		renderPagination(data, page, 'filterPublicRecipes');
+	}).catch(error => {
+		console.error("Error filtering public recipes:", error);
+		showToast("🚨 Failed to filter public recipes", false);
+	});
 }
 
 function resetPublicFilters() {
@@ -532,24 +476,20 @@ function resetPublicFilters() {
 		<input type="text" class="form-control mb-2 ingredient-input" placeholder="Search by ingredient" list="ingredient-suggestions" autocomplete="off">`;
 	fetchPublicRecipes(0);
 }
-
 async function fetchPublicRecipesUser(page = 0, size = 6) {
 	try {
 		const name = document.getElementById('filter-name')?.value || "";
-		const ingredients = Array.from(document.querySelectorAll('.ingredient-input'))
-			.map(input => input.value.trim())
-			.filter(val => val !== "");
-
-		const params = new URLSearchParams({ page, size });
+		const ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value.trim()).filter(val => val !== "");
+		const params = new URLSearchParams({
+			page,
+			size
+		});
 		if (name) params.append("name", name);
 		ingredients.forEach(ing => params.append("ingredients", ing));
-
 		const response = await fetch(`/api/recipes/public-authenticated?${params.toString()}`, {
-        	credentials: 'same-origin'
-        });
-
+			credentials: 'same-origin'
+		});
 		const data = await response.json();
-
 		const container = document.getElementById("allRecipesContainer");
 		if (!data.content?.length) {
 			container.innerHTML = `
@@ -561,7 +501,6 @@ async function fetchPublicRecipesUser(page = 0, size = 6) {
 			document.getElementById("paginationContainer").innerHTML = "";
 			return;
 		}
-
 		container.innerHTML = `
 			<div class="container">
 				<div class="row justify-content-center g-4">
@@ -569,7 +508,6 @@ async function fetchPublicRecipesUser(page = 0, size = 6) {
 				</div>
 			</div>
 		`;
-
 		renderPagination(data, page, 'fetchPublicRecipesUser');
 	} catch (error) {
 		console.error("Error loading public user recipes:", error);
@@ -592,82 +530,70 @@ function resetPublicUserFilters() {
 
 function filterPublicRecipesUser(page = 0, size = 6) {
 	const name = document.getElementById('filter-name').value;
-	const ingredients = Array.from(document.querySelectorAll('.ingredient-input'))
-		.map(input => input.value.trim())
-		.filter(val => val !== "");
-
-	const params = new URLSearchParams({ page, size });
+	const ingredients = Array.from(document.querySelectorAll('.ingredient-input')).map(input => input.value.trim()).filter(val => val !== "");
+	const params = new URLSearchParams({
+		page,
+		size
+	});
 	if (name) params.append("name", name);
 	ingredients.forEach(ing => params.append("ingredients", ing));
-
-	fetch(`/api/recipes/public/user?${params.toString()}`)
-		.then(res => res.json())
-		.then(data => {
-			const container = document.getElementById("allRecipesContainer");
-			if (!data.content?.length) {
-				container.innerHTML = `
+	fetch(`/api/recipes/public/user?${params.toString()}`).then(res => res.json()).then(data => {
+		const container = document.getElementById("allRecipesContainer");
+		if (!data.content?.length) {
+			container.innerHTML = `
 					<div class="col-12 d-flex justify-content-center mt-4">
 						<div class="no-results-message text-center">
 							<p>No results found. Try adjusting your filters!</p>
 						</div>
 					</div>`;
-				document.getElementById("paginationContainer").innerHTML = "";
-				return;
-			}
-
-			container.innerHTML = `
+			document.getElementById("paginationContainer").innerHTML = "";
+			return;
+		}
+		container.innerHTML = `
 				<div class="row row-cols-1 row-cols-md-3 g-4">
 					${renderRecipeCards(data.content)}
 				</div>`;
-			renderPagination(data, page, 'filterPublicRecipesUser');
-		})
-		.catch(error => {
-			console.error("Error filtering public user recipes:", error);
-			showToast("🚨 Failed to filter recipes", false);
-		});
+		renderPagination(data, page, 'filterPublicRecipesUser');
+	}).catch(error => {
+		console.error("Error filtering public user recipes:", error);
+		showToast("🚨 Failed to filter recipes", false);
+	});
 }
-
 // ===============================
 // INGREDIENT INPUT – add extra field for filtering
 // ===============================
 function addIngredientInput() {
 	const container = document.getElementById('ingredient-container');
 	if (!container) return;
-
 	const currentInputs = container.querySelectorAll('.ingredient-entry');
 	if (currentInputs.length >= 10) {
 		showToast("You can add up to 10 ingredients.", false);
 		return;
 	}
-
 	const wrapper = document.createElement('div');
-    wrapper.className = 'input-group mb-2 ingredient-entry';
-
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'form-control ingredient-input';
-    input.placeholder = 'Add another ingredient';
-    input.setAttribute("list", "ingredient-suggestions");
-    input.setAttribute("autocomplete", "off");
-
-    // ✅ Buton X vizibil și stilizat
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'btn btn-outline-danger';
-    btn.innerHTML = '<i class="bi bi-trash text-white"></i>';
-    btn.title = 'Remove';
-    btn.style.display = 'flex';
-    btn.style.alignItems = 'center';
-    btn.style.justifyContent = 'center';
-    btn.style.minWidth = '38px';
-    btn.style.backgroundColor = 'rgba(220,53,69)'; // ✅ vizibil fără să fie agresiv
-    btn.style.border = '1px solid #dc3545';
-
-    btn.onclick = () => wrapper.remove();
-
-    wrapper.appendChild(input);
-    wrapper.appendChild(btn);
-    container.appendChild(wrapper);
+	wrapper.className = 'input-group mb-2 ingredient-entry';
+	const input = document.createElement('input');
+	input.type = 'text';
+	input.className = 'form-control ingredient-input';
+	input.placeholder = 'Add another ingredient';
+	input.setAttribute("list", "ingredient-suggestions");
+	input.setAttribute("autocomplete", "off");
+	// ✅ Buton X vizibil și stilizat
+	const btn = document.createElement('button');
+	btn.type = 'button';
+	btn.className = 'btn btn-outline-danger';
+	btn.innerHTML = '<i class="bi bi-trash text-white"></i>';
+	btn.title = 'Remove';
+	btn.style.display = 'flex';
+	btn.style.alignItems = 'center';
+	btn.style.justifyContent = 'center';
+	btn.style.minWidth = '38px';
+	btn.style.backgroundColor = 'rgba(220,53,69)'; // ✅ vizibil fără să fie agresiv
+	btn.style.border = '1px solid #dc3545';
+	btn.onclick = () => wrapper.remove();
+	wrapper.appendChild(input);
+	wrapper.appendChild(btn);
+	container.appendChild(wrapper);
 }
 
 function filterRecipes(page = 0, size = 6) {
@@ -683,8 +609,7 @@ function filterRecipes(page = 0, size = 6) {
 	});
 	if (name) params.append("name", name);
 	ingredients.forEach(ing => params.append("ingredients", ing));
-	fetch(`/api/recipes/filter?${params.toString()}`)
-    .then(res => res.json()).then(data => {
+	fetch(`/api/recipes/filter?${params.toString()}`).then(res => res.json()).then(data => {
 		const container = document.getElementById("allRecipesContainer");
 		if (!data.content?.length) {
 			container.innerHTML = `
@@ -721,14 +646,12 @@ function resetFilters() {
   `;
 	fetchAllRecipes(0);
 }
-
 // ===============================
 // RECIPE NAVIGATION
 // ===============================
 function goToRecipe(recipeId) {
 	window.location.href = "/recipe/" + recipeId;
 }
-
 async function searchByIngredients() {
 	const input = document.getElementById("searchIngredients").value;
 	const ingredientsArray = input.split(",").map(item => item.trim());
@@ -753,258 +676,221 @@ async function searchByIngredients() {
 		showToast("🚨 Failed to search recipes", false);
 	}
 }
-
 // ===============================
 // SINGLE RECIPE PAGE DISPLAY
 // ===============================
 function formatUnit(unitKey, quantity) {
-    const unit = UNIT_OPTIONS.find(u => u.key === unitKey);
-    if (!unit) return unitKey; // fallback la text brut
-
-    // Folosește plural dacă e cantitate diferită de 1
-    return quantity !== 1 ? unit.plural : unit.abbreviation;
+	const unit = UNIT_OPTIONS.find(u => u.key === unitKey);
+	if (!unit) return unitKey; // fallback la text brut
+	// Folosește plural dacă e cantitate diferită de 1
+	return quantity !== 1 ? unit.plural : unit.abbreviation;
 }
 
 function loadRecipeDetails() {
 	const path = window.location.pathname;
 	const recipeId = path.substring(path.lastIndexOf("/") + 1);
 	let currentRecipeId = null;
-
-	fetch(`/api/recipes/${recipeId}`)
-		.then(response => {
-        	if (response.redirected) {
-        		window.location.href = response.url;
-        		return;
-        	}
-        	if (response.status === 403) {
-        		throw new Error("ACCESS_DENIED");
-        	}
-        	if (!response.ok) {
-        		throw new Error("NOT_FOUND");
-        	}
-        	return response.json();
-        })
-
-		.then(recipe => {
-			currentRecipeId = recipe.id;
-
-			// ✅ 1. Titlu
-			const titleEl = document.getElementById("recipeTitle");
-			if (titleEl) titleEl.textContent = recipe.name;
-
-			// ✅ 2. Instrucțiuni
-			const instructionsEl = document.getElementById("recipeInstructions");
-			if (instructionsEl && recipe.instructions) {
-				const isLink = recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://");
-				const formatted = isLink
-					? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">${recipe.instructions} 🔗</a>`
-					: recipe.instructions.replace(/\n/g, "<br>");
-				instructionsEl.innerHTML = `
+	fetch(`/api/recipes/${recipeId}`).then(response => {
+		if (response.redirected) {
+			window.location.href = response.url;
+			return;
+		}
+		if (response.status === 403) {
+			throw new Error("ACCESS_DENIED");
+		}
+		if (!response.ok) {
+			throw new Error("NOT_FOUND");
+		}
+		return response.json();
+	}).then(recipe => {
+		currentRecipeId = recipe.id;
+		// ✅ 1. Titlu
+		const titleEl = document.getElementById("recipeTitle");
+		if (titleEl) titleEl.textContent = recipe.name;
+		// ✅ 2. Instrucțiuni
+		const instructionsEl = document.getElementById("recipeInstructions");
+		if (instructionsEl && recipe.instructions) {
+			const isLink = recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://");
+			const formatted = isLink ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">${recipe.instructions} 🔗</a>` : recipe.instructions.replace(/\n/g, "<br>");
+			instructionsEl.innerHTML = `
                 	<div class="mb-4">
                 		<p class="text-dark">${formatted}</p>
                 	</div>
                 `;
-			}
-
-			// ✅ 2b. Notes (dacă există)
-            const notesEl = document.getElementById("recipeNotes");
-            if (notesEl && recipe.notes) {
-            	const notesText = notesEl.querySelector("p");
-                if (notesText) notesText.innerHTML = recipe.notes.replace(/\n/g, "<br>");
-            	notesEl.style.display = "block";
-            }
-
-            // ✅ 2c. External link (dacă există)
-            const externalLinkWrapper = document.getElementById("recipeExternalLink");
-            const externalAnchor = document.getElementById("externalLinkAnchor");
-
-            if (externalLinkWrapper && externalAnchor && recipe.externalLink) {
-            	externalAnchor.href = recipe.externalLink;
-            	externalAnchor.textContent = recipe.externalLink;
-            	externalLinkWrapper.style.display = "block";
-            }
-
-
-			// ✅ 3. Imagine slider
-			const slider = document.querySelector(".receipe-slider");
-			if (slider) {
-				slider.innerHTML = `
+		}
+		// ✅ 2b. Notes (dacă există)
+		const notesEl = document.getElementById("recipeNotes");
+		if (notesEl && recipe.notes) {
+			const notesText = notesEl.querySelector("p");
+			if (notesText) notesText.innerHTML = recipe.notes.replace(/\n/g, "<br>");
+			notesEl.style.display = "block";
+		}
+		// ✅ 2c. External link (dacă există)
+		const externalLinkWrapper = document.getElementById("recipeExternalLink");
+		const externalAnchor = document.getElementById("externalLinkAnchor");
+		if (externalLinkWrapper && externalAnchor && recipe.externalLink) {
+			externalAnchor.href = recipe.externalLink;
+			externalAnchor.textContent = recipe.externalLink;
+			externalLinkWrapper.style.display = "block";
+		}
+		// ✅ 3. Imagine slider
+		const slider = document.querySelector(".receipe-slider");
+		if (slider) {
+			slider.innerHTML = `
 					<img src="${recipe.imagePath || '/img/core-img/placeholder.jpg'}"
 					     alt="Recipe Image"
 					     class="img-fluid rounded"
 					     style="max-height: 500px; object-fit: cover; width: 100%;">
 				`;
-			}
-
-			// ✅ 4. Ingrediente
-			const ingredientsEl = document.getElementById("recipeIngredients");
-			if (ingredientsEl && recipe.ingredients?.length) {
-				const list = recipe.ingredients.map(ing => {
-                	const unitText = formatUnit(ing.unit, ing.quantity);
-                	const quantity = parseFloat(ing.quantity).toLocaleString("en-US", { maximumFractionDigits: 2 });
-                	const safeId = "chk-" + ing.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
-                	return `
+		}
+		// ✅ 4. Ingrediente
+		const ingredientsEl = document.getElementById("recipeIngredients");
+		if (ingredientsEl && recipe.ingredients?.length) {
+			const list = recipe.ingredients.map(ing => {
+				const unitText = formatUnit(ing.unit, ing.quantity);
+				const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
+					maximumFractionDigits: 2
+				});
+				const safeId = "chk-" + ing.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
+				return `
                 		<div class="custom-control custom-checkbox mb-2">
                 			<input type="checkbox" class="custom-control-input" id="${safeId}">
                 			<label class="custom-control-label" for="${safeId}">
                 				${quantity} ${unitText} ${ing.name}
                 			</label>
                 		</div>`;
-                }).join('');
-				ingredientsEl.innerHTML = list;
-			}
-
-			// ✅ 5. Butoane edit/delete
-            const actionsEl = document.getElementById("recipeActions");
-            if (actionsEl) {
-            	actionsEl.innerHTML = `
+			}).join('');
+			ingredientsEl.innerHTML = list;
+		}
+		// ✅ 5. Butoane edit/delete
+		const actionsEl = document.getElementById("recipeActions");
+		if (actionsEl) {
+			actionsEl.innerHTML = `
             		<a href="/edit-recipe/${recipe.id}" class="btn delicious-btn" style="margin-right: 12px;">Edit Recipe</a>
             		<button id="deleteBtn" class="btn delicious-btn text-white" style="background-color: #a40000; border-color: #6b0000;" data-bs-toggle="modal" data-bs-target="#deleteConfirmModal">
             			Delete Recipe
             		</button>
             	`;
-            }
-		})
-		.catch(error => {
-        	console.error("Error loading recipe:", error);
-
-        	let message = "Recipe not found or error loading.";
-        	if (error.message === "ACCESS_DENIED") {
-        		message = "You are not allowed to view this recipe.";
-        	}
-
-        	showToast(message, false);
-        	setTimeout(() => window.location.href = "/home", 2500);
-        });
-
-
+		}
+	}).catch(error => {
+		console.error("Error loading recipe:", error);
+		let message = "Recipe not found or error loading.";
+		if (error.message === "ACCESS_DENIED") {
+			message = "You are not allowed to view this recipe.";
+		}
+		showToast(message, false);
+		setTimeout(() => window.location.href = "/home", 2500);
+	});
 	// ✅ 6. Setup buton ștergere
 	const deleteBtn = document.getElementById("confirmDeleteBtn");
 	if (deleteBtn) {
 		deleteBtn.addEventListener("click", () => {
 			if (!currentRecipeId) return;
-			fetch(`/api/recipes/${currentRecipeId}`, { method: "DELETE" })
-				.then(res => {
-					if (!res.ok) throw new Error("Deletion failed.");
-					window.location.href = "/all-recipes?deleted=true";
-				})
-				.catch(err => alert("Error deleting: " + err.message));
+			fetch(`/api/recipes/${currentRecipeId}`, {
+				method: "DELETE"
+			}).then(res => {
+				if (!res.ok) throw new Error("Deletion failed.");
+				window.location.href = "/all-recipes?deleted=true";
+			}).catch(err => alert("Error deleting: " + err.message));
 		});
 	}
 }
 
 function loadPublicRecipeDetails() {
-    // 1️⃣ Extragem ID-ul din URL
-    const recipeId = window.location.pathname.split("/").pop();
-    const addBtn     = document.getElementById("addToMyRecipesBtn");
-    let   currentId  = null;
-
-    fetch(`/api/recipes/public/by-id/${recipeId}`)
-
-        .then(r => {
-            if (!r.ok) throw new Error("Recipe not found.");
-            return r.json();
-        })
-        .then(recipe => {
-            // ✅ Dacă nu e rețetă de la userul „system”, redirecționează
-            if (recipe.user.username !== "system") {
-                showToast("This recipe is not public.", false);
-                window.location.href = "/public-recipes-user";
-                return;
-            }
-
-            currentId = recipe.id;
-
-            /* ---- Populăm pagina (aceleași fragmente ca în loadRecipeDetails) ---- */
-            const titleEl = document.getElementById("recipeTitle");
-            if (titleEl) titleEl.textContent = recipe.name;
-
-            /* Instrucțiuni */
-            const instructionsEl = document.getElementById("recipeInstructions");
-            if (instructionsEl && recipe.instructions) {
-                const isLink   = /^https?:\/\//i.test(recipe.instructions);
-                const formatted = isLink
-                    ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">
+	// 1️⃣ Extragem ID-ul din URL
+	const recipeId = window.location.pathname.split("/").pop();
+	const addBtn = document.getElementById("addToMyRecipesBtn");
+	let currentId = null;
+	fetch(`/api/recipes/public/by-id/${recipeId}`).then(r => {
+		if (!r.ok) throw new Error("Recipe not found.");
+		return r.json();
+	}).then(recipe => {
+		// ✅ Dacă nu e rețetă de la userul „system”, redirecționează
+		if (recipe.user.username !== "system") {
+			showToast("This recipe is not public.", false);
+			window.location.href = "/public-recipes-user";
+			return;
+		}
+		currentId = recipe.id;
+		/* ---- Populăm pagina (aceleași fragmente ca în loadRecipeDetails) ---- */
+		const titleEl = document.getElementById("recipeTitle");
+		if (titleEl) titleEl.textContent = recipe.name;
+		/* Instrucțiuni */
+		const instructionsEl = document.getElementById("recipeInstructions");
+		if (instructionsEl && recipe.instructions) {
+			const isLink = /^https?:\/\//i.test(recipe.instructions);
+			const formatted = isLink ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">
                            ${recipe.instructions} 🔗
-                       </a>`
-                    : recipe.instructions.replace(/\n/g, "<br>");
-                instructionsEl.innerHTML = `<div class="mb-4"><p class="text-dark">${formatted}</p></div>`;
-            }
-
-            /* Notes (dacă există) */
-            const notesWrap = document.getElementById("recipeNotes");
-            if (notesWrap && recipe.notes) {
-                notesWrap.querySelector("p").innerHTML = recipe.notes.replace(/\n/g, "<br>");
-                notesWrap.style.display = "block";
-            }
-
-            /* External link */
-            const extWrap = document.getElementById("recipeExternalLink");
-            const extA    = document.getElementById("externalLinkAnchor");
-            if (extWrap && extA && recipe.externalLink) {
-                extA.href = recipe.externalLink;
-                extA.textContent = recipe.externalLink;
-                extWrap.style.display = "block";
-            }
-
-            /* Imagine */
-            const slider = document.querySelector(".receipe-slider");
-            if (slider) {
-                slider.innerHTML = `
+                       </a>` : recipe.instructions.replace(/\n/g, "<br>");
+			instructionsEl.innerHTML = `<div class="mb-4"><p class="text-dark">${formatted}</p></div>`;
+		}
+		/* Notes (dacă există) */
+		const notesWrap = document.getElementById("recipeNotes");
+		if (notesWrap && recipe.notes) {
+			notesWrap.querySelector("p").innerHTML = recipe.notes.replace(/\n/g, "<br>");
+			notesWrap.style.display = "block";
+		}
+		/* External link */
+		const extWrap = document.getElementById("recipeExternalLink");
+		const extA = document.getElementById("externalLinkAnchor");
+		if (extWrap && extA && recipe.externalLink) {
+			extA.href = recipe.externalLink;
+			extA.textContent = recipe.externalLink;
+			extWrap.style.display = "block";
+		}
+		/* Imagine */
+		const slider = document.querySelector(".receipe-slider");
+		if (slider) {
+			slider.innerHTML = `
                     <img src="${recipe.imagePath || '/img/core-img/placeholder.jpg'}"
                          class="img-fluid rounded"
                          style="max-height:500px; object-fit:cover; width:100%;"
                          alt="${recipe.name}">
                 `;
-            }
-
-            /* Ingrediente */
-            const ingWrap = document.getElementById("recipeIngredients");
-            if (ingWrap && recipe.ingredients?.length) {
-                ingWrap.innerHTML = recipe.ingredients.map(ing => {
-                    const unitTxt  = formatUnit(ing.unit, ing.quantity);
-                    const quantity = parseFloat(ing.quantity)
-                                      .toLocaleString("en-US", { maximumFractionDigits:2 });
-                    return `<p class="mb-1">${quantity} ${unitTxt} ${ing.name}</p>`;
-                }).join("");
-            }
-
-            /* ---- Buton Add to My Recipes ---- */
-            if (addBtn) {
-                const loggedUser = localStorage.getItem("loggedUser");
-                if (!loggedUser) {
-                    addBtn.remove(); // 🔹 elimină complet butonul dacă userul nu e logat
-                } else {
-                    addBtn.style.display = "inline-block";
-                    addBtn.addEventListener("click", () => addPublicRecipeToUser(currentId));
-                }
-            }
-        })
-        .catch(err => {
-            console.error(err);
-            showToast("Could not load recipe.", false);
-            setTimeout(() => window.location.href = "/public-recipes-user", 2500);
-        });
+		}
+		/* Ingrediente */
+		const ingWrap = document.getElementById("recipeIngredients");
+		if (ingWrap && recipe.ingredients?.length) {
+			ingWrap.innerHTML = recipe.ingredients.map(ing => {
+				const unitTxt = formatUnit(ing.unit, ing.quantity);
+				const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
+					maximumFractionDigits: 2
+				});
+				return `<p class="mb-1">${quantity} ${unitTxt} ${ing.name}</p>`;
+			}).join("");
+		}
+		/* ---- Buton Add to My Recipes ---- */
+		if (addBtn) {
+			const loggedUser = localStorage.getItem("loggedUser");
+			if (!loggedUser) {
+				addBtn.remove(); // 🔹 elimină complet butonul dacă userul nu e logat
+			} else {
+				addBtn.style.display = "inline-block";
+				addBtn.addEventListener("click", () => addPublicRecipeToUser(currentId));
+			}
+		}
+	}).catch(err => {
+		console.error(err);
+		showToast("Could not load recipe.", false);
+		setTimeout(() => window.location.href = "/public-recipes-user", 2500);
+	});
 }
-
 /* Helper optional pentru clonare */
 function addPublicRecipeToUser(publicRecipeId) {
-    fetch(`/api/recipes/copy/${publicRecipeId}`, { method: "POST" })
-        .then(r => {
-            if (!r.ok) throw new Error("Copy failed");
-            return r.json();
-        })
-        .then(newRecipe => {
-            showToast("Recipe added to your collection!", true);
-            // Trimite userul direct la rețeta copiată
-            setTimeout(() => window.location.href = `/recipe/${newRecipe.id}`, 1500);
-        })
-        .catch(err => {
-            console.error(err);
-            showToast("Could not add recipe.", false);
-        });
+	fetch(`/api/recipes/copy/${publicRecipeId}`, {
+		method: "POST"
+	}).then(r => {
+		if (!r.ok) throw new Error("Copy failed");
+		return r.json();
+	}).then(newRecipe => {
+		showToast("Recipe added to your collection!", true);
+		// Trimite userul direct la rețeta copiată
+		setTimeout(() => window.location.href = `/recipe/${newRecipe.id}`, 1500);
+	}).catch(err => {
+		console.error(err);
+		showToast("Could not add recipe.", false);
+	});
 }
-
 // ===============================
 // USER MANAGEMENT
 // ===============================
@@ -1016,27 +902,23 @@ function setupForms() {
 function setupRegisterForm() {
 	const form = document.getElementById("registerForm");
 	if (!form) return;
-
 	form.addEventListener("submit", async function(event) {
 		event.preventDefault();
-
 		const username = document.getElementById("username").value;
 		const email = document.getElementById("email").value;
 		const password = document.getElementById("password").value;
-        const confirmPassword = document.getElementById("confirmPassword").value;
-
+		const confirmPassword = document.getElementById("confirmPassword").value;
 		// Validate username
-        const usernameRegex = /^[a-zA-Z0-9_.]{4,20}$/;
-        if (!username) {
-            showToast("Please enter a username.", false);
-            return;
-        }
-        if (!usernameRegex.test(username)) {
-            showToast("Username must be 4–20 characters long and contain only letters, numbers, dots or underscores.", false);
-            return;
-        }
-
-        // Validate email
+		const usernameRegex = /^[a-zA-Z0-9_.]{4,20}$/;
+		if (!username) {
+			showToast("Please enter a username.", false);
+			return;
+		}
+		if (!usernameRegex.test(username)) {
+			showToast("Username must be 4–20 characters long and contain only letters, numbers, dots or underscores.", false);
+			return;
+		}
+		// Validate email
 		if (!email) {
 			showToast("Email address is required.", false);
 			return;
@@ -1046,41 +928,37 @@ function setupRegisterForm() {
 			showToast("Please enter a valid email address (e.g., yourname@domain.com).", false);
 			return;
 		}
-
 		// Validate password
 		if (!password) {
 			showToast("Password is required.", false);
 			return;
 		}
 		if (password.length < 8 || password.length > 64) {
-            showToast("Password must be between 8 and 64 characters.", false);
-            return;
-        }
-
-        // Validate confirm password
-        if (!confirmPassword) {
-        	showToast("Please confirm your password.", false);
-        	return;
-        }
-        if (password !== confirmPassword) {
-        	showToast("Passwords do not match.", false);
-        	return;
-        }
-
-        // Send request to backend
+			showToast("Password must be between 8 and 64 characters.", false);
+			return;
+		}
+		// Validate confirm password
+		if (!confirmPassword) {
+			showToast("Please confirm your password.", false);
+			return;
+		}
+		if (password !== confirmPassword) {
+			showToast("Passwords do not match.", false);
+			return;
+		}
+		// Send request to backend
 		try {
 			const response = await fetch("/api/users/register", {
-            	method: "POST",
-            	headers: {
-            		"Content-Type": "application/json"
-            	},
-            	body: JSON.stringify({
-            		username: username,
-            		email: email,
-            		password: password
-            	})
-            });
-
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					username: username,
+					email: email,
+					password: password
+				})
+			});
 			if (response.ok) {
 				showToast("Registration successful. Please check your email to activate your account before logging in.", true);
 				setTimeout(() => {
@@ -1114,16 +992,16 @@ function setupLoginForm() {
 		}
 		try {
 			const response = await fetch("/api/users/login", {
-            	method: "POST",
-            	credentials: "same-origin",
-            	headers: {
-            		"Content-Type": "application/json"
-            	},
-            	body: JSON.stringify({
-            		username: username,
-            		password: password
-            	})
-            });
+				method: "POST",
+				credentials: "same-origin",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					username: username,
+					password: password
+				})
+			});
 			if (response.ok) {
 				localStorage.setItem("loggedUser", username);
 				showToast("Welcome back. You have logged in successfully.", true);
@@ -1147,10 +1025,10 @@ function checkLoggedInUser() {
 	if (username && nameSpan) {
 		nameSpan.textContent = username;
 	}
-    const heroSpans = document.querySelectorAll(".usernameHeroPlaceholder");
-    heroSpans.forEach(span => {
-        span.textContent = username;
-    });
+	const heroSpans = document.querySelectorAll(".usernameHeroPlaceholder");
+	heroSpans.forEach(span => {
+		span.textContent = username;
+	});
 	const urlParams = new URLSearchParams(window.location.search);
 	if (urlParams.get("logout") === "success") {
 		showToast("You have been logged out successfully.", true);
@@ -1163,175 +1041,142 @@ function setupLogout() {
 	if (!logoutButton) return;
 	logoutButton.addEventListener("click", logoutUser);
 }
-
 async function logoutUser() {
 	try {
 		localStorage.removeItem("loggedUser");
 		await fetch('/api/users/logout', {
-            method: 'POST',
-            credentials: 'same-origin'
-        });
+			method: 'POST',
+			credentials: 'same-origin'
+		});
 		window.location.href = "/?logout=success";
 	} catch (error) {
 		console.error("Logout request failed:", error);
 		window.location.href = "/?logout=success";
 	}
 }
-
+// ===============================
+// CSRF Token – Read from cookie
+// ===============================
+function getCsrfToken() {
+	const cookie = document.cookie.split("; ").find(row => row.startsWith("XSRF-TOKEN="));
+	return cookie ? decodeURIComponent(cookie.split("=")[1]) : "";
+}
 // ========== Ingredient Autocomplete Setup ==========
 function setupIngredientAutocomplete() {
-    document.addEventListener("input", function (e) {
-        if (e.target.classList.contains("ingredient-input")) {
-            const input = e.target;
-            const datalistId = input.getAttribute("list") || "ingredient-suggestions";
-
-            const query = input.value.trim();
-            if (query.length === 0) return;
-
-            fetch(`/api/ingredients/autocomplete?prefix=${encodeURIComponent(query)}`)
-                .then(res => res.json())
-                .then(data => {
-                    let datalist = document.getElementById(datalistId);
-                    if (!datalist) {
-                        datalist = document.createElement("datalist");
-                        datalist.id = datalistId;
-                        document.body.appendChild(datalist);
-                        input.setAttribute("list", datalistId);
-                    }
-
-                    datalist.innerHTML = "";
-                    data.forEach(name => {
-                        const option = document.createElement("option");
-                        option.value = name;
-                        datalist.appendChild(option);
-                    });
-                })
-                .catch(err => {
-                    console.error("Autocomplete error:", err);
-                });
-        }
-    });
+	document.addEventListener("input", function(e) {
+		if (e.target.classList.contains("ingredient-input")) {
+			const input = e.target;
+			const datalistId = input.getAttribute("list") || "ingredient-suggestions";
+			const query = input.value.trim();
+			if (query.length === 0) return;
+			fetch(`/api/ingredients/autocomplete?prefix=${encodeURIComponent(query)}`).then(res => res.json()).then(data => {
+				let datalist = document.getElementById(datalistId);
+				if (!datalist) {
+					datalist = document.createElement("datalist");
+					datalist.id = datalistId;
+					document.body.appendChild(datalist);
+					input.setAttribute("list", datalistId);
+				}
+				datalist.innerHTML = "";
+				data.forEach(name => {
+					const option = document.createElement("option");
+					option.value = name;
+					datalist.appendChild(option);
+				});
+			}).catch(err => {
+				console.error("Autocomplete error:", err);
+			});
+		}
+	});
 }
 
 function setupRecipeAutocomplete() {
-    const input = document.getElementById("filter-name");
-    if (!input) return;
-
-    input.addEventListener("input", function () {
-        const query = input.value.trim();
-        if (query.length === 0) return;
-
-        fetch(`/api/recipes/autocomplete?prefix=${encodeURIComponent(query)}`)
-            .then(res => res.json())
-            .then(data => {
-                let datalist = document.getElementById("recipe-suggestions");
-                if (!datalist) {
-                    datalist = document.createElement("datalist");
-                    datalist.id = "recipe-suggestions";
-                    document.body.appendChild(datalist);
-                }
-
-                datalist.innerHTML = "";
-                data.forEach(name => {
-                    const option = document.createElement("option");
-                    option.value = name;
-                    datalist.appendChild(option);
-                });
-            })
-            .catch(err => {
-                console.error("Recipe name autocomplete error:", err);
-            });
-    });
+	const input = document.getElementById("filter-name");
+	if (!input) return;
+	input.addEventListener("input", function() {
+		const query = input.value.trim();
+		if (query.length === 0) return;
+		fetch(`/api/recipes/autocomplete?prefix=${encodeURIComponent(query)}`).then(res => res.json()).then(data => {
+			let datalist = document.getElementById("recipe-suggestions");
+			if (!datalist) {
+				datalist = document.createElement("datalist");
+				datalist.id = "recipe-suggestions";
+				document.body.appendChild(datalist);
+			}
+			datalist.innerHTML = "";
+			data.forEach(name => {
+				const option = document.createElement("option");
+				option.value = name;
+				datalist.appendChild(option);
+			});
+		}).catch(err => {
+			console.error("Recipe name autocomplete error:", err);
+		});
+	});
 }
-
-function getCsrfToken() {
-    const cookie = document.cookie
-        .split("; ")
-        .find(row => row.startsWith("XSRF-TOKEN="));
-    return cookie ? decodeURIComponent(cookie.split("=")[1]) : "";
-}
-
 // ===============================
 // INITIALIZATION
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
 	const currentPath = window.location.pathname;
 	console.log("Current path is:", currentPath);
-
-    // ✅ Afișăm toast dacă s-a activat contul din linkul de activare
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get("deleted") === "true") {
-        showToast("Recipe deleted successfully.", true);
-    }
-
-    if (urlParams.get("activated") === "true") {
-        showToast("Account activated! You can now log in.", true);
-    } else if (urlParams.get("activationError") === "true") {
-        showToast("Invalid or expired activation link.", false);
-    } else if (urlParams.get("redirected") === "true") {
-        showToast("Please log in to access that page.", false);
-    }
-
-	const isPublicPath =
-		PUBLIC_PATHS.some(path => currentPath === path || currentPath.startsWith(path + "/"));
-	const isProtectedPath =
-		PROTECTED_PATHS.includes(currentPath) ||
-		currentPath.startsWith("/edit-recipe") ||
-		currentPath.startsWith("/recipe");
-
+	// ✅ Afișăm toast dacă s-a activat contul din linkul de activare
+	const urlParams = new URLSearchParams(window.location.search);
+	if (urlParams.get("deleted") === "true") {
+		showToast("Recipe deleted successfully.", true);
+	}
+	if (urlParams.get("activated") === "true") {
+		showToast("Account activated! You can now log in.", true);
+	} else if (urlParams.get("activationError") === "true") {
+		showToast("Invalid or expired activation link.", false);
+	} else if (urlParams.get("redirected") === "true") {
+		showToast("Please log in to access that page.", false);
+	}
+	const isPublicPath = PUBLIC_PATHS.some(path => currentPath === path || currentPath.startsWith(path + "/"));
+	const isProtectedPath = PROTECTED_PATHS.includes(currentPath) || currentPath.startsWith("/edit-recipe") || currentPath.startsWith("/recipe");
 	// ✅ Verificare separată
 	if (isProtectedPath) {
 		checkSession(currentPath, true); // redirect dacă nu e logat
 	} else if (isPublicPath) {
 		checkSession(currentPath, false); // NU redirectează dacă nu e logat
 	}
-
 	if (currentPath === "/public-recipes") {
 		fetchPublicRecipes();
 	} else if (currentPath === "/public-recipes-user") {
 		fetchPublicRecipesUser(0);
-	} else if (
-    	currentPath.startsWith("/public-recipe-user/") ||
-    	currentPath.startsWith("/public-recipe-free/")
-    ) {
-    	loadPublicRecipeDetails();
-    } else if (document.getElementById("allRecipesContainer")) {
+	} else if (currentPath.startsWith("/public-recipe-user/") || currentPath.startsWith("/public-recipe-free/")) {
+		loadPublicRecipeDetails();
+	} else if (document.getElementById("allRecipesContainer")) {
 		fetchAllRecipes();
 	}
-
 	setupForms();
 	setupLogout();
 	checkLoggedInUser();
-
 	if (currentPath.startsWith("/recipe/")) {
 		loadRecipeDetails();
 	}
-
 	// ✅ Autocomplete (numai dacă e nevoie)
-    if (document.getElementById("filter-name")) {
-        setupRecipeAutocomplete();
-    }
-    if (document.querySelector(".ingredient-input")) {
-        setupIngredientAutocomplete();
-    }
-
+	if (document.getElementById("filter-name")) {
+		setupRecipeAutocomplete();
+	}
+	if (document.querySelector(".ingredient-input")) {
+		setupIngredientAutocomplete();
+	}
 	// ✅ 1. Setup formular adăugare rețetă
 	const addRecipeForm = document.getElementById("addRecipeForm");
 	if (addRecipeForm) {
-		addRecipeForm.addEventListener("submit", function (event) {
+		addRecipeForm.addEventListener("submit", function(event) {
 			event.preventDefault();
 			saveRecipe();
 		});
 	}
-
 	// ✅ 2. Tooltipuri Bootstrap
 	const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
 	tooltipTriggerList.forEach(el => new bootstrap.Tooltip(el));
-
 	// ✅ 3. Text sub buton upload
 	const imageInput = document.getElementById("imageFile");
 	if (imageInput) {
-		imageInput.addEventListener("change", function () {
+		imageInput.addEventListener("change", function() {
 			const fileName = this.files[0]?.name || "No file yet... Let’s spice things up!";
 			const statusText = document.getElementById("fileStatusText");
 			if (statusText) {
@@ -1339,17 +1184,15 @@ document.addEventListener("DOMContentLoaded", () => {
 			}
 		});
 	}
-
 	// ✅ 4. Preview imagine și buton „×”
 	if (imageInput) {
-		imageInput.addEventListener("change", function () {
+		imageInput.addEventListener("change", function() {
 			const file = this.files[0];
 			const preview = document.getElementById("imagePreviewContainer");
 			const statusText = document.getElementById("fileStatusText");
-
 			if (file) {
 				const reader = new FileReader();
-				reader.onload = function (e) {
+				reader.onload = function(e) {
 					preview.innerHTML = `
 						<div style="position: relative; display: inline-block;">
 							<img src="${e.target.result}" alt="Preview"
@@ -1386,33 +1229,32 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	}
 	// ✅ Formular contact (dacă există pe pagină)
-    const form = document.getElementById("contact-form");
-    if (form) {
-    	form.addEventListener("submit", function (e) {
-    		e.preventDefault();
-
-    		const name = document.getElementById("contactName").value.trim();
-    		const message = document.getElementById("contactMessage").value.trim();
-
-    		if (!message) {
-    			showToast("Please enter a message.", false);
-    			return;
-    		}
-
-    		fetch("/api/contact", {
-            	method: "POST",
-            	headers: { "Content-Type": "application/json" },
-            	body: JSON.stringify({ name, message })
-            })
-    			.then(response => response.text())
-    			.then(data => {
-    				showToast(data, true);
-    				form.reset();
-    			})
-    			.catch(error => {
-    				console.error("Error:", error);
-    				showToast("Something went wrong.", false);
-    			});
-    	});
-    }
+	const form = document.getElementById("contact-form");
+	if (form) {
+		form.addEventListener("submit", function(e) {
+			e.preventDefault();
+			const name = document.getElementById("contactName").value.trim();
+			const message = document.getElementById("contactMessage").value.trim();
+			if (!message) {
+				showToast("Please enter a message.", false);
+				return;
+			}
+			fetch("/api/contact", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					name,
+					message
+				})
+			}).then(response => response.text()).then(data => {
+				showToast(data, true);
+				form.reset();
+			}).catch(error => {
+				console.error("Error:", error);
+				showToast("Something went wrong.", false);
+			});
+		});
+	}
 });

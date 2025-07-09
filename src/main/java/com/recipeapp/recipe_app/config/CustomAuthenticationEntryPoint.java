@@ -1,4 +1,3 @@
-// Comentariu: Clasă care interceptează accesul neautorizat și redirecționează către login cu parametru
 package com.recipeapp.recipe_app.config;
 
 import jakarta.servlet.ServletException;
@@ -18,7 +17,6 @@ public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint 
                          HttpServletResponse response,
                          AuthenticationException authException)
             throws IOException, ServletException {
-        // Redirect către pagina de login cu parametru de avertizare
         response.sendRedirect("/login?redirected=true");
     }
 }

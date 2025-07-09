@@ -11,11 +11,9 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 public class SecurityConfig {
-    // Comentariu: Injectăm entry point-ul personalizat pentru redirect la login cu mesaj
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
-    // Bean pentru encoderul de parole
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -24,7 +22,14 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf
+                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .ignoringRequestMatchers(
+                                "/h2-console/**",
+                                "/api/users/register",
+                                "/api/users/login"
+                        )
+                )
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.disable())
                 )
@@ -37,7 +42,7 @@ public class SecurityConfig {
                                 "/template-test/**", "/template-test/css/**", "/template-test/img/**", "/api/recipes/public",
                                 "/uploads/**", "/*.jpg", "/public-recipes", "/public-recipe-free/**",
                                 "/api/recipes/public/by-id/**", "/demo-tour", "/api/contact", "/api/ingredients/autocomplete",
-                                "/api/recipes/autocomplete"
+                                "/api/recipes/autocomplete", "/csrf"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -46,7 +51,7 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(customAuthenticationEntryPoint) // Comentariu: entry point personalizat
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
                 .logout(logout -> logout.permitAll());
         return http.build();
