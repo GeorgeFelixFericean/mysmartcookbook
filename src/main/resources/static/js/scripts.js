@@ -1118,6 +1118,9 @@ function setupRecipeAutocomplete() {
 // INITIALIZATION
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
+    fetch("/csrf", { credentials: "same-origin" })
+        .then(() => console.log("✅ CSRF token loaded from /csrf"))
+        .catch(() => console.warn("⚠️ CSRF token fetch failed"));
 	const currentPath = window.location.pathname;
 	console.log("Current path is:", currentPath);
 	// ✅ Afișăm toast dacă s-a activat contul din linkul de activare
