@@ -1,8 +1,6 @@
-// UserController.java
 package com.recipeapp.recipe_app.controller;
 
 import com.recipeapp.recipe_app.dto.LoginRequest;
-import com.recipeapp.recipe_app.exception.InvalidCredentialsException;
 import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.service.UserService;
 import jakarta.servlet.http.Cookie;
@@ -12,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,6 +31,9 @@ public class UserController {
         this.userService = userService;
     }
 
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     @PostMapping("/register")
     public User registerUser(@RequestBody User user) {
         return userService.registerUser(user);
@@ -41,27 +42,22 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         try {
-            User user = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
+            UsernamePasswordAuthenticationToken authRequest =
+                    new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
 
-            Authentication authentication = new UsernamePasswordAuthenticationToken(
-                    user.getUsername(), null, List.of() // sau roluri, dacă ai
-            );
+            Authentication authResult = authenticationManager.authenticate(authRequest);
 
             SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
-            securityContext.setAuthentication(authentication);
+            securityContext.setAuthentication(authResult);
             SecurityContextHolder.setContext(securityContext);
 
-            HttpSession session = request.getSession(true);
-            session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+            request.getSession(true).setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
 
             return ResponseEntity.ok().build();
-        } catch (InvalidCredentialsException e) {
-
-            return ResponseEntity.badRequest()
-                    .body(Collections.singletonMap("error", e.getMessage()));
 
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Collections.singletonMap("error", "Invalid username or password"));
         }
     }
 

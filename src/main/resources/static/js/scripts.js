@@ -995,10 +995,12 @@ function setupRegisterForm() {
 function setupLoginForm() {
 	const form = document.getElementById("loginForm");
 	if (!form) return;
+
 	form.addEventListener("submit", async function(event) {
 		event.preventDefault();
 		const username = document.getElementById("username").value.trim();
 		const password = document.getElementById("password").value.trim();
+
 		if (!username) {
 			showToast("Please enter your username.", false);
 			return;
@@ -1007,18 +1009,35 @@ function setupLoginForm() {
 			showToast("Please enter your password.", false);
 			return;
 		}
+
 		try {
-			const response = await fetch("/api/users/login", {
-				method: "POST",
-				credentials: "same-origin",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					username: username,
-					password: password
-				})
-			});
+		    // 1. Get CSRF token (forces Spring to set cookie)
+            await fetch("/api/csrf-token", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            // 2. Extract token from cookie
+            const csrfToken = getCsrfToken();
+            if (!csrfToken) {
+                showToast("Security error. Please refresh the page and try again.", false);
+                return;
+            }
+
+            // 3. Send login request with token in header
+            const response = await fetch("/api/users/login", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
 			if (response.ok) {
 				localStorage.setItem("loggedUser", username);
 				showToast("Welcome back. You have logged in successfully.", true);
@@ -1137,7 +1156,7 @@ function setupRecipeAutocomplete() {
 // INITIALIZATION
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("/csrf", { credentials: "same-origin" })
+    fetch("/api/csrf", { credentials: "same-origin" })
         .then(() => console.log("✅ CSRF token loaded from /csrf"))
         .catch(() => console.warn("⚠️ CSRF token fetch failed"));
 	const currentPath = window.location.pathname;

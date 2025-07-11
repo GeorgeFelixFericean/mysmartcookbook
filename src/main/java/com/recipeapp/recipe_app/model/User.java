@@ -1,6 +1,7 @@
 package com.recipeapp.recipe_app.model;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
 
 @Entity
@@ -26,18 +27,15 @@ public class User {
     @Column(length = 64)
     private String activationCode;
 
+    public User() {
+    }
 
-    // Constructor implicit (necesar pentru JPA)
-    public User() {}
-
-    // Constructor cu toate câmpurile (fără id)
     public User(String username, String email, String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
 
-    // Getteri și setteri
     public Long getId() {
         return id;
     }
@@ -86,7 +84,6 @@ public class User {
         this.activationCode = activationCode;
     }
 
-    // Pentru comparație între obiecte
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
