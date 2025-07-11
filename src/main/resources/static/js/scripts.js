@@ -1079,17 +1079,41 @@ function setupLogout() {
 }
 async function logoutUser() {
 	try {
-		localStorage.removeItem("loggedUser");
-		await fetch('/api/users/logout', {
-			method: 'POST',
-			credentials: 'same-origin'
+		// 1. Obține tokenul CSRF
+		await fetch("/api/csrf-token", {
+			method: "GET",
+			credentials: "include"
 		});
-		window.location.href = "/?logout=success";
+
+		const csrfToken = getCsrfToken();
+		if (!csrfToken) {
+			showToast("Security error. Please refresh and try again.", false);
+			return;
+		}
+
+		// 2. Trimite logout (nu redirecta manual)
+		const response = await fetch("/api/users/logout", {
+			method: "POST",
+			credentials: "include",
+			headers: {
+				"X-XSRF-TOKEN": csrfToken
+			}
+		});
+
+		if (response.redirected) {
+			localStorage.removeItem("loggedUser");
+			// ✅ Te duce Spring la /login?logout, iar tu poți afișa mesaj acolo
+			window.location.href = response.url;
+		} else {
+			showToast("Logout failed. Please try again.", false);
+		}
 	} catch (error) {
 		console.error("Logout request failed:", error);
-		window.location.href = "/?logout=success";
+		showToast("Unexpected logout error. 🍳", false);
 	}
 }
+
+
 // ===============================
 // CSRF Token – Read from cookie
 // ===============================
@@ -1163,16 +1187,19 @@ document.addEventListener("DOMContentLoaded", () => {
 	console.log("Current path is:", currentPath);
 	// ✅ Afișăm toast dacă s-a activat contul din linkul de activare
 	const urlParams = new URLSearchParams(window.location.search);
-	if (urlParams.get("deleted") === "true") {
-		showToast("Recipe deleted successfully.", true);
-	}
-	if (urlParams.get("activated") === "true") {
-		showToast("Account activated! You can now log in.", true);
-	} else if (urlParams.get("activationError") === "true") {
-		showToast("Invalid or expired activation link.", false);
-	} else if (urlParams.get("redirected") === "true") {
-		showToast("Please log in to access that page.", false);
-	}
+    if (urlParams.get("deleted") === "true") {
+    	showToast("Recipe deleted successfully.", true);
+    }
+    if (urlParams.get("activated") === "true") {
+    	showToast("Account activated! You can now log in.", true);
+    } else if (urlParams.get("activationError") === "true") {
+    	showToast("Invalid or expired activation link.", false);
+    } else if (urlParams.get("redirected") === "true") {
+    	showToast("Please log in to access that page.", false);
+    } else if (urlParams.get("logout") !== null) {
+    	showToast("You have logged out. See you soon!", true);
+    }
+
 	const isPublicPath = PUBLIC_PATHS.some(path => currentPath === path || currentPath.startsWith(path + "/"));
 	const isProtectedPath = PROTECTED_PATHS.includes(currentPath) || currentPath.startsWith("/edit-recipe") || currentPath.startsWith("/recipe");
 	// ✅ Verificare separată
