@@ -894,15 +894,22 @@ function loadPublicRecipeDetails() {
 /* Helper optional pentru clonare */
 function addPublicRecipeToUser(publicRecipeId) {
 	fetch(`/api/recipes/copy/${publicRecipeId}`, {
-		method: "POST"
-	}).then(r => {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			"X-XSRF-TOKEN": getCsrfToken()
+		},
+		credentials: "include"
+	})
+	.then(r => {
 		if (!r.ok) throw new Error("Copy failed");
 		return r.json();
-	}).then(newRecipe => {
+	})
+	.then(newRecipe => {
 		showToast("Recipe added to your collection!", true);
-		// Trimite userul direct la rețeta copiată
 		setTimeout(() => window.location.href = `/recipe/${newRecipe.id}`, 1500);
-	}).catch(err => {
+	})
+	.catch(err => {
 		console.error(err);
 		showToast("Could not add recipe.", false);
 	});
@@ -1322,8 +1329,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			fetch("/api/contact", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json"
+					"Content-Type": "application/json",
+					"X-XSRF-TOKEN": getCsrfToken()
 				},
+				credentials: "include",
 				body: JSON.stringify({
 					name,
 					message
