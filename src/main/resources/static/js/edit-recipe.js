@@ -244,20 +244,27 @@ const recipeId = window.location.pathname.split("/").pop();
         }
 
         console.log("🟣 Pregătesc fetch...");
+
+        const csrfToken = getCsrfToken(); // 🔐 Adăugăm token-ul
+
         fetch(`/api/recipes/${recipeId}`, {
-            method: "PUT",
-            body: formData
+        	method: "PUT",
+        	credentials: "include", // 🧩 Ne asigurăm că cookie-ul e trimis
+        	headers: {
+        		"X-XSRF-TOKEN": csrfToken
+        	},
+        	body: formData
         })
         .then(response => {
-            console.log("✅ fetch done, status:", response.status);
-            if (!response.ok) throw new Error("Eroare la salvarea modificărilor.");
-            showToast("Recipe updated successfully.", true);
-            setTimeout(() => {
-              window.location.href = `/recipe/${recipeId}`;
-            }, 2000);
+        	console.log("✅ fetch done, status:", response.status);
+        	if (!response.ok) throw new Error("Eroare la salvarea modificărilor.");
+        	showToast("Recipe updated successfully.", true);
+        	setTimeout(() => {
+        	  window.location.href = `/recipe/${recipeId}`;
+        	}, 2000);
         })
         .catch(error => {
-            console.error("❌ Fetch failed:", error.message);
-            showToast("Something went wrong while saving the recipe.", false);
+        	console.error("❌ Fetch failed:", error.message);
+        	showToast("Something went wrong while saving the recipe.", false);
         });
     });

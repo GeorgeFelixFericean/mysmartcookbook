@@ -258,10 +258,16 @@ async function saveRecipe() {
 		formData.append("imageFile", imageFile);
 	}
 	try {
+	    const csrfToken = getCsrfToken(); // asigură-te că funcția există și funcționează
 		const response = await fetch("/api/recipes", {
-			method: "POST",
-			body: formData
-		});
+        	method: "POST",
+        	credentials: "include", // esențial pentru cookie-ul cu JSESSIONID și XSRF
+        	headers: {
+        		"X-XSRF-TOKEN": csrfToken
+        	},
+        	body: formData
+        });
+
 		const data = await response.json();
 		if (!data?.id) {
 			throw new Error("Recipe was not saved correctly. Please try again.");
@@ -790,9 +796,15 @@ function loadRecipeDetails() {
 	if (deleteBtn) {
 		deleteBtn.addEventListener("click", () => {
 			if (!currentRecipeId) return;
-			fetch(`/api/recipes/${currentRecipeId}`, {
-				method: "DELETE"
-			}).then(res => {
+			const csrfToken = getCsrfToken();
+
+            fetch(`/api/recipes/${currentRecipeId}`, {
+            	method: "DELETE",
+            	credentials: "same-origin",
+            	headers: {
+            		"X-XSRF-TOKEN": csrfToken
+            	}
+            }).then(res => {
 				if (!res.ok) throw new Error("Deletion failed.");
 				window.location.href = "/all-recipes?deleted=true";
 			}).catch(err => alert("Error deleting: " + err.message));
@@ -1180,9 +1192,9 @@ function setupRecipeAutocomplete() {
 // INITIALIZATION
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-    fetch("/api/csrf", { credentials: "same-origin" })
-        .then(() => console.log("✅ CSRF token loaded from /csrf"))
-        .catch(() => console.warn("⚠️ CSRF token fetch failed"));
+//    fetch("/api/csrf", { credentials: "same-origin" })
+//        .then(() => console.log("✅ CSRF token loaded from /csrf"))
+//        .catch(() => console.warn("⚠️ CSRF token fetch failed"));
 	const currentPath = window.location.pathname;
 	console.log("Current path is:", currentPath);
 	// ✅ Afișăm toast dacă s-a activat contul din linkul de activare
