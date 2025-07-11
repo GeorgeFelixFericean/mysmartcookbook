@@ -1,15 +1,26 @@
 package com.recipeapp.recipe_app.config;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import java.util.function.Supplier;
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
     @Autowired
     private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
@@ -19,41 +30,116 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    // H2 Console Security Configuration
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Order(1)
+    public SecurityFilterChain h2ConsoleSecurityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .ignoringRequestMatchers(
-                                "/h2-console/**",
-                                "/api/users/register",
-                                "/api/users/login"
-                        )
-                )
+                .securityMatcher(AntPathRequestMatcher.antMatcher("/h2-console/**"))
+                .csrf(csrf -> csrf.disable())
                 .headers(headers -> headers
                         .frameOptions(frame -> frame.disable())
                 )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
+                );
+        return http.build();
+    }
+
+    // Main Security Configuration
+    @Bean
+    @Order(2)
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Configure CSRF cookie
+        CookieCsrfTokenRepository tokenRepository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        tokenRepository.setCookieCustomizer(customizer -> {
+            customizer.sameSite("Strict");
+            customizer.secure(false); // true in production
+            customizer.path("/");
+        });
+        tokenRepository.setHeaderName("X-XSRF-TOKEN");
+
+        http
+                // CSRF Configuration
+                .csrf(csrf -> {
+                    csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler() {
+                        @Override
+                        public void handle(HttpServletRequest request,
+                                           HttpServletResponse response,
+                                           Supplier<CsrfToken> csrfToken) {
+                            if ("GET".equals(request.getMethod())) {
+                                CsrfToken token = csrfToken.get();
+                                tokenRepository.saveToken(token, request, response);
+                            }
+                        }
+                    });
+                    csrf.csrfTokenRepository(tokenRepository);
+                })
+
+                // Exception Handling
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(403);
+                            response.getWriter().write("{\"error\":\"Access denied - Invalid CSRF token\"}");
+                        })
+                )
+
+                // Security Headers (Updated for CSS)
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.sameOrigin())
+                        .contentSecurityPolicy(csp -> csp
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                                "script-src 'self' 'unsafe-inline'; " +
+                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
+                                                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
+                                                "img-src 'self' data: blob:; " +
+                                                "connect-src 'self'"
+                                )
+                        )
+                        .httpStrictTransportSecurity(hsts -> hsts
+                                .includeSubDomains(true)
+                                .preload(true)
+                                .maxAgeInSeconds(31536000)
+                        )
+                        .xssProtection(xss -> xss
+                                .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                        )
+                )
+
+                // Authorization
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/", "/login", "/register", "/forgot-password", "/reset-password",
                                 "/api/users/register", "/api/users/login", "/api/users/activate",
                                 "/api/forgot-password", "/api/reset-password", "/api/recover-username",
-                                "/h2-console/**", "/css/**", "/css_old/**", "/js/**", "/img/**", "/html/**", "/fonts/**",
-                                "/template-test/**", "/template-test/css/**", "/template-test/img/**", "/api/recipes/public",
-                                "/uploads/**", "/*.jpg", "/public-recipes", "/public-recipe-free/**",
-                                "/api/recipes/public/by-id/**", "/demo-tour", "/api/contact", "/api/ingredients/autocomplete",
-                                "/api/recipes/autocomplete", "/csrf"
+                                "/css/**", "/js/**", "/img/**", "/fonts/**",
+                                "/api/recipes/public/**", "/uploads/**",
+                                "/public-recipes", "/public-recipe-free/**",
+                                "/demo-tour", "/api/contact",
+                                "/api/ingredients/autocomplete", "/api/recipes/autocomplete",
+                                "/api/csrf-token"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
+
+                // Form Login
                 .formLogin(form -> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/api/users/login")
                         .permitAll()
                 )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-                )
-                .logout(logout -> logout.permitAll());
+
+                // Logout
+                .logout(logout -> logout
+                        .logoutUrl("/api/users/logout")
+                        .deleteCookies("JSESSIONID", "XSRF-TOKEN")
+                        .invalidateHttpSession(true)
+                        .permitAll()
+                );
+
         return http.build();
     }
 }

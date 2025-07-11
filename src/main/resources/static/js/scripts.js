@@ -86,7 +86,11 @@ let toastTimeoutId = null; // stores the current toast timeout
 // ===============================
 function checkSession(path, isProtected) {
 	return fetch('/api/recipes/session-test', {
-		credentials: 'same-origin'
+		headers: {
+            "Content-Type": "application/json",
+            "X-XSRF-TOKEN": getCsrfToken()
+        },
+        credentials: "include"
 	}).then(response => response.text()).then(text => {
 		const isLoggedIn = !text.includes("Login") && !text.toLowerCase().includes("welcome back");
 		if (isProtected && !isLoggedIn) {
@@ -900,79 +904,92 @@ function setupForms() {
 }
 
 function setupRegisterForm() {
-	const form = document.getElementById("registerForm");
-	if (!form) return;
-	form.addEventListener("submit", async function(event) {
-		event.preventDefault();
-		const username = document.getElementById("username").value;
-		const email = document.getElementById("email").value;
-		const password = document.getElementById("password").value;
-		const confirmPassword = document.getElementById("confirmPassword").value;
-		// Validate username
-		const usernameRegex = /^[a-zA-Z0-9_.]{4,20}$/;
-		if (!username) {
-			showToast("Please enter a username.", false);
-			return;
-		}
-		if (!usernameRegex.test(username)) {
-			showToast("Username must be 4–20 characters long and contain only letters, numbers, dots or underscores.", false);
-			return;
-		}
-		// Validate email
-		if (!email) {
-			showToast("Email address is required.", false);
-			return;
-		}
-		const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
-		if (!emailPattern.test(email)) {
-			showToast("Please enter a valid email address (e.g., yourname@domain.com).", false);
-			return;
-		}
-		// Validate password
-		if (!password) {
-			showToast("Password is required.", false);
-			return;
-		}
-		if (password.length < 8 || password.length > 64) {
-			showToast("Password must be between 8 and 64 characters.", false);
-			return;
-		}
-		// Validate confirm password
-		if (!confirmPassword) {
-			showToast("Please confirm your password.", false);
-			return;
-		}
-		if (password !== confirmPassword) {
-			showToast("Passwords do not match.", false);
-			return;
-		}
-		// Send request to backend
-		try {
-			const response = await fetch("/api/users/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					username: username,
-					email: email,
-					password: password
-				})
-			});
-			if (response.ok) {
-				showToast("Registration successful. Please check your email to activate your account before logging in.", true);
-				setTimeout(() => {
-					window.location.href = "/login";
-				}, 2000);
-			} else {
-				const errorData = await response.json();
-				showToast((errorData.error || "Something went wrong... Our kitchen elves are on it! 🧙‍♂️"), false);
-			}
-		} catch (error) {
-			console.error("Registration error:", error);
-			showToast("Something went wrong... Our kitchen elves are on it! 🧙‍♂️", false);
-		}
-	});
+    const form = document.getElementById("registerForm");
+    if (!form) return;
+
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        // Get form values
+        const username = document.getElementById("username").value;
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        const confirmPassword = document.getElementById("confirmPassword").value;
+
+        // Validate inputs (keep your existing validation)
+        if (!validateInputs(username, email, password, confirmPassword)) return;
+
+        try {
+            // 1. First ensure we have a CSRF token
+            await fetch("/api/csrf-token", {
+                method: "GET",
+                credentials: "include"
+            });
+
+            // 2. Get the CSRF token from cookies
+            const csrfToken = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('XSRF-TOKEN='))
+                ?.split('=')[1];
+
+            if (!csrfToken) {
+                showToast("Security error. Please refresh the page and try again.", false);
+                return;
+            }
+
+            // 3. Send registration request with CSRF token
+            const response = await fetch("/api/users/register", {
+                method: "POST",
+                credentials: "include", // Required for cookies
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": csrfToken
+                },
+                body: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password
+                })
+            });
+
+            if (response.ok) {
+                showToast("Registration successful. Please check your email to activate your account.", true);
+                setTimeout(() => {
+                    window.location.href = "/login";
+                }, 2000);
+            } else {
+                const errorData = await response.json();
+                showToast(errorData.error || "Registration failed. Please try again.", false);
+            }
+        } catch (error) {
+            console.error("Registration error:", error);
+            showToast("Network error. Please check your connection.", false);
+        }
+    });
+
+    // Extracted validation function
+    function validateInputs(username, email, password, confirmPassword) {
+        const usernameRegex = /^[a-zA-Z0-9_.]{4,20}$/;
+        const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
+
+        if (!username || !usernameRegex.test(username)) {
+            showToast("Invalid username format", false);
+            return false;
+        }
+        if (!email || !emailPattern.test(email)) {
+            showToast("Invalid email format", false);
+            return false;
+        }
+        if (!password || password.length < 8 || password.length > 64) {
+            showToast("Password must be 8-64 characters", false);
+            return false;
+        }
+        if (password !== confirmPassword) {
+            showToast("Passwords don't match", false);
+            return false;
+        }
+        return true;
+    }
 }
 
 function setupLoginForm() {
@@ -1058,8 +1075,10 @@ async function logoutUser() {
 // CSRF Token – Read from cookie
 // ===============================
 function getCsrfToken() {
-	const cookie = document.cookie.split("; ").find(row => row.startsWith("XSRF-TOKEN="));
-	return cookie ? decodeURIComponent(cookie.split("=")[1]) : "";
+    const cookie = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('XSRF-TOKEN='));
+    return cookie ? decodeURIComponent(cookie.split('=')[1]) : null;
 }
 // ========== Ingredient Autocomplete Setup ==========
 function setupIngredientAutocomplete() {
