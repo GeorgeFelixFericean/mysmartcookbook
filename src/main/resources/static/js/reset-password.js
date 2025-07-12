@@ -1,6 +1,10 @@
-// ===============================
-// Reset Password - Token & Submit
-// ===============================
+function getCsrfToken() {
+    const cookie = document.cookie
+        .split("; ")
+        .find(row => row.startsWith("XSRF-TOKEN="));
+    return cookie ? decodeURIComponent(cookie.split("=")[1]) : null;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("resetPasswordForm");
     const tokenField = document.getElementById("token");
@@ -54,11 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             const response = await fetch("/api/reset-password", {
-            	method: "POST",
-            	headers: { "Content-Type": "application/json" },
-            	body: JSON.stringify({ token, newPassword: password })
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": getCsrfToken() // 🔐 token trimis explicit
+                },
+                credentials: "same-origin", // 🔐 permite trimiterea cookie-ului cu JSESSIONID
+                body: JSON.stringify({ token, newPassword: password })
             });
-
 
             const message = await response.text();
             showToast(message, response.ok);
