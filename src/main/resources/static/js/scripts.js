@@ -122,19 +122,32 @@ function checkSession(path, isProtected) {
 // ===============================
 function showToast(message, isSuccess = true) {
 	const toast = document.getElementById("toastMessage");
-	// Clear any previous timeout so it doesn't auto-hide too early
+
+	// 🧹 Clear any previous timeout so it doesn't auto-hide too early
 	clearTimeout(toastTimeoutId);
-	// Remove previous classes and hide status
+
+	// 🧼 Remove any old styles or content
 	toast.classList.remove("toast-success", "toast-error", "hide");
-	// Add appropriate class
+	toast.innerHTML = ""; // clear content
+
+	// 🎨 Add style based on success/failure
 	toast.classList.add(isSuccess ? "toast-success" : "toast-error");
-	// Set content and show
-	toast.innerHTML = `
-		<span>${message}</span>
-		<div class="close-btn" onclick="hideToast()">×</div>
-	`;
+
+	// 🧱 Build safe DOM elements
+	const span = document.createElement("span");
+	span.textContent = message; // 🔒 Safe text insertion
+
+	const closeBtn = document.createElement("div");
+	closeBtn.className = "close-btn";
+	closeBtn.textContent = "×";
+	closeBtn.onclick = hideToast;
+
+	// 🧩 Inject into DOM
+	toast.appendChild(span);
+	toast.appendChild(closeBtn);
 	toast.style.display = "flex";
-	// Set new timeout to hide after 5 seconds
+
+	// ⏱️ Auto-hide after 5 seconds
 	toastTimeoutId = setTimeout(() => {
 		hideToast();
 	}, 5000);
@@ -304,6 +317,7 @@ function renderRecipeCards(recipes) {
 	const currentPath = window.location.pathname;
 	const isPublicPage = currentPath.includes("public-recipes");
 	const isLoggedIn = !!localStorage.getItem("loggedUser");
+
 	return recipes.map(recipe => {
 		let baseUrl;
 		if (isPublicPage) {
@@ -311,15 +325,18 @@ function renderRecipeCards(recipes) {
 		} else {
 			baseUrl = "/recipe";
 		}
+		const safeName = escapeHTML(recipe.name);
+		const imagePath = escapeHTML(recipe.imagePath || '/img/core-img/placeholder.jpg');
+
 		return `
       <div class="col-sm-6 col-md-4 col-lg-4 mb-4">
         <div class="card shadow-sm h-100">
-          <img src="${recipe.imagePath || '/img/core-img/placeholder.jpg'}"
+          <img src="${imagePath}"
                class="card-img-top"
-               alt="${recipe.name}"
+               alt="${safeName}"
                style="max-height: 200px; object-fit: cover;">
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title">${recipe.name}</h5>
+            <h5 class="card-title">${safeName}</h5>
             <a class="btn btn-sm btn-outline-primary mt-auto" href="${baseUrl}/${recipe.id}">
               Show me the dish
             </a>
@@ -330,45 +347,70 @@ function renderRecipeCards(recipes) {
 	}).join('');
 }
 
+function escapeHTML(str) {
+	if (!str) return '';
+	return str
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#039;");
+}
+
 function renderPagination(data, page, callback) {
 	const paginationContainer = document.getElementById("paginationContainer");
-	if (data.totalPages <= 1) {
-		paginationContainer.innerHTML = "";
-		return;
-	}
+	paginationContainer.innerHTML = "";
+	if (data.totalPages <= 1) return;
+
 	const maxVisiblePages = 5;
 	let startPage = Math.max(0, page - Math.floor(maxVisiblePages / 2));
 	let endPage = Math.min(data.totalPages - 1, startPage + maxVisiblePages - 1);
 	startPage = Math.max(0, endPage - maxVisiblePages + 1);
-	let paginationHtml = `
-	<div class="pagination-wrapper text-center mx-auto">
-	  <ul class="pagination justify-content-center flex-wrap mb-0">
-	    <li class="page-item ${page === 0 ? "disabled" : ""}">
-	      <button class="page-link" ${page === 0 ? "disabled" : ""}
-	              onclick="${callback}(${page - 1})">
-	        &laquo; Previous
-	      </button>
-	    </li>
-	`;
+
+	const wrapper = document.createElement("div");
+	wrapper.className = "pagination-wrapper text-center mx-auto";
+
+	const ul = document.createElement("ul");
+	ul.className = "pagination justify-content-center flex-wrap mb-0";
+
+	// Previous
+	const prevLi = document.createElement("li");
+	prevLi.className = `page-item ${page === 0 ? "disabled" : ""}`;
+	const prevBtn = document.createElement("button");
+	prevBtn.className = "page-link";
+	prevBtn.disabled = page === 0;
+	prevBtn.textContent = "« Previous";
+	prevBtn.addEventListener("click", () => callback(page - 1));
+	prevLi.appendChild(prevBtn);
+	ul.appendChild(prevLi);
+
+	// Page numbers
 	for (let i = startPage; i <= endPage; i++) {
-		paginationHtml += `
-	    <li class="page-item ${i === page ? "active" : ""}">
-	      <button class="page-link" onclick="${callback}(${i})">${i + 1}</button>
-	    </li>
-	  `;
+		const li = document.createElement("li");
+		li.className = `page-item ${i === page ? "active" : ""}`;
+		const btn = document.createElement("button");
+		btn.className = "page-link";
+		btn.textContent = (i + 1).toString();
+		btn.addEventListener("click", () => callback(i));
+		li.appendChild(btn);
+		ul.appendChild(li);
 	}
-	paginationHtml += `
-	    <li class="page-item ${page === data.totalPages - 1 ? "disabled" : ""}">
-	      <button class="page-link" ${page === data.totalPages - 1 ? "disabled" : ""}
-	              onclick="${callback}(${page + 1})">
-	        Next &raquo;
-	      </button>
-	    </li>
-	  </ul>
-	</div>
-	`;
-	paginationContainer.innerHTML = paginationHtml;
+
+	// Next
+	const nextLi = document.createElement("li");
+	nextLi.className = `page-item ${page === data.totalPages - 1 ? "disabled" : ""}`;
+	const nextBtn = document.createElement("button");
+	nextBtn.className = "page-link";
+	nextBtn.disabled = page === data.totalPages - 1;
+	nextBtn.textContent = "Next »";
+	nextBtn.addEventListener("click", () => callback(page + 1));
+	nextLi.appendChild(nextBtn);
+	ul.appendChild(nextLi);
+
+	wrapper.appendChild(ul);
+	paginationContainer.appendChild(wrapper);
 }
+
 async function fetchAllRecipes(page = 0, size = 6) {
 	try {
 		const name = document.getElementById('filter-name')?.value || "";
@@ -400,7 +442,7 @@ async function fetchAllRecipes(page = 0, size = 6) {
             </div>
           </div>
         `;
-		renderPagination(data, page, 'fetchAllRecipes');
+		renderPagination(data, page, fetchAllRecipes);
 	} catch (error) {
 		console.error("Error loading recipes:", error);
 		document.getElementById("allRecipesContainer").innerHTML = "<p class='text-center text-danger'>Oops! Something went wrong...</p>";
@@ -439,7 +481,7 @@ async function fetchPublicRecipes(page = 0, size = 6) {
 				</div>
 			</div>
 		`;
-		renderPagination(data, page, 'fetchPublicRecipes');
+		renderPagination(data, page, fetchPublicRecipes);
 	} catch (error) {
 		console.error("Error loading public recipes:", error);
 		document.getElementById("allRecipesContainer").innerHTML = `
@@ -472,7 +514,7 @@ function filterPublicRecipes(page = 0, size = 6) {
 				<div class="row row-cols-1 row-cols-md-3 g-4">
 					${renderRecipeCards(data.content)}
 				</div>`;
-		renderPagination(data, page, 'filterPublicRecipes');
+		renderPagination(data, page, filterPublicRecipes);
 	}).catch(error => {
 		console.error("Error filtering public recipes:", error);
 		showToast("🚨 Failed to filter public recipes", false);
@@ -518,7 +560,7 @@ async function fetchPublicRecipesUser(page = 0, size = 6) {
 				</div>
 			</div>
 		`;
-		renderPagination(data, page, 'fetchPublicRecipesUser');
+		renderPagination(data, page, fetchPublicRecipesUser);
 	} catch (error) {
 		console.error("Error loading public user recipes:", error);
 		document.getElementById("allRecipesContainer").innerHTML = `
@@ -563,7 +605,7 @@ function filterPublicRecipesUser(page = 0, size = 6) {
 				<div class="row row-cols-1 row-cols-md-3 g-4">
 					${renderRecipeCards(data.content)}
 				</div>`;
-		renderPagination(data, page, 'filterPublicRecipesUser');
+		renderPagination(data, page, filterPublicRecipesUser);
 	}).catch(error => {
 		console.error("Error filtering public user recipes:", error);
 		showToast("🚨 Failed to filter recipes", false);
@@ -637,7 +679,7 @@ function filterRecipes(page = 0, size = 6) {
           ${renderRecipeCards(data.content)}
         </div>
       `;
-		renderPagination(data, page, 'filterRecipes');
+		renderPagination(data, page, filterRecipes);
 	}).catch(error => {
 		console.error("Error filtering recipes:", error);
 		showToast("🚨 Failed to filter recipes", false);
@@ -678,8 +720,8 @@ async function searchByIngredients() {
 			resultsDiv.innerHTML += "<p>No recipes found.</p>";
 		} else {
 			resultsDiv.innerHTML += data.map(recipe => `
-        <p onclick="goToRecipe(${recipe.id})" style="cursor:pointer; color:blue;">${recipe.name}</p>
-      `).join('');
+              <p onclick="goToRecipe(${recipe.id})" style="cursor:pointer; color:blue;">${escapeHTML(recipe.name)}</p>
+            `).join('');
 		}
 	} catch (error) {
 		console.error("Search error:", error);
@@ -719,59 +761,98 @@ function loadRecipeDetails() {
 		if (titleEl) titleEl.textContent = recipe.name;
 		// ✅ 2. Instrucțiuni
 		const instructionsEl = document.getElementById("recipeInstructions");
-		if (instructionsEl && recipe.instructions) {
-			const isLink = recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://");
-			const formatted = isLink ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">${recipe.instructions} 🔗</a>` : recipe.instructions.replace(/\n/g, "<br>");
-			instructionsEl.innerHTML = `
-                	<div class="mb-4">
-                		<p class="text-dark">${formatted}</p>
-                	</div>
-                `;
-		}
+        if (instructionsEl && recipe.instructions) {
+        	const isLink = recipe.instructions.startsWith("http://") || recipe.instructions.startsWith("https://");
+        	instructionsEl.innerHTML = ""; // curățăm mai întâi
+
+        	const wrapper = document.createElement("div");
+        	wrapper.className = "mb-4";
+
+        	const content = document.createElement("p");
+        	content.className = "text-dark";
+
+        	if (isLink) {
+        		const anchor = document.createElement("a");
+        		anchor.href = recipe.instructions;
+        		anchor.target = "_blank";
+        		anchor.className = "link-primary text-decoration-none";
+        		anchor.textContent = recipe.instructions + " 🔗";
+        		content.appendChild(anchor);
+        	} else {
+        		content.innerHTML = escapeHTML(recipe.instructions).replace(/\n/g, "<br>");
+        	}
+
+        	wrapper.appendChild(content);
+        	instructionsEl.appendChild(wrapper);
+        }
+
 		// ✅ 2b. Notes (dacă există)
 		const notesEl = document.getElementById("recipeNotes");
-		if (notesEl && recipe.notes) {
-			const notesText = notesEl.querySelector("p");
-			if (notesText) notesText.innerHTML = recipe.notes.replace(/\n/g, "<br>");
-			notesEl.style.display = "block";
-		}
-		// ✅ 2c. External link (dacă există)
+        if (notesEl && recipe.notes) {
+        	const paragraph = document.createElement("p");
+        	paragraph.innerHTML = escapeHTML(recipe.notes).replace(/\n/g, "<br>");
+        	notesEl.innerHTML = "";
+        	notesEl.appendChild(paragraph);
+        	notesEl.style.display = "block";
+        }
+
 		const externalLinkWrapper = document.getElementById("recipeExternalLink");
-		const externalAnchor = document.getElementById("externalLinkAnchor");
-		if (externalLinkWrapper && externalAnchor && recipe.externalLink) {
-			externalAnchor.href = recipe.externalLink;
-			externalAnchor.textContent = recipe.externalLink;
-			externalLinkWrapper.style.display = "block";
-		}
-		// ✅ 3. Imagine slider
+        const externalAnchor = document.getElementById("externalLinkAnchor");
+        if (externalLinkWrapper && externalAnchor && recipe.externalLink) {
+        	const safeLink = recipe.externalLink.trim();
+        	if (/^https?:\/\//i.test(safeLink)) {
+        		externalAnchor.href = safeLink;
+        		externalAnchor.textContent = safeLink;
+        		externalLinkWrapper.style.display = "block";
+        	}
+        }
+
 		const slider = document.querySelector(".receipe-slider");
-		if (slider) {
-			slider.innerHTML = `
-					<img src="${recipe.imagePath || '/img/core-img/placeholder.jpg'}"
-					     alt="Recipe Image"
-					     class="img-fluid rounded"
-					     style="max-height: 500px; object-fit: cover; width: 100%;">
-				`;
-		}
-		// ✅ 4. Ingrediente
-		const ingredientsEl = document.getElementById("recipeIngredients");
-		if (ingredientsEl && recipe.ingredients?.length) {
-			const list = recipe.ingredients.map(ing => {
-				const unitText = formatUnit(ing.unit, ing.quantity);
-				const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
-					maximumFractionDigits: 2
-				});
-				const safeId = "chk-" + ing.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
-				return `
-                		<div class="custom-control custom-checkbox mb-2">
-                			<input type="checkbox" class="custom-control-input" id="${safeId}">
-                			<label class="custom-control-label" for="${safeId}">
-                				${quantity} ${unitText} ${ing.name}
-                			</label>
-                		</div>`;
-			}).join('');
-			ingredientsEl.innerHTML = list;
-		}
+        if (slider) {
+        	const safeImage = recipe.imagePath?.trim() || "/img/core-img/placeholder.jpg";
+        	if (/^https?:\/\//i.test(safeImage) || safeImage.startsWith("/img/")) {
+        		const img = document.createElement("img");
+        		img.src = safeImage;
+        		img.alt = "Recipe Image";
+        		img.className = "img-fluid rounded";
+        		img.style.maxHeight = "500px";
+        		img.style.objectFit = "cover";
+        		img.style.width = "100%";
+
+        		slider.innerHTML = "";
+        		slider.appendChild(img);
+        	}
+        }
+
+		// ✅ 4. Ingrediente (safe rendering)
+        const ingredientsEl = document.getElementById("recipeIngredients");
+        if (ingredientsEl && recipe.ingredients?.length) {
+        	ingredientsEl.innerHTML = ""; // Clear old content
+        	recipe.ingredients.forEach(ing => {
+        		const unitText = formatUnit(ing.unit, ing.quantity);
+        		const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
+        			maximumFractionDigits: 2
+        		});
+        		const safeId = "chk-" + ing.name.toLowerCase().replace(/[^a-z0-9]/g, "-");
+
+        		const wrapper = document.createElement("div");
+        		wrapper.className = "custom-control custom-checkbox mb-2";
+
+        		const input = document.createElement("input");
+        		input.type = "checkbox";
+        		input.className = "custom-control-input";
+        		input.id = safeId;
+
+        		const label = document.createElement("label");
+        		label.className = "custom-control-label";
+        		label.setAttribute("for", safeId);
+        		label.textContent = `${quantity} ${unitText} ${ing.name}`; // 🔒 Safe
+
+        		wrapper.appendChild(input);
+        		wrapper.appendChild(label);
+        		ingredientsEl.appendChild(wrapper);
+        	});
+        }
 		// ✅ 5. Butoane edit/delete
 		const actionsEl = document.getElementById("recipeActions");
 		if (actionsEl) {
@@ -832,48 +913,87 @@ function loadPublicRecipeDetails() {
 		const titleEl = document.getElementById("recipeTitle");
 		if (titleEl) titleEl.textContent = recipe.name;
 		/* Instrucțiuni */
-		const instructionsEl = document.getElementById("recipeInstructions");
-		if (instructionsEl && recipe.instructions) {
-			const isLink = /^https?:\/\//i.test(recipe.instructions);
-			const formatted = isLink ? `<a href="${recipe.instructions}" target="_blank" class="link-primary text-decoration-none">
-                           ${recipe.instructions} 🔗
-                       </a>` : recipe.instructions.replace(/\n/g, "<br>");
-			instructionsEl.innerHTML = `<div class="mb-4"><p class="text-dark">${formatted}</p></div>`;
-		}
+        const instructionsEl = document.getElementById("recipeInstructions");
+        if (instructionsEl && recipe.instructions) {
+        	const isLink = /^https?:\/\//i.test(recipe.instructions);
+        	instructionsEl.innerHTML = ""; // Clear existing content
+
+        	const wrapper = document.createElement("div");
+        	wrapper.className = "mb-4";
+
+        	const content = document.createElement("p");
+        	content.className = "text-dark";
+
+        	if (isLink) {
+        		const anchor = document.createElement("a");
+        		anchor.href = recipe.instructions;
+        		anchor.target = "_blank";
+        		anchor.className = "link-primary text-decoration-none";
+        		anchor.textContent = recipe.instructions + " 🔗";
+        		content.appendChild(anchor);
+        	} else {
+        		// Replaces newlines and escapes HTML
+        		content.innerHTML = escapeHTML(recipe.instructions).replace(/\n/g, "<br>");
+        	}
+
+        	wrapper.appendChild(content);
+        	instructionsEl.appendChild(wrapper);
+        }
+
 		/* Notes (dacă există) */
-		const notesWrap = document.getElementById("recipeNotes");
-		if (notesWrap && recipe.notes) {
-			notesWrap.querySelector("p").innerHTML = recipe.notes.replace(/\n/g, "<br>");
-			notesWrap.style.display = "block";
-		}
+        const notesWrap = document.getElementById("recipeNotes");
+        if (notesWrap && recipe.notes) {
+        	// 🧼 Curățăm conținutul anterior
+        	notesWrap.innerHTML = "";
+
+        	// ✅ Creăm elementul <p> în siguranță
+        	const paragraph = document.createElement("p");
+        	paragraph.innerHTML = escapeHTML(recipe.notes).replace(/\n/g, "<br>");
+
+        	notesWrap.appendChild(paragraph);
+        	notesWrap.style.display = "block";
+        }
+
 		/* External link */
-		const extWrap = document.getElementById("recipeExternalLink");
-		const extA = document.getElementById("externalLinkAnchor");
-		if (extWrap && extA && recipe.externalLink) {
-			extA.href = recipe.externalLink;
-			extA.textContent = recipe.externalLink;
-			extWrap.style.display = "block";
-		}
-		/* Imagine */
-		const slider = document.querySelector(".receipe-slider");
-		if (slider) {
-			slider.innerHTML = `
-                    <img src="${recipe.imagePath || '/img/core-img/placeholder.jpg'}"
-                         class="img-fluid rounded"
-                         style="max-height:500px; object-fit:cover; width:100%;"
-                         alt="${recipe.name}">
-                `;
-		}
+        const extWrap = document.getElementById("recipeExternalLink");
+        const extA = document.getElementById("externalLinkAnchor");
+
+        if (extWrap && extA && recipe.externalLink) {
+        	extA.href = recipe.externalLink;
+        	extA.textContent = escapeHTML(recipe.externalLink); // 🔐 evităm XSS
+        	extWrap.style.display = "block";
+        }
+
+		/* Image */
+        const slider = document.querySelector(".receipe-slider");
+        if (slider) {
+        	slider.innerHTML = ""; // curățăm conținutul vechi
+
+        	const img = document.createElement("img");
+        	img.src = recipe.imagePath || "/img/core-img/placeholder.jpg";
+        	img.alt = escapeHTML(recipe.name); // 🔐 prevenim XSS
+        	img.className = "img-fluid rounded";
+        	img.style.maxHeight = "500px";
+        	img.style.objectFit = "cover";
+        	img.style.width = "100%";
+
+        	slider.appendChild(img);
+        }
+
 		/* Ingrediente */
 		const ingWrap = document.getElementById("recipeIngredients");
 		if (ingWrap && recipe.ingredients?.length) {
-			ingWrap.innerHTML = recipe.ingredients.map(ing => {
-				const unitTxt = formatUnit(ing.unit, ing.quantity);
-				const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
-					maximumFractionDigits: 2
-				});
-				return `<p class="mb-1">${quantity} ${unitTxt} ${ing.name}</p>`;
-			}).join("");
+			ingWrap.innerHTML = ""; // curățăm conținutul anterior
+            recipe.ingredients.forEach(ing => {
+            	const unitTxt = formatUnit(ing.unit, ing.quantity);
+            	const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
+            		maximumFractionDigits: 2
+            	});
+            	const p = document.createElement("p");
+            	p.className = "mb-1";
+            	p.textContent = `${quantity} ${unitTxt} ${ing.name}`; // 🔒 XSS-proof
+            	ingWrap.appendChild(p);
+            });
 		}
 		/* ---- Buton Add to My Recipes ---- */
 		if (addBtn) {
