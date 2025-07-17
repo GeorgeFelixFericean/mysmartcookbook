@@ -9,23 +9,23 @@ public class PageController {
 
     @GetMapping("/")
     public String landingPage() {
-        return "index"; // va încărca index.html din templates
+        return "index";
     }
 
     @GetMapping("/login")
     public String showLoginPage() {
-        return "login"; // caută login.html în /resources/templates
+        return "login";
     }
 
 
     @GetMapping("/home")
     public String homePage() {
-        return "home"; // home.html rămâne exact cum e
+        return "home";
     }
 
     @GetMapping("/register")
     public String showRegisterPage() {
-        return "register"; // returnează register.html din templates
+        return "register";
     }
 
     @GetMapping("/add-recipe")
@@ -50,17 +50,17 @@ public class PageController {
 
     @GetMapping("/edit-recipe/{id}")
     public String editRecipePage(@PathVariable Long id) {
-        return "edit-recipe"; // Va încărca edit-recipe.html din templates
+        return "edit-recipe";
     }
 
     @GetMapping("/public-recipes")
     public String publicRecipesPage() {
-        return "public-recipes"; // caută public-recipes.html în templates
+        return "public-recipes";
     }
 
     @GetMapping("/public-recipes-user")
     public String publicRecipesForLoggedInUsers() {
-        return "public-recipes-user"; // va încărca public-recipes-user.html din templates
+        return "public-recipes-user";
     }
 
     @GetMapping("/public-recipe-user/{id}")
@@ -75,17 +75,17 @@ public class PageController {
 
     @GetMapping("/demo-tour")
     public String demoTourPage() {
-        return "demo-tour"; // caută demo-tour.html în /templates
+        return "demo-tour";
     }
 
     @GetMapping("/forgot-password")
     public String showForgotPasswordPage() {
-        return "forgot-password"; // sau "forgot-password.html" dacă e în /templates/
+        return "forgot-password";
     }
 
     @GetMapping("/reset-password")
     public String showResetPasswordPage() {
-        return "reset-password"; // trebuie să corespundă exact cu numele fișierului din /templates
+        return "reset-password";
     }
 
     @GetMapping("/public-recipe-free")
@@ -93,4 +93,23 @@ public class PageController {
         return "redirect:/home";
     }
 
+    @GetMapping("/privacy")
+    public String showPrivacyPage() {
+        return "privacy";
+    }
+
+    @GetMapping("/terms")
+    public String showTermsPage() {
+        return "terms";
+    }
+
+    @GetMapping("/contact")
+    public String showContactPage() {
+        return "contact";
+    }
+
+    @GetMapping("/about")
+    public String showAboutUsPage() {
+        return "about";
+    }
 }

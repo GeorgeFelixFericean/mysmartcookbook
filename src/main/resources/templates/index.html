@@ -300,33 +300,32 @@
 <footer class="footer-area">
     <div class="container h-100">
         <div class="row h-100">
-            <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+            <div class="col-12 h-100 d-flex flex-column align-items-center justify-content-center text-center">
 
-                <!-- Footer Social Info -->
-                <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
+                <!-- Footer Links -->
+                <div class="footer-links mb-2">
+                    <a href="/about" class="mx-2">About</a> |
+                    <a href="/contact" class="mx-2">Contact</a> |
+                    <a href="/privacy" class="mx-2">Privacy</a> |
+                    <a href="/terms" class="mx-2">Terms</a>
                 </div>
 
                 <!-- Footer Logo -->
-                <div class="footer-logo">
-                    <a href="/"><img src="img/core-img/logo.png" alt=""></a>
+                <div class="footer-logo mb-2">
+                    <a href="/"><img src="img/core-img/logo.png" alt="Logo"></a>
                 </div>
 
                 <!-- CopyWrite -->
-                <p>
+                <p class="mb-0 small">
                     Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
-                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+                    Licensed under
+                    <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
                 </p>
             </div>
         </div>
     </div>
 </footer>
-<!-- ##### Footer Area Start ##### -->
+<!-- ##### Footer Area End ##### -->
 
 <!-- ##### All Javascript Files ##### -->
 <!-- jQuery-2.2.4 js -->
@@ -342,5 +341,24 @@
 <!-- Scripts js -->
 <script src="/js/scripts.js"></script>
 <div id="toastMessage" class="toast-message" style="display:none;"></div>
+<div id="cookie-banner"
+     style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.9); color: white; padding: 15px; text-align: center; display: none; z-index: 9999;">
+    <p style="margin-bottom: 10px;">We use cookies to improve your experience. By continuing to browse the site, you
+        agree to our use of cookies.
+        <a href="/privacy#cookies" style="color: #f1f1f1; text-decoration: underline;">Learn more</a>.
+    </p>
+    <button id="accept-cookies"
+            style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;">
+        Accept
+    </button>
+    <button id="decline-cookies"
+            style="background-color: #f44336; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px; margin-left: 10px;">
+        Decline
+    </button>
+    <button id="close-cookies"
+            style="background-color: transparent; color: white; border: none; font-size: 18px; cursor: pointer; position: absolute; top: 10px; right: 10px;">
+        &times;
+    </button>
+</div>
 </body>
 </html>

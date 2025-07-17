@@ -1466,4 +1466,70 @@ document.addEventListener("DOMContentLoaded", () => {
 			});
 		});
 	}
+
+	// Contact page form handler (/contact.html)
+    const detailedContactForm = document.getElementById("contactForm");
+    if (detailedContactForm) {
+    	detailedContactForm.addEventListener("submit", function (e) {
+    		e.preventDefault();
+
+    		const name = document.getElementById("name").value.trim();
+    		const email = document.getElementById("email").value.trim();
+    		const message = document.getElementById("message").value.trim();
+
+    		if (!name || !email || !message) {
+    			showToast("Please fill in all fields.", false);
+    			return;
+    		}
+
+    		fetch("/api/contact", {
+    			method: "POST",
+    			headers: {
+    				"Content-Type": "application/json",
+    				"X-XSRF-TOKEN": getCsrfToken()
+    			},
+    			credentials: "include",
+    			body: JSON.stringify({
+    				name,
+    				email,
+    				message
+    			})
+    		})
+    			.then(response => response.text())
+    			.then(data => {
+    				showToast(data, true);
+    				detailedContactForm.reset();
+    			})
+    			.catch(error => {
+    				console.error("Error:", error);
+    				showToast("Something went wrong. Please try again.", false);
+    			});
+    	});
+    }
+    const cookieBanner = document.getElementById('cookie-banner');
+
+      // Verifică dacă utilizatorul a acceptat deja cookie-urile
+      if (!localStorage.getItem('cookies-accepted')) {
+        cookieBanner.style.display = 'block'; // Afișează banner-ul
+      }
+
+      // Butonul "Accept"
+      const acceptBtn = document.getElementById('accept-cookies');
+      acceptBtn.addEventListener('click', () => {
+        localStorage.setItem('cookies-accepted', 'true'); // Salvează consimțământul
+        cookieBanner.style.display = 'none'; // Ascunde banner-ul
+      });
+
+      // Butonul "Decline"
+      const declineBtn = document.getElementById('decline-cookies');
+      declineBtn.addEventListener('click', () => {
+        localStorage.setItem('cookies-accepted', 'false'); // Salvează refuzul
+        cookieBanner.style.display = 'none'; // Ascunde banner-ul
+      });
+
+      // Butonul "Close" (închide banner-ul fără a salva consimțământul)
+      const closeBtn = document.getElementById('close-cookies');
+      closeBtn.addEventListener('click', () => {
+        cookieBanner.style.display = 'none'; // Ascunde banner-ul
+      });
 });

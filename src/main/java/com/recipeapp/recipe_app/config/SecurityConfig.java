@@ -122,7 +122,7 @@ public class SecurityConfig {
                                 "/public-recipes", "/public-recipe-free/**",
                                 "/demo-tour", "/api/contact",
                                 "/api/ingredients/autocomplete", "/api/recipes/autocomplete",
-                                "/api/csrf-token", "/api/csrf", "/*.*"
+                                "/api/csrf-token", "/api/csrf", "/*.*", "/privacy", "/terms", "/contact", "/about"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

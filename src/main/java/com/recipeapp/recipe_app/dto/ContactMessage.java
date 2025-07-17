@@ -4,8 +4,8 @@ package com.recipeapp.recipe_app.dto;
 public class ContactMessage {
     private String name;
     private String message;
+    private String email;
 
-    // Getteri și setteri
     public String getName() {
         return name;
     }
@@ -20,5 +20,13 @@ public class ContactMessage {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

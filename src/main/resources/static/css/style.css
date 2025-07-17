@@ -1642,3 +1642,10 @@ a.text-muted:hover {
 	color: #ff7037 !important; /* Use any accent color if preferred */
 	text-decoration: underline;
 }
+
+.info-indent {
+    margin: 0 0 0.5rem 1.5rem;
+    text-indent: -1.2rem;
+    padding-left: 1.2rem;
+}
+

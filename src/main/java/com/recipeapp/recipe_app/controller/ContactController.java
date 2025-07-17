@@ -1,4 +1,3 @@
-// 📁 src/main/java/com/recipeapp/recipe_app/controller/ContactController.java
 package com.recipeapp.recipe_app.controller;
 
 import com.recipeapp.recipe_app.dto.ContactMessage;
@@ -22,31 +21,37 @@ public class ContactController {
     private String fromEmail;
 
     @Value("${app.contact.receiver}")
-    private String toEmail;  // Adresa la care vrei să primești mesajele
+    private String toEmail;
 
     @PostMapping
     public String sendMessage(@RequestBody ContactMessage message) {
         try {
-
-            System.out.println("✅ Mesaj primit din frontend:");
-            System.out.println("Nume: " + message.getName());
-            System.out.println("Mesaj: " + message.getMessage());
-
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
 
-            String subject = "New message from MySmartCookbook";
-            String content = "From: " +
-                    ((message.getName() != null && !message.getName().trim().isEmpty()) ? message.getName() : "Anonymous") +
-                    "\n\nMessage:\n" + message.getMessage();
+            String senderName = (message.getName() != null && !message.getName().trim().isEmpty())
+                    ? message.getName()
+                    : "Anonymous";
 
-            helper.setText(content, false);
+            String senderEmail = (message.getEmail() != null && !message.getEmail().trim().isEmpty())
+                    ? message.getEmail()
+                    : null;
+
+            String subject = "New message from MySmartCookbook";
+            StringBuilder contentBuilder = new StringBuilder();
+
+            contentBuilder.append("From: ").append(senderName);
+            if (senderEmail != null) {
+                contentBuilder.append(" <").append(senderEmail).append(">");
+            }
+            contentBuilder.append("\n\nMessage:\n").append(message.getMessage());
+
+            helper.setText(contentBuilder.toString(), false);
             helper.setTo(toEmail);
             helper.setSubject(subject);
             helper.setFrom(fromEmail);
 
             mailSender.send(mimeMessage);
-            System.out.println("✅ Email trimis cu succes către: " + toEmail);
             return "Message sent successfully!";
         } catch (MessagingException e) {
             e.printStackTrace();

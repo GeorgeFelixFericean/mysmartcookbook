@@ -18,7 +18,6 @@ public class EmailService {
     public void sendActivationEmail(String toEmail, String username, String activationLink) {
         String url = "https://api.brevo.com/v3/smtp/email";
 
-        // 🔹 Conținutul emailului
         Map<String, Object> emailData = new HashMap<>();
         emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "noreply@mysmartcookbook.com"));
         emailData.put("to", List.of(Map.of("email", toEmail, "name", username)));
@@ -31,12 +30,10 @@ public class EmailService {
                 """.formatted(username, activationLink)
         );
 
-        // 🔹 Setăm headerul cu cheia API
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.set("api-key", brevoApiKey);
 
-        // 🔹 Trimitem requestul
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(emailData, headers);
 
         try {
@@ -66,7 +63,6 @@ public class EmailService {
                 <p>– The My Smart Cookbook Team</p>
                 """.formatted(username, resetLink)
         );
-
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -108,5 +104,4 @@ public class EmailService {
             System.err.println("❌ Email sending exception: " + e.getMessage());
         }
     }
-
 }
