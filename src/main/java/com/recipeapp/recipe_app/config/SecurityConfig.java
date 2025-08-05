@@ -23,6 +23,7 @@ import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 
 import java.util.function.Supplier;
@@ -136,6 +137,8 @@ public class SecurityConfig {
                 // 👇 Adaugă această linie:
                 .httpBasic(Customizer.withDefaults())
 
+                .formLogin(AbstractHttpConfigurer::disable)
+
                 // Logout
                 .logout(logout -> logout
                         .logoutUrl("/api/users/logout")
@@ -154,11 +157,12 @@ public class SecurityConfig {
 
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("preview")
-                .password(passwordEncoder.encode("mysmartaccess"))
-                .roles("PREVIEW")
+        UserDetails user = User.withUsername("myaccess")
+                .password(passwordEncoder.encode("supersecret"))
+                .roles("GATEKEEPER")
                 .build();
 
         return new InMemoryUserDetailsManager(user);
     }
+
 }
