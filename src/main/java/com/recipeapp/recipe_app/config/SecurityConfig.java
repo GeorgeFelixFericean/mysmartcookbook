@@ -7,17 +7,23 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
 
 import java.util.function.Supplier;
 
@@ -127,6 +133,9 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
+                // 👇 Adaugă această linie:
+                .httpBasic(Customizer.withDefaults())
+
                 // Logout
                 .logout(logout -> logout
                         .logoutUrl("/api/users/logout")
@@ -141,5 +150,15 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
+    }
+
+    @Bean
+    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
+        UserDetails user = User.withUsername("preview")
+                .password(passwordEncoder.encode("mysmartaccess"))
+                .roles("PREVIEW")
+                .build();
+
+        return new InMemoryUserDetailsManager(user);
     }
 }
