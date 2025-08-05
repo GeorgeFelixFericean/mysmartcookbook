@@ -15,4 +15,3 @@ EXPOSE 8080
 
 # Run the Spring Boot app
 CMD ["java", "-jar", "target/*.jar"]
-`
