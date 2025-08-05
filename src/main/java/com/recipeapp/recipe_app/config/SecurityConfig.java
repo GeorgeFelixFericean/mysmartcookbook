@@ -88,11 +88,11 @@ public class SecurityConfig {
                 // Exception Handling
                 .exceptionHandling(ex -> ex
 //                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-                        .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            response.setContentType("application/json");
-                            response.setStatus(403);
-                            response.getWriter().write("{\"error\":\"Access denied - Invalid CSRF token\"}");
-                        })
+                                .accessDeniedHandler((request, response, accessDeniedException) -> {
+                                    response.setContentType("application/json");
+                                    response.setStatus(403);
+                                    response.getWriter().write("{\"error\":\"Access denied - Invalid CSRF token\"}");
+                                })
                 )
 
                 // Security Headers (Updated for CSS)
@@ -121,7 +121,7 @@ public class SecurityConfig {
                 // Authorization
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                 "/login", "/register", "/forgot-password", "/reset-password",
+                                "/login", "/register", "/forgot-password", "/reset-password",
                                 "/api/users/register", "/api/users/login", "/api/users/activate",
                                 "/api/forgot-password", "/api/reset-password", "/api/recover-username",
                                 "/css/**", "/js/**", "/img/**", "/fonts/**",
@@ -156,12 +156,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
-        UserDetails user = User.withUsername("myaccess")
-                .password("$2a$10$2k69.vgXgXNySoxFPdlrXezOCLw9dmZ.uXBEOAiuJGQrG3mSzIBNm") // bcrypt hash FIX
+    public UserDetailsService userDetailsService() {
+        UserDetails user = User.builder()
+                .username("myaccess")
+                .password("$2a$10$2k69.vgXgXNySoxFPdlrXezOCLw9dmZ.uXBEOAiuJGQrG3mSzIBNm") // encoded offline
                 .roles("GATEKEEPER")
                 .build();
-
 
         return new InMemoryUserDetailsManager(user);
     }
