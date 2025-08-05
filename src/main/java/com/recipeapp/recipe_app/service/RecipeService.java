@@ -7,6 +7,7 @@ import com.recipeapp.recipe_app.model.Recipe;
 import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.repository.RecipeRepository;
 import com.recipeapp.recipe_app.repository.UserRepository;
+import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +15,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.ImageOutputStream;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -42,13 +50,6 @@ public class RecipeService {
         return recipeRepository.findByIngredients(ingredients, ingredients.size());
     }
 
-    /**
-     * Metodă care salvează o rețetă împreună cu fișierul imagine (dacă există).
-     *
-     * @param recipeDTO datele rețetei (nume, instrucțiuni, ingrediente etc.)
-     * @param imageFile fișierul imagine, poate fi null sau gol
-     * @return rețeta salvată în baza de date
-     */
     public Recipe saveRecipe(RecipeDTO recipeDTO, MultipartFile imageFile, String username) {
         // 1. Construim entitatea Recipe din DTO
         Recipe recipe = new Recipe();
@@ -84,9 +85,39 @@ public class RecipeService {
                     Files.createDirectories(uploadPath);
                 }
 
-                // copiem fișierul în "uploads/"
+                // copiem fișierul în "uploads/" cu redimensionare și compresie
                 Path filePath = uploadPath.resolve(uniqueFilename);
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Verificăm extensia fișierului (acceptăm doar JPG și PNG pentru control)
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+
+                try (OutputStream os = Files.newOutputStream(filePath)) {
+                    BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
+
+                    // ⚙️ Redimensionare la lățime max 1000px (păstrăm proporțiile)
+                    BufferedImage resizedImage = Thumbnails.of(originalImage)
+                            .size(1000, 1000) // se va păstra aspect ratio
+                            .asBufferedImage();
+
+                    // 💾 Salvăm în funcție de tip (cu compresie la JPEG)
+                    if ("jpg".equals(fileExtension) || "jpeg".equals(fileExtension)) {
+                        ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+                        ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
+                        jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                        jpgWriteParam.setCompressionQuality(0.8f); // 80% calitate
+
+                        try (ImageOutputStream ios = ImageIO.createImageOutputStream(os)) {
+                            jpgWriter.setOutput(ios);
+                            jpgWriter.write(null, new IIOImage(resizedImage, null, null), jpgWriteParam);
+                        }
+
+                        jpgWriter.dispose();
+                    } else {
+                        // PNG nu suportă compresie „lossy” — salvăm direct
+                        ImageIO.write(resizedImage, fileExtension, os);
+                    }
+                }
+
 
                 // stocăm în DB doar calea accesibilă via HTTP
                 // ex: "/recipe-1679068342123_img.jpg"
@@ -150,8 +181,38 @@ public class RecipeService {
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
+                // copiem fișierul în "uploads/" cu redimensionare și compresie
                 Path filePath = uploadPath.resolve(uniqueFilename);
-                Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                // Verificăm extensia fișierului (acceptăm doar JPG și PNG pentru control)
+                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+
+                try (OutputStream os = Files.newOutputStream(filePath)) {
+                    BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
+
+                    // ⚙️ Redimensionare la lățime max 1000px (păstrăm proporțiile)
+                    BufferedImage resizedImage = Thumbnails.of(originalImage)
+                            .size(1000, 1000) // se va păstra aspect ratio
+                            .asBufferedImage();
+
+                    // 💾 Salvăm în funcție de tip (cu compresie la JPEG)
+                    if ("jpg".equals(fileExtension) || "jpeg".equals(fileExtension)) {
+                        ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+                        ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
+                        jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                        jpgWriteParam.setCompressionQuality(0.8f); // 80% calitate
+
+                        try (ImageOutputStream ios = ImageIO.createImageOutputStream(os)) {
+                            jpgWriter.setOutput(ios);
+                            jpgWriter.write(null, new IIOImage(resizedImage, null, null), jpgWriteParam);
+                        }
+
+                        jpgWriter.dispose();
+                    } else {
+                        // PNG nu suportă compresie „lossy” — salvăm direct
+                        ImageIO.write(resizedImage, fileExtension, os);
+                    }
+                }
                 recipe.setImagePath("/" + uniqueFilename);
             } catch (IOException e) {
                 e.printStackTrace();
