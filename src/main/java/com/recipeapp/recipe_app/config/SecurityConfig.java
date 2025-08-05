@@ -121,7 +121,7 @@ public class SecurityConfig {
                 // Authorization
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/", "/login", "/register", "/forgot-password", "/reset-password",
+                                 "/login", "/register", "/forgot-password", "/reset-password",
                                 "/api/users/register", "/api/users/login", "/api/users/activate",
                                 "/api/forgot-password", "/api/reset-password", "/api/recover-username",
                                 "/css/**", "/js/**", "/img/**", "/fonts/**",
