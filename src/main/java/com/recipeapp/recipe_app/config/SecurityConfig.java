@@ -158,7 +158,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("myaccess")
-                .password("$2a$10$qLbYZURTctgqK6OBzI3EXej.UXrlovB3Vx4M/o8V2DLTAJS6jxy.q") // bcrypt hash FIX
+                .password("$2a$10$2k69.vgXgXNySoxFPdlrXezOCLw9dmZ.uXBEOAiuJGQrG3mSzIBNm") // bcrypt hash FIX
                 .roles("GATEKEEPER")
                 .build();
 
