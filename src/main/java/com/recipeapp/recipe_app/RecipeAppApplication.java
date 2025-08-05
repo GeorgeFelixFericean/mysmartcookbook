@@ -8,10 +8,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class RecipeAppApplication {
 
 	public static void main(String[] args) {
-//		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-//		String rawPassword = "admin123"; // sau altă parolă
-//		String encodedPassword = encoder.encode(rawPassword);
-//		System.out.println(encodedPassword);
 		SpringApplication.run(RecipeAppApplication.class, args);
 	}
 

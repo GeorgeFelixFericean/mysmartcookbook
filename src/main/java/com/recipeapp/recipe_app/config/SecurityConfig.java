@@ -7,24 +7,17 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-
 
 import java.util.function.Supplier;
 
@@ -87,12 +80,12 @@ public class SecurityConfig {
 
                 // Exception Handling
                 .exceptionHandling(ex -> ex
-//                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-                                .accessDeniedHandler((request, response, accessDeniedException) -> {
-                                    response.setContentType("application/json");
-                                    response.setStatus(403);
-                                    response.getWriter().write("{\"error\":\"Access denied - Invalid CSRF token\"}");
-                                })
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.setContentType("application/json");
+                            response.setStatus(403);
+                            response.getWriter().write("{\"error\":\"Access denied - Invalid CSRF token\"}");
+                        })
                 )
 
                 // Security Headers (Updated for CSS)
@@ -121,7 +114,7 @@ public class SecurityConfig {
                 // Authorization
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/login", "/register", "/forgot-password", "/reset-password",
+                                "/", "/login", "/register", "/forgot-password", "/reset-password",
                                 "/api/users/register", "/api/users/login", "/api/users/activate",
                                 "/api/forgot-password", "/api/reset-password", "/api/recover-username",
                                 "/css/**", "/js/**", "/img/**", "/fonts/**",
@@ -133,11 +126,6 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-
-                // 👇 Adaugă această linie:
-                .httpBasic(Customizer.withDefaults())
-
-                .formLogin(AbstractHttpConfigurer::disable)
 
                 // Logout
                 .logout(logout -> logout
@@ -154,16 +142,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        UserDetails user = User.builder()
-                .username("myaccess")
-                .password("$2a$10$2k69.vgXgXNySoxFPdlrXezOCLw9dmZ.uXBEOAiuJGQrG3mSzIBNm") // encoded offline
-                .roles("GATEKEEPER")
-                .build();
-
-        return new InMemoryUserDetailsManager(user);
-    }
-
 }
