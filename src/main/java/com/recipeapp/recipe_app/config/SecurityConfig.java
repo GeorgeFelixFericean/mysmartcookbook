@@ -87,7 +87,7 @@ public class SecurityConfig {
 
                 // Exception Handling
                 .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+//                        .authenticationEntryPoint(customAuthenticationEntryPoint)
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.setContentType("application/json");
                             response.setStatus(403);
