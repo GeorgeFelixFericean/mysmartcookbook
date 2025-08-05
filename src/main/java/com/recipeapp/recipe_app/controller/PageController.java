@@ -112,4 +112,24 @@ public class PageController {
     public String showAboutUsPage() {
         return "about";
     }
+
+    @GetMapping("/about-logged")
+    public String aboutPageLogged() {
+        return "about-logged";
+    }
+
+    @GetMapping("/contact-logged")
+    public String contactPageLogged() {
+        return "contact-logged";
+    }
+
+    @GetMapping("/privacy-logged")
+    public String privacyPageLogged() {
+        return "privacy-logged";
+    }
+
+    @GetMapping("/terms-logged")
+    public String termsPageLogged() {
+        return "terms-logged";
+    }
 }

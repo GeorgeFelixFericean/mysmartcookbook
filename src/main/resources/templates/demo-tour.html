@@ -9,20 +9,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+    <!-- SEO Meta Tags -->
+    <meta name="author" content="MySmartCookbook">
+    <meta name="keywords"
+          content="recipe demo, mysmartcookbook features, cooking assistant tour, recipe app preview, explore before registering">
+
+    <!-- Open Graph Meta Tags (for social media previews) -->
+    <meta property="og:title" content="Demo Tour – Try MySmartCookbook Without an Account">
+    <meta property="og:description"
+          content="Explore the smart features of MySmartCookbook with our interactive demo – no login needed. See what the app can do for your cooking routine.">
+    <meta property="og:image" content="https://www.mysmartcookbook.com/img/core-img/social-preview.jpg">
+    <meta property="og:url" content="https://www.mysmartcookbook.com/demo-tour">
+    <meta property="og:type" content="website">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.mysmartcookbook.com/demo-tour">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Demo Tour – Try MySmartCookbook Without an Account">
+    <meta name="twitter:description"
+          content="Explore the smart features of MySmartCookbook with our interactive demo – no login needed.">
+    <meta name="twitter:image" content="https://www.mysmartcookbook.com/img/core-img/social-preview.jpg">
+
+    <!-- Language hint -->
+    <meta name="language" content="en">
+
+    <!-- Referrer policy -->
+    <meta name="referrer" content="no-referrer-when-downgrade">
+
     <!-- Title -->
     <title>MySmartCookbook – Take a Guided Tour Before You Start Cooking Smart</title>
 
-    <!-- ✅ Favicon Classic -->
+    <!-- Favicon Classic -->
     <link rel="icon" type="image/x-icon" href="/img/core-img/favicon.ico">
 
-    <!-- ✅ PNG Favicons for modern browsers-->
+    <!-- PNG Favicons for modern browsers-->
     <link rel="icon" type="image/png" sizes="32x32" href="/img/core-img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/core-img/favicon-16x16.png">
 
-    <!-- ✅ iOS -->
+    <!-- iOS -->
     <link rel="apple-touch-icon" sizes="180x180" href="/img/core-img/apple-touch-icon.png">
 
-    <!-- ✅ Optional: Manifest for PWA/Android -->
+    <!-- Optional: Manifest for PWA/Android -->
     <link rel="manifest" href="/site.webmanifest">
 
     <!-- Font Awesome 6.5 (CDN) -->
@@ -62,12 +91,13 @@
                 <!-- Top Social Info -->
                 <div class="col-12 col-sm-6">
                     <div class="top-social-info text-right">
-                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
+                        <a href="https://www.facebook.com/mysmartcookbook/" target="_blank" rel="noopener">
+                            <i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -104,7 +134,10 @@
                                 <!-- Navbar Tab: Home -->
                                 <li><a href="/">Home</a></li>
 
-                                <!-- Navbar Tab: Demo Tour (active)-->
+                                <!-- Navbar Tab: About Us -->
+                                <li><a href="/about">About</a></li>
+
+                                <!-- Navbar Tab: Demo Tour (active) -->
                                 <li class="active"><a href="/demo-tour">How It Works</a></li>
 
                                 <!-- Navbar Tab: Free Recipes -->
@@ -173,17 +206,17 @@
                             </div>
                             <div class="carousel-item" data-index="1">
                                 <a href="/public-recipes">
-                                    <img src="/img/demo/index2.jpg" class="d-block w-100" alt="Public Recipes slide">
+                                    <img src="/img/demo/index2.png" class="d-block w-100" alt="Public Recipes slide">
                                 </a>
                             </div>
                             <div class="carousel-item" data-index="2">
                                 <a href="/register">
-                                    <img src="/img/demo/index3.jpg" class="d-block w-100" alt="Register slide">
+                                    <img src="/img/demo/index3.png" class="d-block w-100" alt="Register slide">
                                 </a>
                             </div>
                             <div class="carousel-item" data-index="3">
                                 <a href="/#contact-section">
-                                    <img src="/img/demo/index4.jpg" class="d-block w-100" alt="Feedback slide">
+                                    <img src="/img/demo/index4.png" class="d-block w-100" alt="Feedback slide">
                                 </a>
                             </div>
                         </div>
@@ -243,17 +276,17 @@
                         <!-- Slides -->
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active" data-index="0">
-                                <img src="/img/demo/index2.jpg" class="d-block w-100" alt="Search by name">
+                                <img src="/img/demo/public1.png" class="d-block w-100" alt="Search by name">
                             </div>
                             <div class="carousel-item" data-index="1">
-                                <img src="/img/demo/index5.jpg" class="d-block w-100"
+                                <img src="/img/demo/public2.png" class="d-block w-100"
                                      alt="Filter by ingredients">
                             </div>
                             <div class="carousel-item" data-index="2">
-                                <img src="/img/demo/index6.jpg" class="d-block w-100" alt="Show results">
+                                <img src="/img/demo/public3.png" class="d-block w-100" alt="Show results">
                             </div>
                             <div class="carousel-item" data-index="3">
-                                <img src="/img/demo/index7.jpg" class="d-block w-100" alt="Reset filters">
+                                <img src="/img/demo/public4.png" class="d-block w-100" alt="Reset filters">
                             </div>
                         </div>
                     </div>
@@ -283,7 +316,7 @@
                         <!-- Reset Filters -->
                         <button type="button" class="list-group-item list-group-item-action" data-index="3">
                             <h5 class="mb-1">Start Fresh Anytime</h5>
-                            <p class="mb-1">Click “Reset” to clear your search and explore new options.</p>
+                            <p class="mb-1">Click “Clear Filters” to reset your search and explore new options.</p>
                         </button>
                     </div>
                 </div>
@@ -318,16 +351,16 @@
                         <!-- Slides -->
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active" data-index="0">
-                                <img src="/img/demo/index8.jpg" class="d-block w-100" alt="Welcome back">
+                                <img src="/img/demo/home1.png" class="d-block w-100" alt="Welcome back">
                             </div>
                             <div class="carousel-item" data-index="1">
-                                <img src="/img/demo/index9.jpg" class="d-block w-100" alt="Add recipe shortcut">
+                                <img src="/img/demo/home2.png" class="d-block w-100" alt="Add recipe shortcut">
                             </div>
                             <div class="carousel-item" data-index="2">
-                                <img src="/img/demo/home3.jpg" class="d-block w-100" alt="Search all recipes">
+                                <img src="/img/demo/home3.png" class="d-block w-100" alt="Search all recipes">
                             </div>
                             <div class="carousel-item" data-index="3">
-                                <img src="/img/demo/home4.jpg" class="d-block w-100" alt="Public suggestions">
+                                <img src="/img/demo/home4.png" class="d-block w-100" alt="Public suggestions">
                             </div>
                         </div>
                     </div>
@@ -389,20 +422,19 @@
                         <!-- Slides -->
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active" data-index="0">
-                                <img src="/img/demo/add1.jpg" class="d-block w-100" alt="Add name and instructions">
+                                <img src="/img/demo/add1.png" class="d-block w-100"
+                                     alt="Add name, instructions and notes">
                             </div>
                             <div class="carousel-item" data-index="1">
-                                <img src="/img/demo/add2.jpg" class="d-block w-100" alt="Add notes and optional link">
+                                <img src="/img/demo/add2.png" class="d-block w-100"
+                                     alt="Add external link and upload recipe image">
                             </div>
                             <div class="carousel-item" data-index="2">
-                                <img src="/img/demo/add3.jpg" class="d-block w-100" alt="Upload recipe image">
-                            </div>
-                            <div class="carousel-item" data-index="3">
-                                <img src="/img/demo/add4.jpg" class="d-block w-100"
+                                <img src="/img/demo/add3.png" class="d-block w-100"
                                      alt="Add ingredients with unit and quantity">
                             </div>
-                            <div class="carousel-item" data-index="4">
-                                <img src="/img/demo/add5.jpg" class="d-block w-100" alt="Save or cancel the recipe">
+                            <div class="carousel-item" data-index="3">
+                                <img src="/img/demo/add4.png" class="d-block w-100" alt="Save or cancel the recipe">
                             </div>
                         </div>
                     </div>
@@ -411,24 +443,28 @@
                 <!-- RIGHT: Explanatory text -->
                 <div class="col-12 col-md-6">
                     <div id="addRecipeDemoTexts" class="list-group">
+                        <!-- Step 1: Title + Instructions + Notes -->
                         <button type="button" class="list-group-item list-group-item-action active" data-index="0">
-                            <h5 class="mb-1">Start with the Basics</h5>
-                            <p class="mb-1">Give your recipe a title and write down how to make it.</p>
+                            <h5 class="mb-1">Core Recipe Info</h5>
+                            <p class="mb-1">
+                                Add a title, write the cooking instructions, and include any personal notes or tips
+                                you'd like to remember.
+                            </p>
                         </button>
+
+                        <!-- Step 2: External Link + Photo -->
                         <button type="button" class="list-group-item list-group-item-action" data-index="1">
-                            <h5 class="mb-1">Notes & Inspiration</h5>
-                            <p class="mb-1">Optionally, add personal notes and a link to the recipe that inspired
-                                you.</p>
+                            <h5 class="mb-1">Inspiration & Photo (Optional)</h5>
+                            <p class="mb-1">
+                                Add a link to the original recipe (if any), and upload a photo of your dish to make it
+                                more visual.
+                            </p>
                         </button>
                         <button type="button" class="list-group-item list-group-item-action" data-index="2">
-                            <h5 class="mb-1">Add a Photo (Optional)</h5>
-                            <p class="mb-1">You can upload a picture of your dish to make the recipe more visual.</p>
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action" data-index="3">
                             <h5 class="mb-1">Add Ingredients</h5>
                             <p class="mb-1">List all ingredients, with the right quantity and measurement unit.</p>
                         </button>
-                        <button type="button" class="list-group-item list-group-item-action" data-index="4">
+                        <button type="button" class="list-group-item list-group-item-action" data-index="3">
                             <h5 class="mb-1">Save Your Recipe</h5>
                             <p class="mb-1">Click “Save Recipe” when you're done. Your dish will be added to your
                                 personal collection.</p>
@@ -472,16 +508,16 @@
 
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active" data-index="0">
-                                <img src="/img/demo/index2.jpg" class="d-block w-100" alt="Search by name">
+                                <img src="/img/demo/all1.png" class="d-block w-100" alt="Search by name">
                             </div>
                             <div class="carousel-item" data-index="1">
-                                <img src="/img/demo/index5.jpg" class="d-block w-100" alt="Filter by ingredients">
+                                <img src="/img/demo/all2.png" class="d-block w-100" alt="Filter by ingredients">
                             </div>
                             <div class="carousel-item" data-index="2">
-                                <img src="/img/demo/index6.jpg" class="d-block w-100" alt="Show results">
+                                <img src="/img/demo/all3.png" class="d-block w-100" alt="Show results">
                             </div>
                             <div class="carousel-item" data-index="3">
-                                <img src="/img/demo/index7.jpg" class="d-block w-100" alt="Reset filters">
+                                <img src="/img/demo/all4.png" class="d-block w-100" alt="Reset filters">
                             </div>
                         </div>
                     </div>
@@ -538,16 +574,16 @@
                         <!-- Slides -->
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active" data-index="0">
-                                <img src="/img/demo/recipe1.jpg" class="d-block w-100" alt="Recipe Overview">
+                                <img src="/img/demo/recipe1.png" class="d-block w-100" alt="Recipe Overview">
                             </div>
                             <div class="carousel-item" data-index="1">
-                                <img src="/img/demo/recipe2.jpg" class="d-block w-100" alt="Ingredients list">
+                                <img src="/img/demo/recipe2.png" class="d-block w-100" alt="Ingredients list">
                             </div>
                             <div class="carousel-item" data-index="2">
-                                <img src="/img/demo/recipe3.jpg" class="d-block w-100" alt="Instructions section">
+                                <img src="/img/demo/recipe3.png" class="d-block w-100" alt="Instructions section">
                             </div>
                             <div class="carousel-item" data-index="3">
-                                <img src="/img/demo/recipe4.jpg" class="d-block w-100" alt="External recipe link">
+                                <img src="/img/demo/recipe4.png" class="d-block w-100" alt="External recipe link">
                             </div>
                         </div>
                     </div>
@@ -616,19 +652,16 @@
                         <!-- Slides -->
                         <div class="carousel-inner rounded shadow">
                             <div class="carousel-item active" data-index="0">
-                                <img src="/img/demo/edit1.jpg" class="d-block w-100" alt="Edit Recipe Overview">
+                                <img src="/img/demo/edit1.png" class="d-block w-100" alt="Edit Recipe Overview">
                             </div>
                             <div class="carousel-item" data-index="1">
-                                <img src="/img/demo/edit2.jpg" class="d-block w-100" alt="Edit Ingredients">
+                                <img src="/img/demo/edit2.png" class="d-block w-100" alt="Edit Ingredients">
                             </div>
                             <div class="carousel-item" data-index="2">
-                                <img src="/img/demo/edit3.jpg" class="d-block w-100" alt="Image and External Link">
+                                <img src="/img/demo/edit3.png" class="d-block w-100" alt="Image and External Link">
                             </div>
                             <div class="carousel-item" data-index="3">
-                                <img src="/img/demo/edit4.jpg" class="d-block w-100" alt="Save or Cancel">
-                            </div>
-                            <div class="carousel-item" data-index="4">
-                                <img src="/img/demo/edit4.jpg" class="d-block w-100" alt="Save or Cancel">
+                                <img src="/img/demo/edit4.png" class="d-block w-100" alt="Save or Cancel">
                             </div>
                         </div>
                     </div>
@@ -639,29 +672,23 @@
                     <div id="editRecipeDemoTexts" class="list-group">
                         <button type="button" class="list-group-item list-group-item-action active" data-index="0">
                             <h5 class="mb-1">Start with the Essentials</h5>
-                            <p class="mb-1">Update the recipe name and cooking instructions to keep things clear and
-                                helpful.</p>
+                            <p class="mb-1">Update the recipe name, cooking instructions and notes to keep things clear
+                                and helpful.</p>
                         </button>
                         <button type="button" class="list-group-item list-group-item-action" data-index="1">
-                            <h5 class="mb-1">Update Notes or Link</h5>
-                            <p class="mb-1">Change your personal notes or update the inspirational link if needed — both
-                                fields are optional.</p>
+                            <h5 class="mb-1">Link & Image</h5>
+                            <p class="mb-1">Update the external link that inspired you and add or replace the recipe
+                                image.</p>
                         </button>
                         <button type="button" class="list-group-item list-group-item-action" data-index="2">
-                            <h5 class="mb-1">Update the Image</h5>
-                            <p class="mb-1">Replace the current photo with a new one, or upload an image if your recipe
-                                doesn’t have one yet.</p>
-
-                        </button>
-                        <button type="button" class="list-group-item list-group-item-action" data-index="3">
                             <h5 class="mb-1">Edit Your Ingredients</h5>
                             <p class="mb-1">You can add new ingredients, adjust existing ones, or remove anything that’s
                                 no longer needed. Make sure each item has a name, quantity, and unit.</p>
                         </button>
-                        <button type="button" class="list-group-item list-group-item-action" data-index="4">
+                        <button type="button" class="list-group-item list-group-item-action" data-index="3">
                             <h5 class="mb-1">Save or Cancel</h5>
-                            <p class="mb-1">Finished editing? Click “Save” to update your recipe, or “Cancel” to discard
-                                the changes and go back.</p>
+                            <p class="mb-1">Finished editing? Click “Update Recipe” to save your recipe, or “Cancel” to
+                                discard the changes and go back.</p>
                         </button>
                     </div>
                 </div>
@@ -670,37 +697,49 @@
     </div>
 </section>
 
+<section class="demo-tour-section section-padding-40-0"></section>
+
 <!-- ##### Footer Area Start ##### -->
 <footer class="footer-area">
     <div class="container h-100">
         <div class="row h-100">
-            <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+            <div class="col-12 h-100 d-flex flex-column align-items-center justify-content-center text-center"
+                 style="margin-bottom: 1.5rem;">
+                <p class="mt-3 mb-2" style="font-size: 14px;">Like this app? Support me with a coffee:</p>
 
-                <!-- Footer Social Info -->
-                <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
+                <div style="margin-bottom: 1.5rem;">
+                    <a href="https://www.buymeacoffee.com/mysmartcookbook" target="_blank" class="btn btn-success"
+                       style="font-weight: bold; padding: 10px 20px; font-size: 16px; border-radius: 30px;">
+                        Buy Me a Coffee
+                    </a>
+                </div>
+
+                <div class="footer-links mb-2">
+                    <a href="/contact" class="mx-2">Contact</a> |
+                    <a href="/privacy" class="mx-2">Privacy</a> |
+                    <a href="/terms" class="mx-2">Terms</a>
                 </div>
 
                 <!-- Footer Logo -->
-                <div class="footer-logo">
-                    <a href="/"><img src="img/core-img/logo.png" alt=""></a>
+                <div class="footer-logo mb-2">
+                    <a href="/"><img src="img/core-img/logo.png" alt="Logo"></a>
                 </div>
 
                 <!-- CopyWrite -->
-                <p>
+                <p> Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    <a href="https://www.mysmartcookbook.com/" target="_blank">MySmartCookbook</a> | Made with
+                    <i class="fa fa-heart-o" aria-hidden="true"></i> by George Fericean
+                </p>
+                <p class="mb-0 small">
                     Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
-                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+                    Licensed under
+                    <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
                 </p>
             </div>
         </div>
     </div>
 </footer>
-<!-- ##### Footer Area Start ##### -->
+<!-- ##### Footer Area End ##### -->
 
 <!-- ##### All Javascript Files ##### -->
 <!-- jQuery-2.2.4 js -->
@@ -717,5 +756,24 @@
 <script src="/js/scripts.js"></script>
 <!-- Demo Tour Script -->
 <script src="/js/demo-tour.js"></script>
+<div id="cookie-banner"
+     style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.9); color: white; padding: 15px; text-align: center; display: none; z-index: 9999;">
+    <p style="margin-bottom: 10px;">We use cookies to improve your experience. By continuing to browse the site, you
+        agree to our use of cookies.
+        <a href="/privacy#cookies" style="color: #f1f1f1; text-decoration: underline;">Learn more</a>.
+    </p>
+    <button id="accept-cookies"
+            style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;">
+        Accept
+    </button>
+    <button id="decline-cookies"
+            style="background-color: #f44336; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px; margin-left: 10px;">
+        Decline
+    </button>
+    <button id="close-cookies"
+            style="background-color: transparent; color: white; border: none; font-size: 18px; cursor: pointer; position: absolute; top: 10px; right: 10px;">
+        &times;
+    </button>
+</div>
 </body>
 </html>

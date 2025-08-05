@@ -9,20 +9,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+    <!-- SEO Meta Tags -->
+    <meta name="author" content="MySmartCookbook">
+    <meta name="keywords"
+          content="register account, create cookbook account, recipe app sign up, smart recipe manager, personalized cooking">
+
+    <!-- Open Graph Meta Tags (for social media previews) -->
+    <meta property="og:title" content="Create Your Free Account – MySmartCookbook">
+    <meta property="og:description"
+          content="Register now to save your favorite recipes, search by ingredients you already have, and build your personal cookbook. It’s free!">
+    <meta property="og:image" content="https://www.mysmartcookbook.com/img/core-img/social-preview.jpg">
+    <meta property="og:url" content="https://www.mysmartcookbook.com/register">
+    <meta property="og:type" content="website">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://www.mysmartcookbook.com/register">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Create Your Free Account – MySmartCookbook">
+    <meta name="twitter:description"
+          content="Join MySmartCookbook and start managing your recipes smarter. Registration is quick and free.">
+    <meta name="twitter:image" content="https://www.mysmartcookbook.com/img/core-img/social-preview.jpg">
+
+    <!-- Language hint -->
+    <meta name="language" content="en">
+
+    <!-- Referrer policy -->
+    <meta name="referrer" content="no-referrer-when-downgrade">
+
     <!-- Title -->
     <title>MySmartCookbook – Create Your Free Account</title>
 
-    <!-- ✅ Favicon Classic -->
+    <!-- Favicon Classic -->
     <link rel="icon" type="image/x-icon" href="/img/core-img/favicon.ico">
 
-    <!-- ✅ PNG Favicons for modern browsers -->
+    <!-- PNG Favicons for modern browsers -->
     <link rel="icon" type="image/png" sizes="32x32" href="/img/core-img/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/img/core-img/favicon-16x16.png">
 
-    <!-- ✅ iOS -->
+    <!-- iOS -->
     <link rel="apple-touch-icon" sizes="180x180" href="/img/core-img/apple-touch-icon.png">
 
-    <!-- ✅ Optional: Manifest for PWA/Android -->
+    <!-- Optional: Manifest for PWA/Android -->
     <link rel="manifest" href="/site.webmanifest">
 
     <!-- Font Awesome 6.5 (CDN) -->
@@ -62,12 +91,13 @@
                 <!-- Top Social Info -->
                 <div class="col-12 col-sm-6">
                     <div class="top-social-info text-right">
-                        <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
-                        <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
+                        <a href="https://www.facebook.com/mysmartcookbook/" target="_blank" rel="noopener">
+                            <i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-instagram" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
+                        <a href="#" title="Coming soon"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
                     </div>
                 </div>
             </div>
@@ -104,6 +134,9 @@
                                 <!-- Navbar Tab: Home -->
                                 <li><a href="/">Home</a></li>
 
+                                <!-- Navbar Tab: About Us -->
+                                <li><a href="/about">About</a></li>
+
                                 <!-- Navbar Tab: Demo Tour -->
                                 <li><a href="/demo-tour">How It Works</a></li>
 
@@ -113,7 +146,7 @@
                                 <!-- Navbar Tab: Login -->
                                 <li><a href="/login">Sign In</a></li>
 
-                                <!-- Navbar Tab: Register (active)-->
+                                <!-- Navbar Tab: Register (active) -->
                                 <li class="active"><a href="/register">Create Account</a></li>
                             </ul>
                         </div>
@@ -158,19 +191,19 @@
                             <!-- Username -->
                             <div class="col-12 col-md-6 offset-md-3 mb-3">
                                 <input type="text" class="form-control" id="username" name="username"
-                                       placeholder="Choose a username">
+                                       placeholder="Choose a username (4–20 chars: letters, numbers, . or _)">
                             </div>
 
                             <!-- Email -->
                             <div class="col-12 col-md-6 offset-md-3 mb-3">
                                 <input type="text" class="form-control" id="email" name="email"
-                                       placeholder="Enter your email address">
+                                       placeholder="Enter a valid email (e.g. name@example.com)">
                             </div>
 
                             <!-- Password -->
                             <div class="col-12 col-md-6 offset-md-3 mb-3">
                                 <input type="password" class="form-control" id="password" name="password"
-                                       placeholder="Choose a password">
+                                       placeholder="Create a password (must be between 8 and 64 characters)">
                             </div>
 
                             <!-- Confirm Password -->
@@ -200,27 +233,29 @@
 <footer class="footer-area">
     <div class="container h-100">
         <div class="row h-100">
-            <div class="col-12 h-100 d-flex flex-wrap align-items-center justify-content-between">
+            <div class="col-12 h-100 d-flex flex-column align-items-center justify-content-center text-center"
+                 style="padding-bottom: 1.5rem;">
 
-                <!-- Footer Social Info -->
-                <div class="footer-social-info text-right">
-                    <a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-tiktok" aria-hidden="true"></i></a>
-                    <a href="#"><i class="fa fa-snapchat-ghost" aria-hidden="true"></i></a>
+                <div class="footer-links mb-2">
+                    <a href="/contact" class="mx-2">Contact</a> |
+                    <a href="/privacy" class="mx-2">Privacy</a> |
+                    <a href="/terms" class="mx-2">Terms</a>
                 </div>
 
                 <!-- Footer Logo -->
-                <div class="footer-logo">
-                    <a href="/"><img src="img/core-img/logo.png" alt=""></a>
+                <div class="footer-logo mb-2">
+                    <a href="/"><img src="img/core-img/logo.png" alt="Logo"></a>
                 </div>
 
                 <!-- CopyWrite -->
-                <p>
+                <p> Copyright &copy;<script>document.write(new Date().getFullYear());</script>
+                    <a href="https://www.mysmartcookbook.com/" target="_blank">MySmartCookbook</a> | Made with
+                    <i class="fa fa-heart-o" aria-hidden="true"></i> by George Fericean
+                </p>
+                <p class="mb-0 small">
                     Template originally designed by <a href="https://colorlib.com" target="_blank">Colorlib</a>.
-                    Licensed under <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
+                    Licensed under
+                    <a href="https://creativecommons.org/licenses/by/3.0/" target="_blank">CC BY 3.0</a>.
                 </p>
             </div>
         </div>
@@ -241,5 +276,24 @@
 <script src="js/active.js"></script>
 <!-- Scripts js -->
 <script src="/js/scripts.js"></script>
+<div id="cookie-banner"
+     style="position: fixed; bottom: 0; left: 0; width: 100%; background-color: rgba(0, 0, 0, 0.9); color: white; padding: 15px; text-align: center; display: none; z-index: 9999;">
+    <p style="margin-bottom: 10px;">We use cookies to improve your experience. By continuing to browse the site, you
+        agree to our use of cookies.
+        <a href="/privacy#cookies" style="color: #f1f1f1; text-decoration: underline;">Learn more</a>.
+    </p>
+    <button id="accept-cookies"
+            style="background-color: #4CAF50; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px;">
+        Accept
+    </button>
+    <button id="decline-cookies"
+            style="background-color: #f44336; color: white; border: none; padding: 10px 20px; cursor: pointer; font-size: 16px; border-radius: 5px; margin-left: 10px;">
+        Decline
+    </button>
+    <button id="close-cookies"
+            style="background-color: transparent; color: white; border: none; font-size: 18px; cursor: pointer; position: absolute; top: 10px; right: 10px;">
+        &times;
+    </button>
+</div>
 </body>
 </html>

@@ -77,7 +77,8 @@ const UNIT_OPTIONS = [{
 	plural: "stalks",
 	label: "stalk"
 }];
-const PUBLIC_PATHS = ["/", "/login", "/register", "/public-recipes", "/demo-tour", "/forgot-password", "/reset-password", "/public-recipe-free"];
+const PUBLIC_PATHS = ["/", "/login", "/register", "/public-recipes", "/demo-tour", "/forgot-password",
+    "/reset-password", "/public-recipe-free", "/about", "/contact", "/privacy", "/terms"];
 const PROTECTED_PATHS = ['/home', '/add-recipe', '/all-recipes'];
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 let toastTimeoutId = null; // stores the current toast timeout
@@ -105,7 +106,15 @@ function checkSession(path, isProtected) {
 			} else if (path.startsWith("/public-recipe-free/")) {
 				const id = path.split("/").pop();
 				window.location.href = `/public-recipe-user/${id}`;
-			} else {
+			} else if (path === "/about"){
+			    window.location.href = "/about-logged";
+			} else if (path === "/contact"){
+                window.location.href = "/contact-logged";
+            } else if (path === "/privacy"){
+                window.location.href = "/privacy-logged";
+            } else if (path === "/terms"){
+                window.location.href = "/terms-logged";
+            } else {
 				window.location.href = "/home";
 			}
 			return false;
@@ -134,8 +143,10 @@ function showToast(message, isSuccess = true) {
 	toast.classList.add(isSuccess ? "toast-success" : "toast-error");
 
 	// 🧱 Build safe DOM elements
-	const span = document.createElement("span");
-	span.textContent = message; // 🔒 Safe text insertion
+	const textDiv = document.createElement("div");
+    textDiv.className = "toast-text";
+    textDiv.textContent = message;
+
 
 	const closeBtn = document.createElement("div");
 	closeBtn.className = "close-btn";
@@ -143,7 +154,8 @@ function showToast(message, isSuccess = true) {
 	closeBtn.onclick = hideToast;
 
 	// 🧩 Inject into DOM
-	toast.appendChild(span);
+    toast.appendChild(textDiv);
+
 	toast.appendChild(closeBtn);
 	toast.style.display = "flex";
 
@@ -196,6 +208,84 @@ function addIngredientField() {
 			</div>
 		</div>
 	`;
+	container.appendChild(div);
+}
+
+function editIngredientField(name = "", quantity = "", unit = "") {
+	const container = document.getElementById("ingredientsContainer");
+	const div = document.createElement("div");
+	div.className = "ingredient-entry rounded p-3 mb-3 bg-light-subtle";
+	const formRow = document.createElement("div");
+	formRow.className = "form-row";
+	// Ingredient Name (text)
+	const nameGroup = document.createElement("div");
+	nameGroup.className = "form-group col-md-5";
+	const nameInput = document.createElement("input");
+	nameInput.type = "text";
+	nameInput.name = "ingredientName";
+	nameInput.className = "form-control ingredient-name";
+	nameInput.placeholder = "Ingredient name";
+	nameInput.value = name;
+	nameGroup.appendChild(nameInput);
+	// Quantity (number)
+	const qtyGroup = document.createElement("div");
+	qtyGroup.className = "form-group col-md-3";
+	const qtyInput = document.createElement("input");
+	qtyInput.type = "number";
+	qtyInput.name = "ingredientQuantity";
+	qtyInput.min = "0";
+	qtyInput.step = "1";
+	qtyInput.className = "form-control ingredient-quantity";
+	qtyInput.placeholder = "Quantity";
+	qtyInput.value = quantity;
+	qtyGroup.appendChild(qtyInput);
+	// Unit (select)
+	const unitGroup = document.createElement("div");
+	unitGroup.className = "form-group col-md-3";
+	const select = document.createElement("select");
+	select.name = "ingredientUnit";
+	select.className = "form-control ingredient-unit";
+	const defaultOption = document.createElement("option");
+	defaultOption.disabled = true;
+	if (!unit) defaultOption.selected = true;
+	defaultOption.hidden = true;
+	defaultOption.textContent = "Select unit";
+	select.appendChild(defaultOption);
+	UNIT_OPTIONS.forEach(u => {
+		const opt = document.createElement("option");
+		opt.value = u.key;
+		opt.title = u.label;
+		opt.textContent = u.abbreviation;
+		if (u.key === unit) opt.selected = true;
+		select.appendChild(opt);
+	});
+	unitGroup.appendChild(select);
+	// Delete button
+	const deleteGroup = document.createElement("div");
+	deleteGroup.className = "form-group col-md-1 d-flex align-items-start";
+	const delBtn = document.createElement("button");
+	delBtn.type = "button";
+	delBtn.className = "btn btn-danger btn-sm";
+	delBtn.title = "Remove ingredient";
+	delBtn.style.height = "100%";
+	delBtn.style.display = "flex";
+	delBtn.style.alignItems = "center";
+	delBtn.style.justifyContent = "center";
+	delBtn.style.paddingTop = "0.375rem";
+	delBtn.style.paddingBottom = "0.375rem";
+	delBtn.onclick = function() {
+		removeIngredientField(delBtn);
+	};
+	const icon = document.createElement("i");
+	icon.className = "bi bi-trash";
+	delBtn.appendChild(icon);
+	deleteGroup.appendChild(delBtn);
+	// Assemble all
+	formRow.appendChild(nameGroup);
+	formRow.appendChild(qtyGroup);
+	formRow.appendChild(unitGroup);
+	formRow.appendChild(deleteGroup);
+	div.appendChild(formRow);
 	container.appendChild(div);
 }
 
@@ -442,6 +532,9 @@ async function fetchAllRecipes(page = 0, size = 6) {
             </div>
           </div>
         `;
+        console.log("🔥 rendered content:");
+        console.log(container.innerHTML);
+
 		renderPagination(data, page, fetchAllRecipes);
 	} catch (error) {
 		console.error("Error loading recipes:", error);
@@ -675,10 +768,10 @@ function filterRecipes(page = 0, size = 6) {
 			return;
 		}
 		container.innerHTML = `
-        <div class="row row-cols-1 row-cols-md-3 g-4">
-          ${renderRecipeCards(data.content)}
-        </div>
-      `;
+          <div class="row justify-content-center g-4">
+            ${renderRecipeCards(data.content)}
+          </div>
+        `;
 		renderPagination(data, page, filterRecipes);
 	}).catch(error => {
 		console.error("Error filtering recipes:", error);
@@ -809,19 +902,17 @@ function loadRecipeDetails() {
 
 		const slider = document.querySelector(".receipe-slider");
         if (slider) {
-        	const safeImage = recipe.imagePath?.trim() || "/img/core-img/placeholder.jpg";
-        	if (/^https?:\/\//i.test(safeImage) || safeImage.startsWith("/img/")) {
-        		const img = document.createElement("img");
-        		img.src = safeImage;
-        		img.alt = "Recipe Image";
-        		img.className = "img-fluid rounded";
-        		img.style.maxHeight = "500px";
-        		img.style.objectFit = "cover";
-        		img.style.width = "100%";
+        	slider.innerHTML = "";
 
-        		slider.innerHTML = "";
-        		slider.appendChild(img);
-        	}
+        	const img = document.createElement("img");
+        	img.src = recipe.imagePath?.trim() || "/img/core-img/placeholder.jpg";
+        	img.alt = escapeHTML(recipe.name); // 🔐 prevent XSS
+        	img.className = "img-fluid rounded";
+        	img.style.maxHeight = "500px";
+        	img.style.objectFit = "cover";
+        	img.style.width = "100%";
+
+        	slider.appendChild(img);
         }
 
 		// ✅ 4. Ingrediente (safe rendering)
@@ -960,18 +1051,18 @@ function loadPublicRecipeDetails() {
 
         if (extWrap && extA && recipe.externalLink) {
         	extA.href = recipe.externalLink;
-        	extA.textContent = escapeHTML(recipe.externalLink); // 🔐 evităm XSS
+        	extA.textContent = escapeHTML(recipe.externalLink); // 🔐 avoid XSS
         	extWrap.style.display = "block";
         }
 
 		/* Image */
         const slider = document.querySelector(".receipe-slider");
         if (slider) {
-        	slider.innerHTML = ""; // curățăm conținutul vechi
+        	slider.innerHTML = "";
 
         	const img = document.createElement("img");
         	img.src = recipe.imagePath || "/img/core-img/placeholder.jpg";
-        	img.alt = escapeHTML(recipe.name); // 🔐 prevenim XSS
+        	img.alt = escapeHTML(recipe.name); // 🔐 prevent XSS
         	img.className = "img-fluid rounded";
         	img.style.maxHeight = "500px";
         	img.style.objectFit = "cover";
@@ -980,10 +1071,10 @@ function loadPublicRecipeDetails() {
         	slider.appendChild(img);
         }
 
-		/* Ingrediente */
+		/* Ingredients */
 		const ingWrap = document.getElementById("recipeIngredients");
 		if (ingWrap && recipe.ingredients?.length) {
-			ingWrap.innerHTML = ""; // curățăm conținutul anterior
+			ingWrap.innerHTML = "";
             recipe.ingredients.forEach(ing => {
             	const unitTxt = formatUnit(ing.unit, ing.quantity);
             	const quantity = parseFloat(ing.quantity).toLocaleString("en-US", {
@@ -991,7 +1082,7 @@ function loadPublicRecipeDetails() {
             	});
             	const p = document.createElement("p");
             	p.className = "mb-1";
-            	p.textContent = `${quantity} ${unitTxt} ${ing.name}`; // 🔒 XSS-proof
+            	p.textContent = `${quantity} ${unitTxt} ${ing.name}`; // XSS-proof
             	ingWrap.appendChild(p);
             });
 		}
@@ -1112,19 +1203,19 @@ function setupRegisterForm() {
         const emailPattern = /^[^@]+@[^@]+\.[^@]+$/;
 
         if (!username || !usernameRegex.test(username)) {
-            showToast("Invalid username format", false);
+            showToast("Username must be 4–20 characters and can only include letters, numbers, dots, or underscores.", false);
             return false;
         }
         if (!email || !emailPattern.test(email)) {
-            showToast("Invalid email format", false);
+            showToast("Please enter a valid email address (e.g. yourname@example.com).", false);
             return false;
         }
         if (!password || password.length < 8 || password.length > 64) {
-            showToast("Password must be 8-64 characters", false);
+            showToast("Password must be between 8 and 64 characters long.", false);
             return false;
         }
         if (password !== confirmPassword) {
-            showToast("Passwords don't match", false);
+            showToast("Passwords do not match. Please re-enter.", false);
             return false;
         }
         return true;
@@ -1319,9 +1410,6 @@ function setupRecipeAutocomplete() {
 // INITIALIZATION
 // ===============================
 document.addEventListener("DOMContentLoaded", () => {
-//    fetch("/api/csrf", { credentials: "same-origin" })
-//        .then(() => console.log("✅ CSRF token loaded from /csrf"))
-//        .catch(() => console.warn("⚠️ CSRF token fetch failed"));
 	const currentPath = window.location.pathname;
 	console.log("Current path is:", currentPath);
 	// ✅ Afișăm toast dacă s-a activat contul din linkul de activare
@@ -1359,6 +1447,202 @@ document.addEventListener("DOMContentLoaded", () => {
 	setupForms();
 	setupLogout();
 	checkLoggedInUser();
+	if (currentPath.startsWith("/edit-recipe/")) {
+        const recipeId = window.location.pathname.split("/").pop();
+        fetch(`/api/recipes/${recipeId}`).then(res => {
+            if (!res.ok) {
+                // Recipe does not exist – we display toast and redirect
+                const toast = new bootstrap.Toast(document.getElementById("errorToast"));
+                toast.show();
+                setTimeout(() => {
+                    window.location.href = "/home";
+                }, 2500);
+                throw new Error("Recipe not found");
+            }
+            return res.json();
+        }).then(recipe => {
+            document.getElementById("name").value = recipe.name || "";
+            document.getElementById("instructions").value = recipe.instructions || "";
+            document.getElementById("notes").value = recipe.notes || "";
+            document.getElementById("externalLink").value = recipe.externalLink || "";
+            const container = document.getElementById("imagePreview");
+            const imageSrc = recipe.imagePath || "/img/core-img/placeholder.jpg";
+            container.innerHTML = `
+                      <div class="position-relative d-inline-block" style="max-width: 100%;">
+                        <img src="${imageSrc}" alt="Preview"
+                             class="img-fluid rounded shadow"
+                             style="max-height: 250px; display: block;">
+                        <button type="button"
+                            id="removeImageBtn"
+                            class="btn btn-sm btn-dark rounded-circle position-absolute"
+                            title="Remove image"
+                            style="
+                                top: 8px;
+                                right: 8px;
+                                width: 28px;
+                                height: 28px;
+                                padding: 0;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            ">
+                            <i class="bi bi-x-lg text-white"></i>
+                        </button>
+                      </div>
+                    `;
+            window.imageMarkedForDeletion = false;
+            document.getElementById("removeImageBtn").addEventListener("click", () => {
+                document.getElementById("imagePreview").innerHTML = "";
+                document.getElementById("imageFile").value = "";
+                window.imageMarkedForDeletion = true;
+            });
+            document.getElementById("cancelButton").href = `/recipe/${recipeId}`;
+            recipe.ingredients.forEach(ingredient => {
+                editIngredientField(ingredient.name, ingredient.quantity, ingredient.unit);
+            });
+            document.getElementById("imageFile").addEventListener("change", function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const container = document.getElementById("imagePreview");
+                        container.innerHTML = `
+                                    <div class="position-relative d-inline-block" style="max-width: 100%;">
+                                        <img src="${e.target.result}" alt="Preview"
+                                             class="img-fluid rounded shadow"
+                                             style="max-height: 250px; display: block;">
+                                        <button type="button"
+                                            id="removeImageBtn"
+                                            class="btn btn-sm btn-dark rounded-circle position-absolute"
+                                            title="Remove image"
+                                            style="
+                                                top: 8px;
+                                                right: 8px;
+                                                width: 28px;
+                                                height: 28px;
+                                                padding: 0;
+                                                display: flex;
+                                                align-items: center;
+                                                justify-content: center;
+                                            ">
+                                            <i class="bi bi-x-lg text-white"></i>
+                                        </button>
+                                    </div>
+                                `;
+                        window.imageMarkedForDeletion = false;
+                        document.getElementById("removeImageBtn").addEventListener("click", () => {
+                            document.getElementById("imagePreview").innerHTML = "";
+                            document.getElementById("imageFile").value = "";
+                            window.imageMarkedForDeletion = true;
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            document.getElementById("editRecipeForm").addEventListener("submit", function(event) {
+                event.preventDefault();
+                const formData = new FormData();
+                const name = document.getElementById("name").value.trim();
+                if (!name) {
+                    showToast("Please enter a recipe name.", false);
+                    return;
+                }
+                const recipeDTO = {
+                    name: document.getElementById("name").value,
+                    instructions: document.getElementById("instructions").value,
+                    notes: document.getElementById("notes").value,
+                    externalLink: document.getElementById("externalLink").value,
+                    ingredients: []
+                };
+                const names = document.getElementsByName("ingredientName");
+                const quantities = document.getElementsByName("ingredientQuantity");
+                const units = document.getElementsByName("ingredientUnit");
+                console.log("🧪 Validating ingredients...");
+                for (let i = 0; i < names.length; i++) {
+                    console.log(`Ingredient ${i + 1}:`, {
+                        name: names[i].value,
+                        quantity: quantities[i].value,
+                        unit: units[i].value
+                    });
+                }
+
+                for (let i = 0; i < names.length; i++) {
+                    const ingName = names[i].value.trim();
+                    const quantity = quantities[i].value;
+                    const unit = units[i].value;
+                    console.log("🧪 UNIT VALUE RAW:", `"${unit}"`);
+
+                    if (!ingName) {
+                        showToast("Ingredient name is required.", false);
+                        return;
+                    }
+                    if (ingName.length > 50) {
+                        showToast("Ingredient name must be 50 characters or fewer.", false);
+                        return;
+                    }
+                    if (!quantity.trim()) {
+                        showToast("Quantity is required.", false);
+                        return;
+                    }
+                    const parsedQty = parseFloat(quantity);
+                    if (isNaN(parsedQty)) {
+                        showToast("Quantity must be a valid number.", false);
+                        return;
+                    }
+                    if (parsedQty <= 0) {
+                        showToast("Quantity must be greater than 0.", false);
+                        return;
+                    }
+                    if (parsedQty > 100000) {
+                        showToast("Quantity must be less than 100,000.", false);
+                        return;
+                    }
+                    if (!unit || unit.toLowerCase().includes("select")) {
+                        showToast("Please select a unit of measure.", false);
+                        return;
+                    }
+                    recipeDTO.ingredients.push({
+                        name: ingName,
+                        quantity: parseFloat(quantity),
+                        unit: unit
+                    });
+                }
+                formData.append("recipeDTO", new Blob([JSON.stringify(recipeDTO)], {
+                    type: "application/json"
+                }));
+                if (window.imageMarkedForDeletion) {
+                    formData.append("deleteImage", "true");
+                }
+                const imageFile = document.getElementById("imageFile").files[0];
+                if (imageFile) {
+                    const maxSize = 5 * 1024 * 1024; // 5MB
+                    if (imageFile.size > maxSize) {
+                        showToast("Image too large. Maximum allowed size is 5MB.", false);
+                        return;
+                    }
+                    formData.append("imageFile", imageFile);
+                }
+                const csrfToken = getCsrfToken();
+                fetch(`/api/recipes/${recipeId}`, {
+                    method: "PUT",
+                    credentials: "include",
+                    headers: {
+                        "X-XSRF-TOKEN": csrfToken
+                    },
+                    body: formData
+                }).then(response => {
+                    if (!response.ok) throw new Error("Eroare la salvarea modificărilor.");
+                    showToast("Recipe updated successfully.", true);
+                    setTimeout(() => {
+                        window.location.href = `/recipe/${recipeId}`;
+                    }, 2000);
+                }).catch(error => {
+                    console.error("❌ Fetch failed:", error.message);
+                    showToast("Something went wrong while saving the recipe.", false);
+                });
+            });
+        });
+    }
 	if (currentPath.startsWith("/recipe/")) {
 		loadRecipeDetails();
 	}
@@ -1470,42 +1754,59 @@ document.addEventListener("DOMContentLoaded", () => {
 	// Contact page form handler (/contact.html)
     const detailedContactForm = document.getElementById("contactForm");
     if (detailedContactForm) {
-    	detailedContactForm.addEventListener("submit", function (e) {
-    		e.preventDefault();
+        detailedContactForm.addEventListener("submit", function (e) {
+            e.preventDefault();
 
-    		const name = document.getElementById("name").value.trim();
-    		const email = document.getElementById("email").value.trim();
-    		const message = document.getElementById("message").value.trim();
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const message = document.getElementById("message").value.trim();
 
-    		if (!name || !email || !message) {
-    			showToast("Please fill in all fields.", false);
-    			return;
-    		}
+            // ✅ Validare nume
+            if (name.length === 0) {
+                showToast("Please enter your name.", false);
+                return;
+            }
 
-    		fetch("/api/contact", {
-    			method: "POST",
-    			headers: {
-    				"Content-Type": "application/json",
-    				"X-XSRF-TOKEN": getCsrfToken()
-    			},
-    			credentials: "include",
-    			body: JSON.stringify({
-    				name,
-    				email,
-    				message
-    			})
-    		})
-    			.then(response => response.text())
-    			.then(data => {
-    				showToast(data, true);
-    				detailedContactForm.reset();
-    			})
-    			.catch(error => {
-    				console.error("Error:", error);
-    				showToast("Something went wrong. Please try again.", false);
-    			});
-    	});
+            // ✅ Validare email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (email.length === 0 || !emailRegex.test(email)) {
+                showToast("Please enter a valid email address (e.g. yourname@example.com).", false);
+                return;
+            }
+
+            // ✅ Validare mesaj
+            if (message.length === 0) {
+                showToast("Please write your message.", false);
+                return;
+            }
+
+            if (message.length > 1000) {
+                showToast("Message is too long (max 1000 characters).", false);
+                return;
+            }
+
+            // ✅ Trimitere către backend
+            fetch("/api/contact", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-XSRF-TOKEN": getCsrfToken()
+                },
+                credentials: "include",
+                body: JSON.stringify({ name, email, message })
+            })
+                .then(response => response.text())
+                .then(data => {
+                    showToast(data, true);
+                    detailedContactForm.reset();
+                })
+                .catch(error => {
+                    console.error("Error:", error);
+                    showToast("Something went wrong. Please try again.", false);
+                });
+        });
     }
+
     const cookieBanner = document.getElementById('cookie-banner');
 
       // Verifică dacă utilizatorul a acceptat deja cookie-urile
