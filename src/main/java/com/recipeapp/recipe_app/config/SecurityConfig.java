@@ -158,7 +158,7 @@ public class SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails user = User.withUsername("myaccess")
-                .password(passwordEncoder.encode("supersecret"))
+                .password(passwordEncoder.encode("$2a$10$2k69.vgXgXNySoxFPdlrXezOCLw9dmZ.uXBEOAiuJGQrG3mSzIBNm"))
                 .roles("GATEKEEPER")
                 .build();
 
