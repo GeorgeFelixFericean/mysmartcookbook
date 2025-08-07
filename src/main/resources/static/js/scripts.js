@@ -416,7 +416,6 @@ function renderRecipeCards(recipes) {
 			baseUrl = "/recipe";
 		}
 		const safeName = escapeHTML(recipe.name);
-//		const imagePath = escapeHTML(recipe.imagePath || '/img/core-img/placeholder.jpg');
         const imagePath = recipe.imagePath ? recipe.imagePath : '/img/core-img/placeholder.jpg';
 
 		return `
@@ -425,7 +424,7 @@ function renderRecipeCards(recipes) {
           <img src="${imagePath}"
                class="card-img-top"
                alt="${safeName}"
-               style="max-height: 200px; object-fit: cover;">
+               style="max-height: 200px; width: 100%; object-fit: cover;">
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">${safeName}</h5>
             <a class="btn btn-sm btn-outline-primary mt-auto" href="${baseUrl}/${recipe.id}">
