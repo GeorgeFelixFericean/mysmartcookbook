@@ -21,6 +21,7 @@ import javax.imageio.ImageWriteParam;
 import javax.imageio.ImageWriter;
 import javax.imageio.stream.ImageOutputStream;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.Files;
@@ -36,10 +37,12 @@ import java.util.stream.Collectors;
 public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final UserRepository userRepository;
+    private final CloudinaryService cloudinaryService;
 
-    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository) {
+    public RecipeService(RecipeRepository recipeRepository, UserRepository userRepository, CloudinaryService cloudinaryService) {
         this.recipeRepository = recipeRepository;
         this.userRepository = userRepository;
+        this.cloudinaryService = cloudinaryService;
     }
 
     public List<Recipe> searchRecipesByName(String name) {
@@ -72,62 +75,39 @@ public class RecipeService {
         }
         recipe.setIngredients(ingredients);
 
-        // 3. Dacă user-ul a încărcat un fișier imagine, îl salvăm în "uploads/"
+        // 3. Dacă user-ul a încărcat un fișier imagine, o procesăm și o urcăm pe Cloudinary
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
-                String originalFilename = imageFile.getOriginalFilename();
-                // generăm un nume unic pentru fișier
-                String uniqueFilename = "recipe-" + System.currentTimeMillis() + "_" + originalFilename;
+                BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
 
-                // folderul "uploads/" - îl creăm dacă nu există
-                Path uploadPath = Paths.get("uploads");
-                if (!Files.exists(uploadPath)) {
-                    Files.createDirectories(uploadPath);
-                }
+                // ⚙️ Redimensionare la lățime max 1000px (păstrăm proporțiile)
+                BufferedImage resizedImage = Thumbnails.of(originalImage)
+                        .size(1000, 1000)
+                        .asBufferedImage();
 
-                // copiem fișierul în "uploads/" cu redimensionare și compresie
-                Path filePath = uploadPath.resolve(uniqueFilename);
+                // 💾 Salvăm într-un buffer ca JPEG cu compresie 80%
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
+                ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
+                jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
+                jpgWriteParam.setCompressionQuality(0.8f); // 80% quality
 
-                // Verificăm extensia fișierului (acceptăm doar JPG și PNG pentru control)
-                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
+                jpgWriter.setOutput(ImageIO.createImageOutputStream(baos));
+                jpgWriter.write(null, new IIOImage(resizedImage, null, null), jpgWriteParam);
+                jpgWriter.dispose();
 
-                try (OutputStream os = Files.newOutputStream(filePath)) {
-                    BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
+                // 📤 Upload către Cloudinary
+                String imageUrl = cloudinaryService.uploadImage(baos.toByteArray());
 
-                    // ⚙️ Redimensionare la lățime max 1000px (păstrăm proporțiile)
-                    BufferedImage resizedImage = Thumbnails.of(originalImage)
-                            .size(1000, 1000) // se va păstra aspect ratio
-                            .asBufferedImage();
-
-                    // 💾 Salvăm în funcție de tip (cu compresie la JPEG)
-                    if ("jpg".equals(fileExtension) || "jpeg".equals(fileExtension)) {
-                        ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
-                        ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
-                        jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-                        jpgWriteParam.setCompressionQuality(0.8f); // 80% calitate
-
-                        try (ImageOutputStream ios = ImageIO.createImageOutputStream(os)) {
-                            jpgWriter.setOutput(ios);
-                            jpgWriter.write(null, new IIOImage(resizedImage, null, null), jpgWriteParam);
-                        }
-
-                        jpgWriter.dispose();
-                    } else {
-                        // PNG nu suportă compresie „lossy” — salvăm direct
-                        ImageIO.write(resizedImage, fileExtension, os);
-                    }
-                }
-
-
-                // stocăm în DB doar calea accesibilă via HTTP
-                // ex: "/recipe-1679068342123_img.jpg"
-                recipe.setImagePath("/" + uniqueFilename);
+                // Salvăm URL-ul public în entitate
+                recipe.setImagePath(imageUrl);
 
             } catch (IOException e) {
                 e.printStackTrace();
-                throw new RuntimeException("Eroare la salvarea fișierului imagine", e);
+                throw new RuntimeException("Eroare la procesarea sau urcarea imaginii", e);
             }
         }
+
         // Obținem User din UserRepository
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("User not found: " + username));
