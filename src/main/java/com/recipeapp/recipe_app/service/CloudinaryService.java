@@ -30,10 +30,12 @@ public class CloudinaryService {
                 ObjectUtils.asMap(
                         "folder", "mysmartcookbook",
                         "transformation", new Transformation()
-                                .quality("auto")
-                                .fetchFormat("auto")
                                 .width(1000)
-                                .crop("limit")
+                                .height(1000)
+                                .crop("fill")         // taie pentru a umple exact pătratul
+                                .gravity("auto")      // alege partea „relevantă” a imaginii (mâncare, centru etc.)
+                                .quality("auto")      // compresie inteligentă
+                                .fetchFormat("auto")  // WebP dacă suportă browserul
                 )
         );
 

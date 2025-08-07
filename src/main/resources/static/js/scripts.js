@@ -421,12 +421,10 @@ function renderRecipeCards(recipes) {
 		return `
       <div class="col-sm-6 col-md-4 col-lg-4 mb-4">
         <div class="card shadow-sm h-100">
-          <div class="ratio ratio-4x3">
-            <img src="${imagePath}"
-                 class="card-img-top"
-                 alt="${safeName}"
-                 style="object-fit: cover;">
-          </div>
+          <img src="${imagePath}"
+               class="card-img-top"
+               alt="${safeName}"
+               style="max-height: 200px; object-fit: cover;">
           <div class="card-body d-flex flex-column">
             <h5 class="card-title">${safeName}</h5>
             <a class="btn btn-sm btn-outline-primary mt-auto" href="${baseUrl}/${recipe.id}">
