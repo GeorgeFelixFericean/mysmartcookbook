@@ -16,12 +16,10 @@ public class Recipe {
     @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JsonManagedReference
     private List<Ingredient> ingredients = new ArrayList<>();
-    @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 10000)
     private String instructions;
     private String imagePath;
-    @Lob
-    @Column(columnDefinition = "TEXT")
+    @Column(length = 10000)
     private String notes;
     @Column(nullable = true)  // este opțional
     private String externalLink;
