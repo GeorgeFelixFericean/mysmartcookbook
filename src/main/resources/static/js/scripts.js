@@ -416,7 +416,8 @@ function renderRecipeCards(recipes) {
 			baseUrl = "/recipe";
 		}
 		const safeName = escapeHTML(recipe.name);
-		const imagePath = escapeHTML(recipe.imagePath || '/img/core-img/placeholder.jpg');
+//		const imagePath = escapeHTML(recipe.imagePath || '/img/core-img/placeholder.jpg');
+        const imagePath = recipe.imagePath ? recipe.imagePath : '/img/core-img/placeholder.jpg';
 
 		return `
       <div class="col-sm-6 col-md-4 col-lg-4 mb-4">
