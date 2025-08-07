@@ -97,7 +97,7 @@ public class SecurityConfig {
                                                 "script-src 'self' 'unsafe-inline'; " +
                                                 "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com https://cdn.jsdelivr.net; " +
                                                 "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com https://cdn.jsdelivr.net data:; " +
-                                                "img-src 'self' data: blob:; " +
+                                                "img-src 'self' data: blob: https://res.cloudinary.com; " +
                                                 "connect-src 'self'"
                                 )
                         )
