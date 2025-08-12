@@ -16,7 +16,6 @@ public class EmailService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void sendActivationEmail(String toEmail, String username, String activationLink) {
-        testBrevoApiKey();
         String url = "https://api.brevo.com/v3/smtp/email";
 
         Map<String, Object> emailData = new HashMap<>();
@@ -47,31 +46,11 @@ public class EmailService {
         }
     }
 
-    // ✅ Test direct API Brevo: /v3/account
-    public void testBrevoApiKey() {
-        String url = "https://api.brevo.com/v3/account";
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.set("accept", "application/json");
-        headers.set("api-key", brevoApiKey == null ? "" : brevoApiKey.trim());
-
-        HttpEntity<Void> request = new HttpEntity<>(headers);
-
-        try {
-            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
-            System.out.println("📡 Brevo /v3/account status: " + response.getStatusCode());
-            System.out.println("📡 Brevo /v3/account body: " + response.getBody());
-        } catch (Exception e) {
-            System.err.println("❌ Error calling Brevo /v3/account: " + e.getMessage());
-        }
-    }
-
-
     public void sendPasswordResetEmail(String toEmail, String username, String resetLink) {
         String url = "https://api.brevo.com/v3/smtp/email";
 
         Map<String, Object> emailData = new HashMap<>();
-        emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "noreply@mysmartcookbook.com"));
+        emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "contact@mysmartcookbook.com"));
         emailData.put("to", List.of(Map.of("email", toEmail, "name", username)));
         emailData.put("subject", "Reset your password");
         emailData.put("htmlContent", """
@@ -105,7 +84,7 @@ public class EmailService {
         String url = "https://api.brevo.com/v3/smtp/email";
 
         Map<String, Object> emailData = new HashMap<>();
-        emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "noreply@mysmartcookbook.com"));
+        emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "contact@mysmartcookbook.com"));
         emailData.put("to", List.of(Map.of("email", toEmail)));
         emailData.put("subject", subject);
         emailData.put("htmlContent", htmlBody);

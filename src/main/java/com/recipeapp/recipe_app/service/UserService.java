@@ -5,6 +5,7 @@ import com.recipeapp.recipe_app.exception.UserAlreadyExistsException;
 import com.recipeapp.recipe_app.model.User;
 import com.recipeapp.recipe_app.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,8 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    @Value("${app.activation.base-url}")
+    private String activationBaseUrl;
 
 
     @Autowired
@@ -53,7 +56,7 @@ public class UserService {
 
         User savedUser = userRepository.save(user);
 
-        String activationLink = "http://localhost:8080/api/users/activate?code=" + savedUser.getActivationCode();
+        String activationLink = activationBaseUrl + "/api/users/activate?code=" + savedUser.getActivationCode();
 
         emailService.sendActivationEmail(savedUser.getEmail(), savedUser.getUsername(), activationLink);
 
