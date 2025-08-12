@@ -2,6 +2,7 @@ package com.recipeapp.recipe_app.service;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,6 +16,7 @@ public class EmailService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
+    @Async("mailExecutor")
     public void sendActivationEmail(String toEmail, String username, String activationLink) {
         String url = "https://api.brevo.com/v3/smtp/email";
 
