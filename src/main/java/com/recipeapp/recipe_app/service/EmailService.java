@@ -16,13 +16,7 @@ public class EmailService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void sendActivationEmail(String toEmail, String username, String activationLink) {
-        // ✅ Log pentru verificare cheie API (primele 8 caractere)
-        if (brevoApiKey != null && !brevoApiKey.isBlank()) {
-            System.out.println("📧 Brevo API key starts with: " + brevoApiKey.substring(0, 8) + "...");
-        } else {
-            System.out.println("⚠️ Brevo API key is NULL or empty!");
-        }
-
+        testBrevoApiKey();
         String url = "https://api.brevo.com/v3/smtp/email";
 
         Map<String, Object> emailData = new HashMap<>();
@@ -53,6 +47,26 @@ public class EmailService {
         }
     }
 
+    // ✅ Test direct API Brevo: /v3/account
+    public void testBrevoApiKey() {
+        String url = "https://api.brevo.com/v3/account";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("accept", "application/json");
+        headers.set("api-key", brevoApiKey == null ? "" : brevoApiKey.trim());
+
+        HttpEntity<Void> request = new HttpEntity<>(headers);
+
+        try {
+            ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+            System.out.println("📡 Brevo /v3/account status: " + response.getStatusCode());
+            System.out.println("📡 Brevo /v3/account body: " + response.getBody());
+        } catch (Exception e) {
+            System.err.println("❌ Error calling Brevo /v3/account: " + e.getMessage());
+        }
+    }
+
+
     public void sendPasswordResetEmail(String toEmail, String username, String resetLink) {
         String url = "https://api.brevo.com/v3/smtp/email";
 
@@ -73,18 +87,17 @@ public class EmailService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        // ✅ Eliminăm spațiile/newline din cheia API
-        headers.set("api-key", brevoApiKey == null ? "" : brevoApiKey.trim());
+        headers.set("api-key", brevoApiKey);
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(emailData, headers);
 
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
             if (!response.getStatusCode().is2xxSuccessful()) {
-                System.err.println("❌ Failed to send activation email: " + response.getBody());
+                System.err.println("❌ Failed to send password reset email: " + response.getBody());
             }
         } catch (Exception e) {
-            System.err.println("❌ Email sending exception: " + e.getMessage());
+            System.err.println("❌ Password reset email exception: " + e.getMessage());
         }
     }
 
