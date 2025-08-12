@@ -73,17 +73,18 @@ public class EmailService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.set("api-key", brevoApiKey);
+        // ✅ Eliminăm spațiile/newline din cheia API
+        headers.set("api-key", brevoApiKey == null ? "" : brevoApiKey.trim());
 
         HttpEntity<Map<String, Object>> request = new HttpEntity<>(emailData, headers);
 
         try {
             ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
             if (!response.getStatusCode().is2xxSuccessful()) {
-                System.err.println("❌ Failed to send password reset email: " + response.getBody());
+                System.err.println("❌ Failed to send activation email: " + response.getBody());
             }
         } catch (Exception e) {
-            System.err.println("❌ Password reset email exception: " + e.getMessage());
+            System.err.println("❌ Email sending exception: " + e.getMessage());
         }
     }
 
