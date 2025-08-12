@@ -73,62 +73,6 @@ public class RecipeService {
         }
         recipe.setIngredients(ingredients);
 
-        // 3. Dacă user-ul a încărcat un fișier imagine, îl salvăm în "uploads/"
-//        if (imageFile != null && !imageFile.isEmpty()) {
-//            try {
-//                String originalFilename = imageFile.getOriginalFilename();
-//                // generăm un nume unic pentru fișier
-//                String uniqueFilename = "recipe-" + System.currentTimeMillis() + "_" + originalFilename;
-//
-//                // folderul "uploads/" - îl creăm dacă nu există
-//                Path uploadPath = Paths.get("uploads");
-//                if (!Files.exists(uploadPath)) {
-//                    Files.createDirectories(uploadPath);
-//                }
-//
-//                // copiem fișierul în "uploads/" cu redimensionare și compresie
-//                Path filePath = uploadPath.resolve(uniqueFilename);
-//
-//                // Verificăm extensia fișierului (acceptăm doar JPG și PNG pentru control)
-//                String fileExtension = originalFilename.substring(originalFilename.lastIndexOf(".") + 1).toLowerCase();
-//
-//                try (OutputStream os = Files.newOutputStream(filePath)) {
-//                    BufferedImage originalImage = ImageIO.read(imageFile.getInputStream());
-//
-//                    // ⚙️ Redimensionare la lățime max 1000px (păstrăm proporțiile)
-//                    BufferedImage resizedImage = Thumbnails.of(originalImage)
-//                            .size(1000, 1000) // se va păstra aspect ratio
-//                            .asBufferedImage();
-//
-//                    // 💾 Salvăm în funcție de tip (cu compresie la JPEG)
-//                    if ("jpg".equals(fileExtension) || "jpeg".equals(fileExtension)) {
-//                        ImageWriter jpgWriter = ImageIO.getImageWritersByFormatName("jpg").next();
-//                        ImageWriteParam jpgWriteParam = jpgWriter.getDefaultWriteParam();
-//                        jpgWriteParam.setCompressionMode(ImageWriteParam.MODE_EXPLICIT);
-//                        jpgWriteParam.setCompressionQuality(0.8f); // 80% calitate
-//
-//                        try (ImageOutputStream ios = ImageIO.createImageOutputStream(os)) {
-//                            jpgWriter.setOutput(ios);
-//                            jpgWriter.write(null, new IIOImage(resizedImage, null, null), jpgWriteParam);
-//                        }
-//
-//                        jpgWriter.dispose();
-//                    } else {
-//                        // PNG nu suportă compresie „lossy” — salvăm direct
-//                        ImageIO.write(resizedImage, fileExtension, os);
-//                    }
-//                }
-//
-//
-//                // stocăm în DB doar calea accesibilă via HTTP
-//                // ex: "/recipe-1679068342123_img.jpg"
-//                recipe.setImagePath("/" + uniqueFilename);
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//                throw new RuntimeException("Eroare la salvarea fișierului imagine", e);
-//            }
-//        }
         if (imageFile != null && !imageFile.isEmpty()) {
             try {
                 String imageUrl = cloudinaryService.uploadFile(imageFile);

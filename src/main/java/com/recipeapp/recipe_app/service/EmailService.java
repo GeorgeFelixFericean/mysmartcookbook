@@ -16,10 +16,17 @@ public class EmailService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public void sendActivationEmail(String toEmail, String username, String activationLink) {
+        // ✅ Log pentru verificare cheie API (primele 8 caractere)
+        if (brevoApiKey != null && !brevoApiKey.isBlank()) {
+            System.out.println("📧 Brevo API key starts with: " + brevoApiKey.substring(0, 8) + "...");
+        } else {
+            System.out.println("⚠️ Brevo API key is NULL or empty!");
+        }
+
         String url = "https://api.brevo.com/v3/smtp/email";
 
         Map<String, Object> emailData = new HashMap<>();
-        emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "noreply@mysmartcookbook.com"));
+        emailData.put("sender", Map.of("name", "My Smart Cookbook", "email", "contact@mysmartcookbook.com"));
         emailData.put("to", List.of(Map.of("email", toEmail, "name", username)));
         emailData.put("subject", "Activate your account");
         emailData.put("htmlContent", """
