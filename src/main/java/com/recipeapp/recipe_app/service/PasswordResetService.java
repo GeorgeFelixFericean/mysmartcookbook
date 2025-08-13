@@ -52,8 +52,7 @@ public class PasswordResetService {
         tokenRepository.save(resetToken);
 
         // 📧 Construim linkul și trimitem emailul
-//        String resetLink = "https://mysmartcookbook.com/reset-password?token=" + token;
-        String resetLink = "http://localhost:8080/reset-password?token=" + token;
+        String resetLink = "https://mysmartcookbook.onrender.com/reset-password?token=" + token;
         String subject = "Reset your password";
         String body = "Hi " + user.getUsername() + ",\n\n" +
                 "Click the link below to reset your password:\n" +
