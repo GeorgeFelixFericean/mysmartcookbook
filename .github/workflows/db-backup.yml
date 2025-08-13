@@ -21,24 +21,21 @@ jobs:
           pg_dump --version
 
 
-      - name: Create dump (via DATABASE_URL)
+      - name: Create dump (via DATABASE_URL, pg_dump 17)
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           set -euo pipefail
+          /usr/lib/postgresql/17/bin/pg_dump --version
           ts=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
           outfile="db_${ts}.dump"
 
           url="$DATABASE_URL"
-          # adaugă sslmode=require indiferent dacă există deja parametri
           if [[ "$url" == *\?* ]]; then sep="&"; else sep="?"; fi
           url_ssl="${url}${sep}sslmode=require"
 
-          # format custom (-Fc) => restaurabil cu pg_restore
-          pg_dump "$url_ssl" -Fc --no-owner --no-privileges -f "$outfile"
-
+          /usr/lib/postgresql/17/bin/pg_dump "$url_ssl" -Fc --no-owner --no-privileges -f "$outfile"
           echo "OUTFILE=$outfile" >> $GITHUB_ENV
-
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
