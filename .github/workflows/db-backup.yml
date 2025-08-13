@@ -16,19 +16,24 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y postgresql-client
 
-      - name: Create dump
+      - name: Create dump (via DATABASE_URL)
         env:
-          PGHOST: ${{ secrets.PGHOST }}
-          PGPORT: ${{ secrets.PGPORT }}
-          PGDATABASE: ${{ secrets.PGDATABASE }}
-          PGUSER: ${{ secrets.PGUSER }}
-          PGPASSWORD: ${{ secrets.PGPASSWORD }}
-          PGSSLMODE: ${{ secrets.PGSSLMODE }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
+          set -euo pipefail
           ts=$(date -u +"%Y-%m-%dT%H-%M-%SZ")
-          outfile="db_${PGDATABASE}_${ts}.dump"
-          pg_dump -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDATABASE" -Fc --no-owner --no-privileges -f "$outfile"
+          outfile="db_${ts}.dump"
+
+          url="$DATABASE_URL"
+          # adaugă sslmode=require indiferent dacă există deja parametri
+          if [[ "$url" == *\?* ]]; then sep="&"; else sep="?"; fi
+          url_ssl="${url}${sep}sslmode=require"
+
+          # format custom (-Fc) => restaurabil cu pg_restore
+          pg_dump "$url_ssl" -Fc --no-owner --no-privileges -f "$outfile"
+
           echo "OUTFILE=$outfile" >> $GITHUB_ENV
+
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
