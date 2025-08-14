@@ -1,21 +1,25 @@
+// src/main/java/com/recipeapp/recipe_app/config/CloudinaryConfig.java
 package com.recipeapp.recipe_app.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import java.util.Map;
 
 @Configuration
 public class CloudinaryConfig {
 
     @Bean
-    public Cloudinary cloudinary() {
+    public Cloudinary cloudinary(
+            @Value("${cloudinary.cloud-name}") String cloudName,
+            @Value("${cloudinary.api-key}") String apiKey,
+            @Value("${cloudinary.api-secret}") String apiSecret
+    ) {
         return new Cloudinary(ObjectUtils.asMap(
-                "cloud_name", "dti9mi29n",
-                "api_key", "665142894927999",
-                "api_secret", "6z_k3nxs-3CljU0f0LGD1NljRI8"
+                "cloud_name", cloudName,
+                "api_key", apiKey,
+                "api_secret", apiSecret
         ));
     }
 }
