@@ -26,9 +26,9 @@ A full‑stack personal cookbook that lets you save recipes, search by ingredien
 ## Overview
 MySmartCookbook is a personal cookbook where users can add, edit, and organize their favorite recipes. Its key feature is **ingredient‑based search**: find recipes you can cook with what’s already in your kitchen. Visitors can try a **free public recipes** section; logged‑in users get full recipe management.
 
-Live demo: **[TBD – add when ready]**
+(https://www.mysmartcookbook.com/)
   
-Repository: **(this repo)**
+Repository: https://github.com/GeorgeFelixFericean/recipe-app
 
 ---
 
