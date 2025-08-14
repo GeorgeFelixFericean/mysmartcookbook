@@ -211,7 +211,15 @@ Otherwise, list core endpoints in a `docs/api.md` file (optional).
 ---
 
 ## License
-MIT (or your preferred license).
+Proprietary License – All Rights Reserved
+
+Copyright (c) 2025 George Fericean
+
+This software and its source code are the exclusive property of George Fericean.
+No part of this software may be copied, modified, distributed, or used for any
+purpose without the prior written permission of the copyright holder.
+
+Unauthorized use of this software or its source code is strictly prohibited.
 
 ---
 
