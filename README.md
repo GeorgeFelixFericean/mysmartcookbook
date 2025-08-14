@@ -28,8 +28,7 @@ MySmartCookbook is a personal cookbook where users can add, edit, and organize t
 
 Website: https://www.mysmartcookbook.com/
   
-Repository: https://github.com/GeorgeFelixFericean/recipe-app
-
+Repository: https://github.com/GeorgeFelixFericean/mysmartcookbook
 ---
 
 ## Key features
